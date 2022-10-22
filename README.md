@@ -25,9 +25,9 @@
 
 <p align="center">
   <a href="https://iThieler.github.io/Proxmox/">
-    <img src="https://github-readme-stats.vercel.app/api?username=iThieler&hide=stars&count_private=true&show_icons=true&theme=dark" />
-  </a><br /><br />
+    <img src="https://github-readme-stats.vercel.app/api?username=iThieler&hide=stars&count_private=true&show_icons=true&theme=dark" height="130" />
+  </a>
   <a href="https://iThieler.github.io/Proxmox/">
-    <img src="https://github-readme-stats.vercel.app/api/top-langs?username=iThieler&theme=dark" width="350" />
+    <img src="https://github-readme-stats.vercel.app/api/top-langs?username=iThieler&layout=compact&theme=dark" height="130" />
   </a>
 </p>
