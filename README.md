@@ -11,7 +11,132 @@
 
 <h1 align="center" id="heading">Content</h1>
 
--   [My Stats & Skills](#my-stats--skills)
+<details>
+<summary markdown="span"> Proxmox Host Server </summary>
+-------------------- BEGIN SUBMENU --------------------
+<details>
+<summary markdown="span"> Proxmox Basic config </summary>
+ 
+<p align="center"><img src="https://github.com/home-assistant/brands/blob/master/core_integrations/proxmoxve/icon.png?raw=true" height="100"/></p>
+
+<h1 align="center" id="heading"> Proxmox Basic config </h1>
+
+This script performs the following tasks after creating a configuration file. The configuration file is created by answering questions and is used to find variables for other tasks that are added in the future.
+- If not already done and supported by the system hard disk, S.M.A.R.T. support is enabled on it
+- The cluster and host firewall is set up and activated
+- A backup tool is created in which VMs can be set.
+- A cronjob is created, which creates backups of all VMs in the backup pool.
+- Proxmox dark mode is activated >> Thanks to [Weilbyte](https://github.com/Weilbyte/PVEDiscordDark) for his work
+- The "source" lists are updated and adapted.
+  - Adding the correct PVE7 sources
+  - Activate the no-subscription repo
+  - Deactivating the Subscription Nag
+- Complete update of the host server
+- Restart of the Host server
+ 
+Run the following in the Proxmox Shell. ⚠️ **PVE7 ONLY**
+
+```bash
+bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/global-config-file.sh) install
+```
+
+____________________________________________________________________________________________ 
+</details>
+--------------------- END SUBMENU ---------------------
+</details>
+
+<details>
+<summary markdown="span"> LXC Container </summary>
+-------------------- BEGIN SUBMENU --------------------
+<details>
+<summary markdown="span"> LXC 1 </summary>
+ 
+<p align="center"><img src="" height="100"/></p>
+
+<h1 align="center" id="heading"> LXC 1 </h1>
+
+```bash
+bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/lxc/*.sh) install
+```
+
+____________________________________________________________________________________________ 
+</details>
+<details>
+<summary markdown="span"> LXC 2 </summary>
+ 
+<p align="center"><img src="" height="100"/></p>
+
+<h1 align="center" id="heading"> LXC 2 </h1>
+
+```bash
+bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/lxc/*.sh) install
+```
+
+____________________________________________________________________________________________ 
+</details>
+<details>
+<summary markdown="span"> LXC 3 </summary>
+ 
+<p align="center"><img src="" height="100"/></p>
+
+<h1 align="center" id="heading"> LXC 3 </h1>
+
+```bash
+bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/lxc/*.sh) install
+```
+
+____________________________________________________________________________________________ 
+</details>
+--------------------- END SUBMENU ---------------------
+</details>
+
+<details>
+<summary markdown="span"> Virtual machines </summary>
+-------------------- BEGIN SUBMENU --------------------
+<details>
+<summary markdown="span"> VM 1 </summary>
+ 
+<p align="center"><img src="" height="100"/></p>
+
+<h1 align="center" id="heading"> VM 1 </h1>
+
+```bash
+bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/vm/*.sh) install
+```
+
+____________________________________________________________________________________________ 
+</details>
+<details>
+<summary markdown="span"> VM 2 </summary>
+ 
+<p align="center"><img src="" height="100"/></p>
+
+<h1 align="center" id="heading"> VM 2 </h1>
+
+```bash
+bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/vm/*.sh) install
+```
+
+____________________________________________________________________________________________ 
+</details>
+<details>
+<summary markdown="span"> VM 3 </summary>
+ 
+<p align="center"><img src="" height="100"/></p>
+
+<h1 align="center" id="heading"> VM 3 </h1>
+
+```bash
+bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/vm/*.sh) install
+```
+
+____________________________________________________________________________________________ 
+</details>
+--------------------- END SUBMENU ---------------------
+</details>
+
+<details>
+<summary markdown="span"> My Stats & Skills </summary>
 
 <h1 align="center" id="heading">My Stats & Skills</h1>
 
@@ -19,3 +144,4 @@
   <a href="https://iThieler.github.io/Proxmox/"><img src="https://github-readme-stats.vercel.app/api?username=iThieler&hide=stars&count_private=true&show_icons=true&theme=dark" height="130" /></a>
   <a href="https://iThieler.github.io/Proxmox/"><img src="https://github-readme-stats.vercel.app/api/top-langs?username=iThieler&layout=compact&theme=dark" height="130" /></a>
 </p>
+</details>
