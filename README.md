@@ -39,9 +39,81 @@ Run the following in the Proxmox Shell. ⚠️ **PVE7 ONLY**
 ```bash
 bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/global-config-file.sh) install
 ```
-
 ____________________________________________________________________________________________ 
 </details>
+
+<details>
+<summary markdown="span"> Resize Container Disk (LXC) </summary>
+ 
+<h1 align="center" id="heading"> Resize Container Disk (LXC) </h1>
+
+You will need access to your Proxmox node via SSH or directly. This applies to the standard Proxmox setup using LVM. In this example, the hard disk of the VMID 100 is reduced from 16GB to 8GB. On your Proxmox node, do the following:
+
+List containers
+```bash
+pct list
+```
+
+
+Stop the container you want to resize
+```bash
+pct stop 100
+```
+
+
+Find out it's path on the node
+```bash
+lvdisplay | grep "LV Path\|LV Size"
+```
+
+
+Run a file system check
+```bash
+e2fsck -fy /dev/pve/vm-100-disk-0
+```
+
+
+Resize the file system
+```bash
+resize2fs /dev/pve/vm-100-disk-0 8G
+```
+
+
+Resize the local volume
+```bash
+lvreduce -L 8G /dev/pve/vm-100-disk-0
+```
+
+
+Edit the container's conf file
+```bash
+nano /etc/pve/lxc/100.conf
+```
+
+
+Update the following line accordingly
+```bash
+FROM:
+rootfs: local-lvm:vm-100-disk-0,size=16G
+TO:
+rootfs: local-lvm:vm-100-disk-0,size=8G
+```
+
+
+Start the container
+```bash
+pct start 100
+```
+
+
+Enter and check the resize container disk
+```bash
+pct enter 100
+df -h
+```
+____________________________________________________________________________________________ 
+</details>
+
 --------------------- END SUBMENU ---------------------
 </details>
 
@@ -58,9 +130,9 @@ ________________________________________________________________________________
 ```bash
 bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/lxc/*.sh) install
 ```
-
 ____________________________________________________________________________________________ 
 </details>
+
 <details>
 <summary markdown="span"> LXC 2 </summary>
  
@@ -71,9 +143,9 @@ ________________________________________________________________________________
 ```bash
 bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/lxc/*.sh) install
 ```
-
 ____________________________________________________________________________________________ 
 </details>
+
 <details>
 <summary markdown="span"> LXC 3 </summary>
  
@@ -84,9 +156,9 @@ ________________________________________________________________________________
 ```bash
 bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/lxc/*.sh) install
 ```
-
 ____________________________________________________________________________________________ 
 </details>
+
 --------------------- END SUBMENU ---------------------
 </details>
 
@@ -103,9 +175,9 @@ ________________________________________________________________________________
 ```bash
 bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/vm/*.sh) install
 ```
-
 ____________________________________________________________________________________________ 
 </details>
+
 <details>
 <summary markdown="span"> VM 2 </summary>
  
@@ -116,9 +188,9 @@ ________________________________________________________________________________
 ```bash
 bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/vm/*.sh) install
 ```
-
 ____________________________________________________________________________________________ 
 </details>
+
 <details>
 <summary markdown="span"> VM 3 </summary>
  
@@ -129,9 +201,9 @@ ________________________________________________________________________________
 ```bash
 bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/vm/*.sh) install
 ```
-
 ____________________________________________________________________________________________ 
 </details>
+
 --------------------- END SUBMENU ---------------------
 </details>
 
