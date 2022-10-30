@@ -4,22 +4,12 @@
 
 <p align="center">
   <a href="https://github.com/iThieler/Proxmox/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" ></a>
-  <a href="https://github.com/iThieler/Proxmox/discussions"><img src="https://img.shields.io/badge/%F0%9F%92%AC-Discussions-orange" /></a>
+  <a href="https://github.com/iThieler/iThieler/discussions"><img src="https://img.shields.io/badge/%F0%9F%92%AC-Discussions-orange" /></a>
   <a href="https://github.com/iThieler/Proxmox/blob/master/CHANGELOG.md"><img src="https://img.shields.io/badge/🔶-Changelog-blue" /></a>
   <a href="https://ko-fi.com/U7U3FUTLF"><img src="https://img.shields.io/badge/%E2%98%95-Buy%20me%20a%20coffee-red" /></a>
-</p>
+</p><br><br>
 
-<h1 align="center" id="heading">Content</h1>
-
-<details>
-<summary markdown="span"> Proxmox Host Server </summary>
--------------------- BEGIN SUBMENU --------------------
-<details>
-<summary markdown="span"> Proxmox Basic config </summary>
- 
 <p align="center"><img src="https://github.com/home-assistant/brands/blob/master/core_integrations/proxmoxve/icon.png?raw=true" height="100"/></p>
-
-<h1 align="center" id="heading"> Proxmox Basic config </h1>
 
 This script performs the following tasks after creating a configuration file. The configuration file is created by answering questions and is used to find variables for other tasks that are added in the future.
 - If not already done and supported by the system hard disk, S.M.A.R.T. support is enabled on it
@@ -39,8 +29,8 @@ Run the following in the Proxmox Shell. ⚠️ **PVE7 ONLY**
 ```bash
 bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/global-config-file.sh) install
 ```
-____________________________________________________________________________________________ 
-</details>
+
+<br><br><h1 align="center" id="heading"> Good to know & more </h1>
 
 <details>
 <summary markdown="span"> Resize Container Disk (LXC) </summary>
@@ -114,12 +104,9 @@ df -h
 ____________________________________________________________________________________________ 
 </details>
 
---------------------- END SUBMENU ---------------------
-</details>
-
 <details>
 <summary markdown="span"> LXC Container </summary>
--------------------- BEGIN SUBMENU --------------------
+<h1 id="heading"> </h1>
 <details>
 <summary markdown="span"> LXC 1 </summary>
  
@@ -157,14 +144,11 @@ ________________________________________________________________________________
 bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/lxc/*.sh) install
 ```
 ____________________________________________________________________________________________ 
-</details>
-
---------------------- END SUBMENU ---------------------
-</details>
+</details><h1 id="heading"> </h1></details>
 
 <details>
 <summary markdown="span"> Virtual machines </summary>
--------------------- BEGIN SUBMENU --------------------
+<h1 id="heading"> </h1>
 <details>
 <summary markdown="span"> VM 1 </summary>
  
@@ -202,18 +186,4 @@ ________________________________________________________________________________
 bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/vm/*.sh) install
 ```
 ____________________________________________________________________________________________ 
-</details>
-
---------------------- END SUBMENU ---------------------
-</details>
-
-<details>
-<summary markdown="span"> My Stats & Skills </summary>
-
-<h1 align="center" id="heading">My Stats & Skills</h1>
-
-<p align="center">
-  <a href="https://iThieler.github.io/Proxmox/"><img src="https://github-readme-stats.vercel.app/api?username=iThieler&hide=stars&count_private=true&show_icons=true&theme=dark" height="130" /></a>
-  <a href="https://iThieler.github.io/Proxmox/"><img src="https://github-readme-stats.vercel.app/api/top-langs?username=iThieler&layout=compact&theme=dark" height="130" /></a>
-</p>
-</details>
+</details><h1 id="heading"> </h1></details>
