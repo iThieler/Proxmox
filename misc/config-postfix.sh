@@ -68,5 +68,3 @@ if [ ! whip_yesno "JA" "NEIN" "MAILSERVER" "Es wurde eine E-Mail an >>${mailTO}<
     exit 1
   fi
 fi
-
-exit 0
