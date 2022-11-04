@@ -79,6 +79,7 @@ function create_Global_Config() {
   fi
 
   # create config File
+  echo > "/root/.iThieler"
   echo -e "\0043\0041/bin/bash
   \0043 This file stores variables that are specified during the first execution of the post-processing script by the >
   \0043 This makes re-execution of the script easier, and follows a standard. The advantage is that the user does not >
