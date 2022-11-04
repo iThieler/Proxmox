@@ -5,7 +5,7 @@ source <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/fu
 
 function create_Global_Config() {
   # get Variables from Server
-  hostNETWORK=$(hostname -I | grep -d. -f1,2,3)
+  hostNETWORK=$(hostname -I | cut -d. -f1,2,3)
   hostDOMAIN=$(pveum user list | grep "root@pam" | awk '{print $5}' | cut -d\@ -f2)
   hostGATEWAY=$(ip a s | grep inet | grep ${hostNETWORK} | cut -d. -f4 | cut -d' ' -f1 | cut -d/ -f1)
   hostROOTMAIL=$(pveum user list | grep "root@pam" | awk '{print $5}')
