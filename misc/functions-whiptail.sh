@@ -1,3 +1,5 @@
+source <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/functions-basic.sh)
+
 ################################
 ##   normal Whiptail Boxes    ##
 ################################
@@ -49,6 +51,17 @@ function whip_inputbox_password() {
   input=$(whiptail --passwordbox --ok-button " ${1} " --nocancel --backtitle "© 2021 - SmartHome-IoT.net" --title " ${2} " "\n${3}" 10 80 3>&1 1>&2 2>&3)
   if [[ $input == "" ]]; then
     whip_inputbox "$1" "$2" "$3" "$4\n\n!!! Es muss eine Eingabe erfolgen !!!" ""
+  else
+    echo "${input}"
+  fi
+}
+
+# give a whiptail box with inpput field for passwords
+function whip_inputbox_password_autogenerate() {
+  #call whip_inputbox "btn" "title" "message"
+  input=$(whiptail --passwordbox --ok-button " ${1} " --nocancel --backtitle "© 2021 - SmartHome-IoT.net" --title " ${2} " "\n${3}" 10 80 3>&1 1>&2 2>&3)
+  if [[ $input == "" ]]; then
+    echo $(generatePassword 26)
   else
     echo "${input}"
   fi
