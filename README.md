@@ -27,7 +27,7 @@ This script performs the following tasks after creating a configuration file. Th
 Run the following in the Proxmox Shell. ⚠️ **PVE7 ONLY**
 
 ```bash
-bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/global-config-file.sh) install
+bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/checkup.sh)
 ```
 
 <br><br><h1 align="center" id="heading"> Good to know & more </h1>
