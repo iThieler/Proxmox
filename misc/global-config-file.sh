@@ -1,16 +1,17 @@
 #!/bin/bash
 
-source <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/functions-basic.sh)
-source <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/functions-whiptail.sh)
+source "/root/Proxmox/misc/functions-basic.sh"
+source "/root/Proxmox/misc/functions-whiptail.sh"
+configFILE="$1"
 
 function create_Global_Config() {
   echoLOG g "in Funktion"
   # get Variables from Server
-  hostNETWORK=$(hostname -I | cut -d. -f1,2,3)
-  echoLOG y "hostNETWORK= ${hostNETWORK}"
+  hostNETWORKID=$(hostname -I | cut -d. -f1,2,3)
+  echoLOG y "hostNETWORKID= ${hostNETWORKID}"
   hostDOMAIN=$(pveum user list | grep "root@pam" | awk '{print $5}' | cut -d\@ -f2)
   echoLOG r "hostDOMAIN= ${hostDOMAIN}"
-  hostGATEWAY=$(ip a s | grep inet | grep ${hostNETWORK} | cut -d. -f4 | cut -d' ' -f1 | cut -d/ -f1)
+  hostGATEWAY=$(ip r | grep default | cut -d' ' -f3)
   echoLOG b "hostGATEWAY= ${hostGATEWAY}"
   hostROOTMAIL=$(pveum user list | grep "root@pam" | awk '{print $5}')
   echoLOG g "hostROOTMAIL= ${hostROOTMAIL}"
@@ -37,7 +38,7 @@ function create_Global_Config() {
 
   # config NAS
   if whip_yesno "JA" "NEIN" "NAS" "Befindet sich ein Network Attached Storage (NAS) in deinem Netzwerk?"; then
-    nasIP=$(whip_inputbox "OK" "NAS" "Wie lautet die IP-Adresse der NAS?" "${hostNETWORK}.")
+    nasIP=$(whip_inputbox "OK" "NAS" "Wie lautet die IP-Adresse der NAS?" "${hostNETWORKID}.")
     nasBAKPATH=$(whip_inputbox "OK" "NAS" "Wie heisst der Ordner in dem Backups gespeichert werden sollen?\nProxmox erstellt automatisch einen Unterordner namens >>dump<<." "backups")
     if whip_yesno "SAMBA" "NFS" "NAS" "Kann dieses Verzeichnis per NFS (Linux Standard) angebunden werden, oder soll das Samba Protokoll (Windows Standard) genutzt werden?"; then
       nasPROTOCOL=cifs
@@ -55,25 +56,26 @@ function create_Global_Config() {
 
   # config VLAN
   if whip_yesno "JA" "NEIN" "VLAN" "Werden in diesem Netzwerk VLANs genutzt?"; then
+    networkID=$(${hostNETWORKID} | cut -d. -f1,2)
     if whip_yesno "JA" "NEIN" "VLAN" "Wird ein VLAN für Server genutzt?"; then
       vlanSERVERID=$(whip_inputbox "OK" "VLAN" "Wie lautet die VLAN-ID?")
-      vlanSERVERGW=$(whip_inputbox "OK" "VLAN" "Wie lautet die IP-Adresse des Gateways?" "${hostNETWORK}.")
+      vlanSERVERGW=$(whip_inputbox "OK" "VLAN" "Wie lautet die IP-Adresse des Gateways?" "${hostGATEWAY}")
     fi
     if whip_yesno "JA" "NEIN" "VLAN" "Wird ein VLAN für SmartHome Geräte genutzt?"; then
       vlanSMARTHOMEID=$(whip_inputbox "OK" "VLAN" "Wie lautet die VLAN-ID?")
-      vlanSMARTHOMEGW=$(whip_inputbox "OK" "VLAN" "Wie lautet die IP-Adresse des Gateways?")
+      vlanSMARTHOMEGW=$(whip_inputbox "OK" "VLAN" "Wie lautet die IP-Adresse des Gateways?" "${networkID}.${vlanSMARTHOMEID}.254")
     fi
     if whip_yesno "JA" "NEIN" "VLAN" "Wird ein VLAN für DHCP (Handys, Laptops, Fernseher usw.) genutzt?"; then
       vlanDHCPID=$(whip_inputbox "OK" "VLAN" "Wie lautet die VLAN-ID?")
-      vlanDHCPGW=$(whip_inputbox "OK" "VLAN" "Wie lautet die IP-Adresse des Gateways?")
+      vlanDHCPGW=$(whip_inputbox "OK" "VLAN" "Wie lautet die IP-Adresse des Gateways?" "${networkID}.${vlanDHCPID}.254")
     fi
     if whip_yesno "JA" "NEIN" "VLAN" "Wird ein VLAN für Gäste WLAN genutzt?"; then
       vlanGUESTID=$(whip_inputbox "OK" "VLAN" "Wie lautet die VLAN-ID?")
-      vlanGUESTGW=$(whip_inputbox "OK" "VLAN" "Wie lautet die IP-Adresse des Gateways?" "${hostNETWORK}.")
+      vlanGUESTGW=$(whip_inputbox "OK" "VLAN" "Wie lautet die IP-Adresse des Gateways?" "${networkID}.${vlanDHCPID}.1")
     fi
   else
     vlanSERVERID=0
-    vlanSERVERGW="${hostNETWORK}.${hostGATEWAY}"
+    vlanSERVERGW="${hostNETWORKID}.${hostGATEWAY}"
   fi
 
   # create config File
@@ -109,21 +111,21 @@ function create_Global_Config() {
   vlanDHCPID=${vlanDHCPID}
   vlanDHCPGW=${vlanDHCPGW}
   vlanGUESTID=${vlanGUESTID}
-  vlanGUESTGW=${vlanGUESTGW}" > /root/pve-global-config.sh
+  vlanGUESTGW=${vlanGUESTGW}" > $configFILE
 }
 
-if [ -f /root/pve-global-config.sh ]; then
-  source /root/pve-global-config.sh
+if [ -f "$configFILE" ]; then
+  source "$configFILE"
 else
   echoLOG g "Starte globale Konfiguration :-)"
   create_Global_Config
   updateHost
-  source /root/pve-global-config.sh
+  source "$configFILE"
   if [ -z "$nasIP" ]; then
-    bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/config-nas.sh)
+    bash "/root/Proxmox/misc/config-nas.sh" "$1"
   fi
   if [ -z "$mailSERVER" ]; then
-    bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/config-postfix.sh)
+    bash "/root/Proxmox/misc/config-postfix.sh" "$1"
   fi
-  bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/config-pve.sh)
+  bash "/root/Proxmox/misc/config-pve.sh" "$1"
 fi
