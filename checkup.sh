@@ -10,7 +10,7 @@ function check_pkg() {
 }
 
 # Check Proxmox
-if ! command -v pveversion >/dev/null 2>&1;
+if ! command -v pveversion >/dev/null 2>&1; then
   NEWT_COLORS='
       window=black,red
       border=white,red
