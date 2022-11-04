@@ -19,7 +19,7 @@ function create_Global_Config() {
   fi
 
   # config SMTP server for email notification
-  if whip_yesno "JA" "NEIN" "MAILSERVER" "Soll ein eigene Mailserver für den Versand von Benachrichtigungen verwendet werden?"; then
+  if whip_yesno "JA" "NEIN" "MAILSERVER" "Soll ein eigener Mailserver für den Versand von Benachrichtigungen verwendet werden?"; then
     mailUSER=$(whip_inputbox "OK" "MAILSERVER" "Welcher Benutzername wird für den Login am Mailserver verwendet?" "notify@${hostDOMAIN}")
     mailPASS=$(whip_inputbox "OK" "MAILSERVER" "Wie lautet das Passwort, welches für den Login am Mailserver verwendet wird?")
     mailTO=$(whip_inputbox "OK" "MAILSERVER" "An welche E-Mailadresse sollen Benachrichtigungen von deinem Server gesendet werden?" "${hostROOTMAIL}")
@@ -30,7 +30,7 @@ function create_Global_Config() {
   fi
 
   # config NAS
-  if $(whip_yesno "JA" "NEIN" "NAS" "Befindet sich ein Network Attached Storage (NAS) in deinem Netzwerk?"); then
+  if whip_yesno "JA" "NEIN" "NAS" "Befindet sich ein Network Attached Storage (NAS) in deinem Netzwerk?"; then
     nasIP=$(whip_inputbox "OK" "NAS" "Wie lautet die IP-Adresse der NAS?" "${hostNETWORK}.")
     nasBAKPATH=$(whip_inputbox "OK" "NAS" "Wie heisst der Ordner in dem Backups gespeichert werden sollen?\nProxmox erstellt automatisch einen Unterordner namens >>dump<<." "backups")
     if $(whip_yesno "SAMBA" "NFS" "NAS" "Kann dieses Verzeichnis per NFS (Linux Standard) angebunden werden, oder soll das Samba Protokoll (Windows Standard) genutzt werden?"); then
@@ -48,7 +48,7 @@ function create_Global_Config() {
   fi
 
   # config VLAN
-  if $(whip_yesno "JA" "NEIN" "VLAN" "Werden in diesem Netzwerk VLANs genutzt?"); then
+  if whip_yesno "JA" "NEIN" "VLAN" "Werden in diesem Netzwerk VLANs genutzt?"; then
     if $(whip_yesno "JA" "NEIN" "VLAN" "Wird ein VLAN für Server genutzt?"); then
       vlanSERVERID=$(whip_inputbox "OK" "VLAN" "Wie lautet die VLAN-ID?")
       vlanSERVERGW=$(whip_inputbox "OK" "VLAN" "Wie lautet die IP-Adresse des Gateways?" "${hostNETWORK}.")
