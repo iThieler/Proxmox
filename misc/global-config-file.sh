@@ -2,11 +2,6 @@
 
 source <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/functions-basic.sh)
 source <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/functions-whiptail.sh)
-if [ -f /root/pve-global-config.sh ]; then
-  source /root/pve-global-config.sh
-else
-  create_Global_Config
-fi
 
 function create_Global_Config() {
   # get Variables from Server
@@ -110,3 +105,9 @@ function create_Global_Config() {
   vlanGUESTID=${vlanGUESTID}
   vlanGUESTGW=${vlanGUESTGW}" > /root/pve-global-config.sh
 }
+
+if [ -f /root/pve-global-config.sh ]; then
+  source /root/pve-global-config.sh
+else
+  create_Global_Config
+fi
