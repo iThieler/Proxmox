@@ -15,6 +15,7 @@ function create_Global_Config() {
   robotPASS=$(whip_inputbox "OK" "NETZWERKROBOTER" "Wie lautet das Passwort von >>${robotNAME}<<?\nLeer = Passwort automatisch erstellen")
   if [ ! $robotPASS ]; then
     robotPASS=$(generatePassword 26)
+    echo $robotPASS
     whip_message "NETZWERKROBOTER" "Erstelle auf deinen Geräten (Router, NAS, Switch, AccessPoint) den folgenden Benutzer mit Adminrechten.\n\nBenutzername: ${robotNAME}\n${Passwort}: ${robotPASS}"
   fi
 
