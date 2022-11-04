@@ -32,6 +32,21 @@ function check_pkg() {
   fi
 }
 
+# Function cloning github repository an makes SH-Files executable
+function cloneGIT() {
+  # Call with: cloneGIT "REPOSITORY_NAME" "GITHUBUSERNAME"
+  local repo=$1
+  if [ -z "$2" ]; then
+    local user="iThieler"
+  else
+    local user=$2
+  fi
+  git clone "https://github.com/${user}/${repo}.git" &>/dev/null
+  for f in `find "/root/Proxmox" -name '*.sh' -o -regex './s?bin/[^/]+' -o -regex './usr/sbin/[^/]+' -o -regex './usr/lib/[^/]+'`; do
+    ( cd `dirname $f` && git update-index --chmod=+x  `basename $f` )
+  done 
+}
+
 # Function generates a random secure Linux password
 function generatePassword() {
   # Call with: generatePassword 12 >> 12 is the password length
