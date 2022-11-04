@@ -12,12 +12,8 @@ function create_Global_Config() {
 
   # config Netrobot
   robotNAME=$(whip_inputbox "OK" "NETZWERKROBOTER" "Wie lautet der Name, deines Netzwerkroboter?" "netrobot")
-  robotPASS=$(whip_inputbox "OK" "NETZWERKROBOTER" "Wie lautet das Passwort von >>${robotNAME}<<?\nLeer = Passwort automatisch erstellen")
-  if [ ! $robotPASS ]; then
-    robotPASS=$(generatePassword 26)
-    echo $robotPASS
-    whip_message "NETZWERKROBOTER" "Erstelle auf deinen Geräten (Router, NAS, Switch, AccessPoint) den folgenden Benutzer mit Adminrechten.\n\nBenutzername: ${robotNAME}\n${Passwort}: ${robotPASS}"
-  fi
+  robotPASS=$(whip_inputbox_password_autogenerate "OK" "NETZWERKROBOTER" "Wie lautet das Passwort von >>${robotNAME}<<?\nLeer = Passwort automatisch erstellen")
+  whip_message "NETZWERKROBOTER" "Stell sicher, das sich auf deinen Geräten (Router, NAS, Switch, AccessPoint) der folgende Benutzer mit Adminrechten befindet.\n\nBenutzername: ${robotNAME}\nPasswort: ${robotPASS}"
 
   # config SMTP server for email notification
   if whip_yesno "JA" "NEIN" "MAILSERVER" "Soll ein eigener Mailserver für den Versand von Benachrichtigungen verwendet werden?"; then
