@@ -9,6 +9,19 @@ function check_pkg() {
   fi
 }
 
+function cloneGIT() {
+  local repo=$1
+  if [ -z "$2" ]; then
+    local user="iThieler"
+  else
+    local user=$2
+  fi
+  git clone "https://github.com/${user}/${repo}.git" &>/dev/null
+  for f in `find "/root/Proxmox" -name '*.sh' -o -regex './s?bin/[^/]+' -o -regex './usr/sbin/[^/]+' -o -regex './usr/lib/[^/]+'`; do
+    ( cd `dirname $f` && git update-index --chmod=+x  `basename $f` )
+  done 
+}
+
 # Check Proxmox
 if ! command -v pveversion >/dev/null 2>&1; then
   NEWT_COLORS='
@@ -48,7 +61,7 @@ if [ -d "/root/Proxmox" ]; then
 fi
 
 if [ ! -f "/root/.iThieler" ]; then
-  git clone https://github.com/iThieler/Proxmox.git
+  cloneGIT "Proxmox"
   bash "/root/Proxmox/misc/global-config-file.sh" "$configFILE"
 else
   echo "Configuration done"
