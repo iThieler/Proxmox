@@ -20,4 +20,4 @@ if check_ip "${nasIP}"; then
 fi
 
 # create Backupjob every Day at 3:00
-echo "0 3 * * *   root   vzdump --compress zstd --mailto root --mailnotification always --exclude-path /mnt/ --exclude-path /media/ --mode snapshot --quiet 1 --pool BackupPool --maxfiles 6 --storage backups" >> /etc/cron.d/vzdump
+echo "0 3 * * *   root   vzdump --compress zstd --mailto ${mailTO} --mailnotification always --exclude-path /mnt/ --exclude-path /media/ --mode snapshot --quiet 1 --pool BackupPool --maxfiles 6 --storage backups" >> /etc/cron.d/vzdump
