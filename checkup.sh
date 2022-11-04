@@ -47,9 +47,8 @@ if [ -d "/root/Proxmox" ]; then
   rm -r "/root/Proxmox"
 fi
 
-git clone https://github.com/iThieler/Proxmox.git
-
 if [ ! -f "/root/.iThieler" ]; then
+  git clone https://github.com/iThieler/Proxmox.git
   bash "/root/Proxmox/misc/global-config-file.sh" "$configFILE"
 else
   echo "Configuration done"
