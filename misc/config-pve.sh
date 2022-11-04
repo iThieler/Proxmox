@@ -76,5 +76,3 @@ fi
 whip_message "PROXMOX" "Die Grundkonfiguration des Servers ist nun abgeschlossen. Der Server muss neu gestartet werden. Nach dem Neustart kann dieses Skript zur installation und konfiguration von Containern und virtuellen Maschinen erneut aufgerufen werden."
 sleep 2
 reboot
-
-exit 0
