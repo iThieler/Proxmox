@@ -1,3 +1,4 @@
+source <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/functions-whiptail.sh)
 
 # Function ping given IP and return TRUE if available
 function pingIP() {
