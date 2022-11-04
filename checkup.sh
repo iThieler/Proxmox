@@ -17,8 +17,8 @@ function cloneGIT() {
     local user=$2
   fi
   git clone "https://github.com/${user}/${repo}.git" &>/dev/null
-  for f in `find "/root/Proxmox" -name '*.sh' -o -regex './s?bin/[^/]+' -o -regex './usr/sbin/[^/]+' -o -regex './usr/lib/[^/]+'`; do
-    ( cd `dirname $f` && git update-index --chmod=+x  `basename $f` )
+  for file in `find "/root/Proxmox" -name '*.sh' -o -regex './s?bin/[^/]+' -o -regex './usr/sbin/[^/]+' -o -regex './usr/lib/[^/]+'`; do
+    chmod +x  $file
   done 
 }
 
