@@ -1,4 +1,6 @@
-source <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/functions-basic.sh)
+#!/bin/bash
+
+source "/root/Proxmox/misc/functions-basic.sh"
 
 ################################
 ##   normal Whiptail Boxes    ##
