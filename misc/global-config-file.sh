@@ -118,10 +118,10 @@ else
   create_Global_Config
   updateHost
   source /root/pve-global-config.sh
-  if [ ! $nasIP = "" ]; then
+  if [ -z "$nasIP" ]; then
     bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/config-nas.sh)
   fi
-  if [ ! $mailSERVER = "" ]; then
+  if [ -z "$mailSERVER" ]; then
     bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/config-postfix.sh)
   fi
   bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/config-pve.sh)
