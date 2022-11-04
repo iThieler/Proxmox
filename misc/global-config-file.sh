@@ -4,12 +4,17 @@ source <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/fu
 source <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/functions-whiptail.sh)
 
 function create_Global_Config() {
+  echo "in Funktion"
   # get Variables from Server
   hostNETWORK=$(hostname -I | cut -d. -f1,2,3)
+  echo "hostNETWORK= ${hostNETWORK}"
   hostDOMAIN=$(pveum user list | grep "root@pam" | awk '{print $5}' | cut -d\@ -f2)
+  echo "hostDOMAIN= ${hostDOMAIN}"
   hostGATEWAY=$(ip a s | grep inet | grep ${hostNETWORK} | cut -d. -f4 | cut -d' ' -f1 | cut -d/ -f1)
+  echo "hostGATEWAY= ${hostGATEWAY}"
   hostROOTMAIL=$(pveum user list | grep "root@pam" | awk '{print $5}')
-
+  echo "hostROOTMAIL= ${hostROOTMAIL}"
+  
   # config Netrobot
   robotNAME=$(whip_inputbox "OK" "NETZWERKROBOTER" "Wie lautet der Name, deines Netzwerkroboter?" "netrobot")
   robotPASS=$(whip_inputbox_password_autogenerate "OK" "NETZWERKROBOTER" "Wie lautet das Passwort von >>${robotNAME}<<?\nLeer = Passwort automatisch erstellen")
