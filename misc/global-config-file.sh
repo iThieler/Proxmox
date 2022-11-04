@@ -4,16 +4,16 @@ source <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/fu
 source <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/functions-whiptail.sh)
 
 function create_Global_Config() {
-  echo "in Funktion"
+  echoLOG g "in Funktion"
   # get Variables from Server
   hostNETWORK=$(hostname -I | cut -d. -f1,2,3)
-  echo "hostNETWORK= ${hostNETWORK}"
+  echoLOG y "hostNETWORK= ${hostNETWORK}"
   hostDOMAIN=$(pveum user list | grep "root@pam" | awk '{print $5}' | cut -d\@ -f2)
-  echo "hostDOMAIN= ${hostDOMAIN}"
+  echoLOG r "hostDOMAIN= ${hostDOMAIN}"
   hostGATEWAY=$(ip a s | grep inet | grep ${hostNETWORK} | cut -d. -f4 | cut -d' ' -f1 | cut -d/ -f1)
-  echo "hostGATEWAY= ${hostGATEWAY}"
+  echoLOG b "hostGATEWAY= ${hostGATEWAY}"
   hostROOTMAIL=$(pveum user list | grep "root@pam" | awk '{print $5}')
-  echo "hostROOTMAIL= ${hostROOTMAIL}"
+  echoLOG g "hostROOTMAIL= ${hostROOTMAIL}"
   
   # config Netrobot
   robotNAME=$(whip_inputbox "OK" "NETZWERKROBOTER" "Wie lautet der Name, deines Netzwerkroboter?" "netrobot")
@@ -115,6 +115,7 @@ function create_Global_Config() {
 if [ -f /root/pve-global-config.sh ]; then
   source /root/pve-global-config.sh
 else
+  echoLOG g "Starte globale Konfiguration :-)"
   create_Global_Config
   updateHost
   source /root/pve-global-config.sh
