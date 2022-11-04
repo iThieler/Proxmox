@@ -1,12 +1,8 @@
 #!/bin/bash
 
-source <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/functions-basic.sh)
-source <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/functions-whiptail.sh)
-if [ -f /root/pve-global-config.sh ]; then
-  source /root/pve-global-config.sh
-else
-  bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/global-config-file.sh) install
-fi
+source "/root/Proxmox/misc/functions-basic.sh"
+source "/root/Proxmox/misc/functions-whiptail.sh"
+configFILE="$1"
 
 bakFILE backup "/etc/aliases"
 bakFILE backup "/etc/postfix/canonical"
