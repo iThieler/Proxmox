@@ -1,11 +1,11 @@
 #!/bin/bash
 
-source $(dirname "$0")/misc//basic-functions.sh
-source $(dirname "$0")/misc/whiptail-functions.sh
+source <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/functions-basic.sh)
+source <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/functions-whiptail.sh)
 if [ -f /root/pve-global-config.sh ]; then
   source /root/pve-global-config.sh
 else
-  bash ./global-config-file.sh
+  bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/global-config-file.sh) install
 fi
 
 # mount NAS as Backupstorage in Proxmox
