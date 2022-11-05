@@ -4,7 +4,7 @@ if [ -n "${1}" ]; then
   configFILE="$1"
 fi
 
-DIR_PATH=$(cd $(dirname “${BASH_SOURCE:-$0}”) && pwd)
+DIR_PATH=$(realpath "$0")
 
 path=$DIR_PATH/$(basename “${BASH_SOURCE:-$0}”)
 
