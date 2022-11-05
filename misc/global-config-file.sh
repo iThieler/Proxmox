@@ -4,7 +4,8 @@ if [ -n "$1" ]; then
   configFile="$1"
 fi
 
-echo -e "source \"$(dirname \"${BASH_SOURCE[0]}\")/A.sh\""
+source "$(dirname "${BASH_SOURCE[0]}")/functions-basic.sh"
+source "$(dirname "${BASH_SOURCE[0]}")/functions-whiptail.sh"
 
 pwd
 
