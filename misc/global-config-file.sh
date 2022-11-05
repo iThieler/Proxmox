@@ -4,12 +4,11 @@ if [ -n "${1}" ]; then
   configFILE="$1"
 fi
 
-DIR_PATH=$(realpath "$0")
+fileName=$(basename “${BASH_SOURCE:-$0}”)
+filePATH=$(realpath "$0" | sed "s/\/$fileNAME//")
 
-path=$DIR_PATH/$(basename “${BASH_SOURCE:-$0}”)
-
-echo "The absolute path is ${path}"
+echo "The Filepath is ${filePATH}"
 echo "----------------------------------"
-echo "The directory path is ${DIR_PATH}"
+echo "The FileName is ${fileName}"
 echo "----------------------------------"
 echo "The configFile is ${configFile}"
