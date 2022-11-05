@@ -1,6 +1,8 @@
 #!/bin/bash
 
-echo "$1"
+if [ -z "$1" ]; then
+  echo "$1"
+fi
 
 #fileName=$(basename "${BASH_SOURCE:-$0}")
 #filePATH=$(realpath "$0" | sed 's|\(.*\)/.*|\1|')
