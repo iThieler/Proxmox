@@ -120,7 +120,6 @@ function create_Global_Config() {
   vlanGUESTID=${vlanGUESTID}
   vlanGUESTGW=${vlanGUESTGW}" > $configFILE
 }
-com
 
 echo "Starte globale Konfiguration :-)"
 #create_Global_Config
@@ -135,3 +134,7 @@ if [ -n "$mailSERVER" ]; then
 fi
 
 bash "misc/config-pve.sh" "$configFile"
+
+com
+
+echo "Hallo"
