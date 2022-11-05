@@ -9,6 +9,7 @@ filePATH=$(realpath "$0" | sed 's|\(.*\)/.*|\1|')
 source "$filePATH/functions-basic.sh"
 source "$filePATH/functions-whiptail.sh"
 
+<<com
 function create_Global_Config() {
   echoLOG g "in Funktion"
   # get Variables from Server
@@ -119,17 +120,18 @@ function create_Global_Config() {
   vlanGUESTID=${vlanGUESTID}
   vlanGUESTGW=${vlanGUESTGW}" > $configFILE
 }
+com
 
 echoLOG g "Starte globale Konfiguration :-)"
-create_Global_Config
+#create_Global_Config
 updateHost
 
 if [ -n "$nasIP" ]; then
-  bash "/root/Proxmox/misc/config-nas.sh" "$configFile"
+  bash "misc/config-nas.sh" "$configFile"
 fi
 
 if [ -n "$mailSERVER" ]; then
-  bash "/root/Proxmox/misc/config-postfix.sh" "$configFile"
+  bash "misc/config-postfix.sh" "$configFile"
 fi
 
-bash "/root/Proxmox/misc/config-pve.sh" "$configFile"
+bash "misc/config-pve.sh" "$configFile"
