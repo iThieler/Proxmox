@@ -1,8 +1,6 @@
 #!/bin/bash
 
-if [ -z "${1}" ]; then
-  configFILE="$1"
-fi
+configFILE=$1
 
 fileName=$(basename "${BASH_SOURCE:-$0}")
 filePATH=$(realpath "$0" | sed 's|\(.*\)/.*|\1|')
