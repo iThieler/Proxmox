@@ -67,5 +67,5 @@ if [ -f "/root/.iThieler" ]; then
 else
   cloneGIT "${gitREPONAME}"
   cd "/root/${gitREPONAME}"
-  bash "misc/global-config-file.sh" "/root/pve-global-config.sh"
+  bash "misc/global-config-file.sh" "$configFILE"
 fi
