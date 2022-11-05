@@ -3,10 +3,8 @@
 if [ -n "$1" ]; then
   configFile="$1"
 fi
-export filePATH=$(realpath "$0" | sed 's|\(.*\)/.*|\1|')
 
-source "$filePATH/functions-basic.sh"
-source "$filePATH/functions-whiptail.sh"
+echo -e "source \"$(dirname \"${BASH_SOURCE[0]}\")/A.sh\""
 
 <<com
 fileName=$(basename "${BASH_SOURCE:-$0}")
