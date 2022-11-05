@@ -1,10 +1,13 @@
 #!/bin/bash
 
-source "/root/Proxmox/misc/functions-basic.sh"
-source "/root/Proxmox/misc/functions-whiptail.sh"
-if [ -n "${1}" ]; then
-  configFILE="$1"
+if [ -n "$1" ]; then
+  configFile="$1"
 fi
+fileName=$(basename "${BASH_SOURCE:-$0}")
+filePATH=$(realpath "$0" | sed 's|\(.*\)/.*|\1|')
+
+source "$filePATH/functions-basic.sh"
+source "$filePATH/functions-whiptail.sh"
 
 function create_Global_Config() {
   echoLOG g "in Funktion"
