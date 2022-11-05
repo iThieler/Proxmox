@@ -122,9 +122,9 @@ function create_Global_Config() {
 }
 com
 
-echoLOG g "Starte globale Konfiguration :-)"
+echo "Starte globale Konfiguration :-)"
 #create_Global_Config
-updateHost
+#updateHost
 
 if [ -n "$nasIP" ]; then
   bash "misc/config-nas.sh" "$configFile"
