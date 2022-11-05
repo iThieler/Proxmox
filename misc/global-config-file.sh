@@ -1,7 +1,9 @@
 #!/bin/bash
 
 if [ -n "$1" ]; then
+  configFile="$1"
   echo "$1"
+  echo "$configFile"
 fi
 
 #fileName=$(basename "${BASH_SOURCE:-$0}")
