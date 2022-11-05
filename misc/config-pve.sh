@@ -2,7 +2,9 @@
 
 source "/root/Proxmox/misc/functions-basic.sh"
 source "/root/Proxmox/misc/functions-whiptail.sh"
-configFILE="$1"
+if [ -n "${1}" ]; then
+  configFILE="$1"
+fi
 
 # Enable S.M.A.R.T. support on system hard drive, when disabled and device is SMART-enabled
 if [ $(smartctl -a /dev/$(eval $(lsblk -oMOUNTPOINT,PKNAME -P | grep 'MOUNTPOINT="/"'); echo $PKNAME | sed 's|[0-9]*$||') | grep -c "SMART support is: Enabled") -eq 0 ]; then
