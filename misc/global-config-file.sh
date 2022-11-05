@@ -120,18 +120,16 @@ function create_Global_Config() {
   vlanGUESTGW=${vlanGUESTGW}" > $configFILE
 }
 
-if [ -f "$configFILE" ]; then
-  source "$configFILE"
-else
-  echoLOG g "Starte globale Konfiguration :-)"
-  create_Global_Config
-  updateHost
-  source "$configFILE"
-  if [ -n "$nasIP" ]; then
-    bash "/root/Proxmox/misc/config-nas.sh" "$1"
-  fi
-  if [ -n "$mailSERVER" ]; then
-    bash "/root/Proxmox/misc/config-postfix.sh" "$1"
-  fi
-  bash "/root/Proxmox/misc/config-pve.sh" "$1"
+echoLOG g "Starte globale Konfiguration :-)"
+create_Global_Config
+updateHost
+
+if [ -n "$nasIP" ]; then
+  bash "/root/Proxmox/misc/config-nas.sh" "$configFile"
 fi
+
+if [ -n "$mailSERVER" ]; then
+  bash "/root/Proxmox/misc/config-postfix.sh" "$configFile"
+fi
+
+bash "/root/Proxmox/misc/config-pve.sh" "$configFile"
