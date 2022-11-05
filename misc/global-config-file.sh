@@ -3,7 +3,6 @@
 if [ -n "$1" ]; then
   configFile="$1"
 fi
-
 fileName=$(basename "${BASH_SOURCE:-$0}")
 filePATH=$(realpath "$0" | sed 's|\(.*\)/.*|\1|')
 
