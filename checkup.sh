@@ -54,15 +54,16 @@ if ! check_pkg "git"; then
 fi
 
 # Start the script
+gitREPONAME="Proxmox"
 configFILE="/root/pve-global-config.sh"
 
-if [ -d "/root/Proxmox" ]; then
-  rm -r "/root/Proxmox"
+if [ -d "/root/${gitREPONAME}" ]; then
+  rm -r "/root/${gitREPONAME}"
 fi
 
 if [ ! -f "/root/.iThieler" ]; then
-  cloneGIT "Proxmox"
-  cd "/root/Proxmox/"
+  cloneGIT "${gitREPONAME}"
+  cd "/root/${gitREPONAME}"
   bash "./misc/global-config-file.sh" "${configFILE}"
 else
   birth=$(stat .iThieler | grep "Birth" | cut -d' ' -f3,4,5)
