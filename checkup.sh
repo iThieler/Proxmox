@@ -63,7 +63,7 @@ fi
 if [ ! -f "/root/.iThieler" ]; then
   cloneGIT "Proxmox"
   cd "/root/Proxmox/"
-  bash "./misc/global-config-file.sh" "$configFILE"
+  bash "./misc/global-config-file.sh" "${configFILE}"
 else
   birth=$(stat .iThieler | grep "Birth" | cut -d' ' -f3,4,5)
   echo -e "$(date +'%Y-%m-%d  %T')  [\033[1;31mERROR\033[0m]  Configuration almost done at >> ${birth}"
