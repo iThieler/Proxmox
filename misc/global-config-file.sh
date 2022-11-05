@@ -6,8 +6,8 @@ fi
 fileName=$(basename "${BASH_SOURCE:-$0}")
 filePATH=$(realpath "$0" | sed 's|\(.*\)/.*|\1|')
 
-source "$filePATH/functions-basic.sh"
-source "$filePATH/functions-whiptail.sh"
+source "${filePATH}/functions-basic.sh"
+source "${filePATH}/functions-whiptail.sh"
 
 echo "The Filepath is ${filePATH}"
 echo "----------------------------------"
