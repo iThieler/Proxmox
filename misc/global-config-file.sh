@@ -1,6 +1,6 @@
 #!/bin/bash
 
-configFILE=$1
+echo "$1"
 
 fileName=$(basename "${BASH_SOURCE:-$0}")
 filePATH=$(realpath "$0" | sed 's|\(.*\)/.*|\1|')
