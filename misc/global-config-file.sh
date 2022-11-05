@@ -6,6 +6,8 @@ fi
 
 echo -e "source \"$(dirname \"${BASH_SOURCE[0]}\")/A.sh\""
 
+pwd
+
 <<com
 fileName=$(basename "${BASH_SOURCE:-$0}")
 filePATH=$(realpath "$0" | sed 's|\(.*\)/.*|\1|')
