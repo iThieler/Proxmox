@@ -61,11 +61,11 @@ if [ -d "/root/${gitREPONAME}" ]; then
   rm -r "/root/${gitREPONAME}"
 fi
 
-if [ ! -f "/root/.iThieler" ]; then
-  cloneGIT "${gitREPONAME}"
-  cd "/root/${gitREPONAME}"
-  bash "./misc/global-config-file.sh" "${configFILE}"
-else
+if [ -f "/root/.iThieler" ]; then
   birth=$(stat .iThieler | grep "Birth" | cut -d' ' -f3,4,5)
   echo -e "$(date +'%Y-%m-%d  %T')  [\033[1;31mERROR\033[0m]  Configuration almost done at >> ${birth}"
+else
+  cloneGIT "${gitREPONAME}"
+  cd "/root/${gitREPONAME}"
+  bash "misc/global-config-file.sh" "${configFILE}"
 fi
