@@ -2,7 +2,9 @@
 
 source "/root/Proxmox/misc/functions-basic.sh"
 source "/root/Proxmox/misc/functions-whiptail.sh"
-configFILE="$1"
+if [ -n "${1}" ]; then
+  configFILE="$1"
+fi
 
 function create_Global_Config() {
   echoLOG g "in Funktion"
@@ -122,10 +124,10 @@ else
   create_Global_Config
   updateHost
   source "$configFILE"
-  if [ -z "$nasIP" ]; then
+  if [ -n "$nasIP" ]; then
     bash "/root/Proxmox/misc/config-nas.sh" "$1"
   fi
-  if [ -z "$mailSERVER" ]; then
+  if [ -n "$mailSERVER" ]; then
     bash "/root/Proxmox/misc/config-postfix.sh" "$1"
   fi
   bash "/root/Proxmox/misc/config-pve.sh" "$1"
