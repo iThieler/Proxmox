@@ -3,6 +3,12 @@
 if [ -n "$1" ]; then
   configFile="$1"
 fi
+export filePATH=$(realpath "$0" | sed 's|\(.*\)/.*|\1|')
+
+source "$filePATH/functions-basic.sh"
+source "$filePATH/functions-whiptail.sh"
+
+<<com
 fileName=$(basename "${BASH_SOURCE:-$0}")
 filePATH=$(realpath "$0" | sed 's|\(.*\)/.*|\1|')
 
@@ -14,3 +20,4 @@ echo "----------------------------------"
 echo "The FileName is ${fileName}"
 echo "----------------------------------"
 echo "The configFile is ${configFile}"
+com
