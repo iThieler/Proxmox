@@ -2,7 +2,7 @@
 
 if [ -n "$1" ]; then
   configFile="$1"
-  echo "$1"
+  #echo "$1"
   echo "$configFile"
 fi
 
@@ -13,4 +13,4 @@ fi
 #echo "----------------------------------"
 #echo "The FileName is ${fileName}"
 #echo "----------------------------------"
-#echo "The configFile is ${configFile}"
+echo "The configFile is ${configFile}"
