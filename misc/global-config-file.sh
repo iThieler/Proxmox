@@ -4,7 +4,7 @@ if [ -n "${1}" ]; then
   configFILE="$1"
 fi
 
-fileName=$(basename “${BASH_SOURCE:-$0}”)
+fileName=$(basename "${BASH_SOURCE:-$0}")
 filePATH=$(realpath "$0" | sed "s/\/$fileNAME//")
 
 echo "The Filepath is ${filePATH}"
