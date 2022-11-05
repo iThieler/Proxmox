@@ -5,7 +5,7 @@ if [ -n "${1}" ]; then
 fi
 
 fileName=$(basename "${BASH_SOURCE:-$0}")
-filePATH=$(realpath "$0" | sed "s/\/$fileNAME//")
+filePATH=$(realpath "$0")
 
 echo "The Filepath is ${filePATH}"
 echo "----------------------------------"
