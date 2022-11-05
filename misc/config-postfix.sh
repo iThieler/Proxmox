@@ -2,7 +2,9 @@
 
 source "/root/Proxmox/misc/functions-basic.sh"
 source "/root/Proxmox/misc/functions-whiptail.sh"
-configFILE="$1"
+if [ -n "${1}" ]; then
+  configFILE="$1"
+fi
 
 bakFILE backup "/etc/aliases"
 bakFILE backup "/etc/postfix/canonical"
