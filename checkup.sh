@@ -16,10 +16,17 @@ function menuMAIN() {
   menuSelection=$(whiptail --menu --nocancel --backtitle "© 2021 - SmartHome-IoT.net" --title " CONFIGURING PROXMOX " "\nWhat do you want to do?" 20 80 10 "${sel[@]}" 3>&1 1>&2 2>&3)
 
   if [[ $menuSelection == "1" ]]; then
-    #update "server"
+    echoLOG y "Start full update Host Server"
+    updateHost
+    echoLOG g "Full Hostupdate done"
     menuMAIN
   elif [[ $menuSelection == "2" ]]; then
+    echoLOG y "Start full update Host Server"
+    updateHost
+    echoLOG g "Full Hostupdate done"
+    echoLOG y "Start updating Container"
     #update "all"
+    echoLOG g "All Containerupdates done"
     menuMAIN
   elif [[ $menuSelection == "3" ]]; then
     #install "LXC"
@@ -46,6 +53,7 @@ function menuMAIN() {
     #delete "VM"
     menuMAIN
   elif [[ $menuSelection == "Q" ]]; then
+    echoLOG y "one moment please, while finishing script"
     #finish
     exit 0
   else
@@ -78,6 +86,7 @@ if [ "$pve_majorversion" -lt 7 ]; then
   exit 1
 fi
 
+<<comment
 # Checks if git package is installed
 if ! checkPKG "git"; then
   apt update &>/dev/null
@@ -90,10 +99,11 @@ gitREPONAME="Proxmox"
 if [ -d "/root/${gitREPONAME}" ]; then
   rm -r "/root/${gitREPONAME}"
 fi
+comment
 
 if [ -f "/root/.iThieler" ]; then
   birth=$(stat .iThieler | grep "Birth" | cut -d' ' -f3,4,5)
-  echo -e "$(date +'%Y-%m-%d  %T')  [\033[1;31mERROR\033[0m]  Configuration almost done at >> ${birth}"
+  echoLOG b "Global configuration almost done at >> ${birth}"
   menuMAIN
 else
   bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/global-config-file.sh)
