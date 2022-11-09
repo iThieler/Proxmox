@@ -1,9 +1,6 @@
 #!/bin/bash
 
-if [ -n "${1}" ]; then
-  configFILE="$1"
-fi
-
+source "/root/pve-global-config.sh"
 source <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/_functions.sh)
 
 # Enable S.M.A.R.T. support on system hard drive, when disabled and device is SMART-enabled
