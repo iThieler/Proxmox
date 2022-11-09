@@ -8,7 +8,6 @@ filePATH=$(realpath "$0" | sed 's|\(.*\)/.*|\1|')
 
 source <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/_functions.sh)
 
-<<com
 function create_Global_Config() {
   echoLOG g "in Funktion"
   # get Variables from Server
@@ -133,7 +132,5 @@ if [ -n "$mailSERVER" ]; then
 fi
 
 bash "misc/config-pve.sh" "$configFile"
-
-com
 
 echo "Hallo"
