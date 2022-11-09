@@ -6,7 +6,6 @@ fi
 
 source <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/_functions.sh)
 
-
 # Enable S.M.A.R.T. support on system hard drive, when disabled and device is SMART-enabled
 if [ $(smartctl -a /dev/$(eval $(lsblk -oMOUNTPOINT,PKNAME -P | grep 'MOUNTPOINT="/"'); echo $PKNAME | sed 's|[0-9]*$||') | grep -c "SMART support is: Enabled") -eq 0 ]; then
   if [ $(smartctl -a /dev/$(eval $(lsblk -oMOUNTPOINT,PKNAME -P | grep 'MOUNTPOINT="/"'); echo $PKNAME | sed 's|[0-9]*$||') | grep -c "SMART support is: Unavailabl") -eq 0 ]; then
@@ -72,6 +71,6 @@ if [ -z $nasIP ]; then
   fi
 fi
 
+updateHost
+
 whip_message "PROXMOX" "Die Grundkonfiguration des Servers ist nun abgeschlossen. Der Server muss neu gestartet werden. Nach dem Neustart kann dieses Skript zur installation und konfiguration von Containern und virtuellen Maschinen erneut aufgerufen werden."
-sleep 2
-reboot
