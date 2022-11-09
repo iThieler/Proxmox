@@ -1,11 +1,7 @@
 #!/bin/bash
 
-if [ -n "${1}" ]; then
-  configFILE="$1"
-fi
-
+source "/root/pve-global-config.sh"
 source <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/_functions.sh)
-
 
 bakFILE backup "/etc/aliases"
 bakFILE backup "/etc/postfix/canonical"
