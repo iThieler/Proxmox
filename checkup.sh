@@ -30,8 +30,10 @@ function menuMAIN() {
   elif [[ $menuSelection == "5" ]]; then
     if whip_yesno "ALL" "SELECT" "BACKUP GUEST SYSTEMS" "Do you want to back up all containers and virtual machines, or select individual ones?"; then
       #backuprestore "backup" "all"
+      menuMAIN
     else
       #backuprestore "backup" "select"
+      menuMAIN
     fi
     menuMAIN
   elif [[ $menuSelection == "6" ]]; then
