@@ -45,7 +45,7 @@ rm -rf "/etc/postfix/sasl_passwd"
 
 # test E-Mail settings
 echo -e "Dies ist eine Testnachricht, versendet durch das Konfigurationsskript von https://ithieler.github.io/Proxmox/\n\nBestätige den erhalt dieser E-Mail im Konfigurationsskript." | mail -a "From: \"HomeServer\" <${mailFROM}>" -s "[HomeServer] Testnachricht" "$mailTO"
-if [ ! whip_yesno "JA" "NEIN" "MAILSERVER" "Es wurde eine E-Mail an >>${mailTO}<< gesendet. Wurde die E-Mail erfolgreich zugestellt? (Je nach Anbieter kann dies bis zu 15 Minuten dauern)" ]; then
+if ! whip_yesno "JA" "NEIN" "MAILSERVER" "Es wurde eine E-Mail an >>${mailTO}<< gesendet. Wurde die E-Mail erfolgreich zugestellt? (Je nach Anbieter kann dies bis zu 15 Minuten dauern)"; then
   whip_alert "MAILSERVER" "Die Protokolldatei wird auf bekannte Fehler geprüft, es wird versucht, gefundene Fehler automatisch zu beheben.\n\nAnschließend wird erneut eine E-Mail an >>${mailTO}<< gesendet. Überprüfe auch den Spam-Ordner."
   if grep "SMTPUTF8 is required" "/var/log/mail.log"; then
     if ! grep "smtputf8_enable = no" /etc/postfix/main.cf; then
@@ -54,7 +54,7 @@ if [ ! whip_yesno "JA" "NEIN" "MAILSERVER" "Es wurde eine E-Mail an >>${mailTO}<
     fi
   fi
   echo -e "Dies ist die erneute Testnachricht, versendet durch das Konfigurationsskript von https://ithieler.github.io/Proxmox/\n\nBestätige den erhalt dieser E-Mail im Konfigurationsskript." | mail -a "From: \"HomeServer\" <${mailFROM}>" -s "[HomeServer] Testnachricht" "$mailTO"
-  if [ ! whip_yesno "JA" "NEIN" "MAILSERVER" "Es wurde eine E-Mail an >>${mailTO}<< gesendet. Wurde die E-Mail erfolgreich zugestellt? (Je nach Anbieter kann dies bis zu 15 Minuten dauern)" ]; then
+  if ! whip_yesno "JA" "NEIN" "MAILSERVER" "Es wurde eine E-Mail an >>${mailTO}<< gesendet. Wurde die E-Mail erfolgreich zugestellt? (Je nach Anbieter kann dies bis zu 15 Minuten dauern)"; then
     whip_alert "MAILSERVER" "Das Fehlerprotokoll befindet sich in der Datei >>${mailTO}<<\nNach einer Prüfung kann dieses Skript erneut aufgerufen werden. Alle änderungen werden rückgängig gemacht."
     bakFILE recover "/etc/aliases"
     bakFILE recover "/etc/postfix/canonical"
@@ -63,3 +63,5 @@ if [ ! whip_yesno "JA" "NEIN" "MAILSERVER" "Es wurde eine E-Mail an >>${mailTO}<
     exit 1
   fi
 fi
+
+exit 0
