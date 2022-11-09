@@ -113,7 +113,7 @@ function create_Global_Config() {
 }
 
 if [ ! -f "/root/pve-global-config.sh" ]; then
-  echoLOG "no" "creating configuration file"
+  echoLOG b "creating configuration file"
   create_Global_Config
 fi
 
