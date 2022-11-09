@@ -14,37 +14,35 @@ function menuMAIN() {
   menuSelection=$(whiptail --menu --nocancel --backtitle "© 2021 - SmartHome-IoT.net" --title " CONFIGURING PROXMOX " "\nWhat do you want to do?" 20 80 10 "${sel[@]}" 3>&1 1>&2 2>&3)
 
   if [[ $menuSelection == "1" ]]; then
-    update "server"
+    #update "server"
     menuMAIN
   elif [[ $menuSelection == "2" ]]; then
-    update "all"
+    #update "all"
     menuMAIN
   elif [[ $menuSelection == "3" ]]; then
-    install "LXC"
+    #install "LXC"
     menuMAIN
   elif [[ $menuSelection == "4" ]]; then
-    install "VM"
+    #install "VM"
     menuMAIN
   elif [[ $menuSelection == "5" ]]; then
-    whiptail --yesno --yes-button " ${btn_11} " --no-button " ${btn_12} " --backtitle "© 2021 - SmartHome-IoT.net" --title " ${tit_0008} " "\n${txt_0038}?" 10 80
-    yesno=$?
-    if [ $yesno -eq 0 ]; then
-      backuprestore "backup" "all"
+    if whip_yesno "ALL" "SELECT" "BACKUP GUEST SYSTEMS" "Do you want to back up all containers and virtual machines, or select individual ones?"; then
+      #backuprestore "backup" "all"
     else
-      backuprestore "backup" "select"
+      #backuprestore "backup" "select"
     fi
     menuMAIN
   elif [[ $menuSelection == "6" ]]; then
-    backuprestore "restore" "all"
+    #backuprestore "restore" "all"
     menuMAIN
   elif [[ $menuSelection == "7" ]]; then
-    delete "LXC"
+    #delete "LXC"
     menu
   elif [[ $menuSelection == "8" ]]; then
-    delete "VM"
+    #delete "VM"
     menuMAIN
   elif [[ $menuSelection == "Q" ]]; then
-    finish
+    #finish
     exit 0
   else
     menuMAIN
