@@ -117,15 +117,15 @@ echoLOG b "Starte globale Konfiguration :-)"
 create_Global_Config
 
 if [ -n "$nasIP" ]; then
-  bash <(https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/config-nas.sh)
+  bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/config-nas.sh)
 fi
 
 if [ -n "$mailSERVER" ]; then
-  bash <(https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/config-postfix.sh)
+  bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/config-postfix.sh)
 fi
 
-bash <(https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/config-pve.sh)
+bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/config-pve.sh)
 
 sleep 2
 
-echo "reboot"
+reboot
