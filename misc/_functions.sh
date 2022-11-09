@@ -81,8 +81,6 @@ function updateHost() {
 
   # install DarkMode
   bash <(curl -s https://raw.githubusercontent.com/Weilbyte/PVEDiscordDark/master/PVEDiscordDark.sh) install
-
-  return true
 }
 
 # Function generates an Filebackup
