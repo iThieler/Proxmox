@@ -138,7 +138,29 @@ else
   echoLOG r "configure Proxmox main system"
 fi
 
+if ! checkPKG "mailutils"; then
+  apt update &>/dev/null
+  apt install -y mailutils &>/dev/null
+fi
+
 echo > "/root/.iThieler"
+
+# mail configuration file to root
+if [ -z "${mailUSER}" ]; then
+  local mailto=$(whip_inputbox "OK" "CONFIGURATION FILE" "An welche Adresse soll eine Kopie der Konfiguartionsdatei gesendet werden?" "${mailTO}")
+  cp /root/pve-global-config.sh /tmp/proxmox-configuration.txt
+  sed -i 's|robotPASS=".*"|robotPASS=""|g' /tmp/proxmox-configuration.txt
+  sed -i 's|mailPASS=".*"|mailPASS=""|g' /tmp/proxmox-configuration.txt
+  sed -i 's|nasPASS=".*"|nasPASS=""|g' /tmp/proxmox-configuration.txt
+  echo -e "Im Anhang befindet sich die Datei >>proxmox-configuration.txt<<. Diese sollte unbedingt gesichert werden. Mit dieser Datei kann kann eine erneute Konfiguration schneller erfolgen, da schon alle fragen beantwortet sind. Falls eine NAS angegeben wurde, wird diese Datei ebenfalls im Backupordner gesichert" | mail.mailutils -a "From: \"HomeServer\" <${mailFROM}>" -s "[HomeServer] Testnachricht" "${mailto}" -A "/tmp/proxmox-configuration.txt"
+  echoLOG b "Kopie der Konfiurationsdatei an >> ${mailto} << gesendet."
+fi
+
+# copy configuration to NAS
+if [ -z "$nasIP" ]; then
+  cp /root/pve-global-config.sh /mnt/pve/backups/proxmox-configuration.txt > /dev/null 2>&1
+  echoLOG b "Kopie der Konfiurationsdatei auf NAS gespeichert."
+fi
 
 sleep 2
 reboot
