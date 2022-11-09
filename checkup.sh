@@ -86,7 +86,6 @@ fi
 
 # Start the script
 gitREPONAME="Proxmox"
-configFILE="/root/pve-global-config.sh"
 
 if [ -d "/root/${gitREPONAME}" ]; then
   rm -r "/root/${gitREPONAME}"
@@ -97,5 +96,5 @@ if [ -f "/root/.iThieler" ]; then
   echo -e "$(date +'%Y-%m-%d  %T')  [\033[1;31mERROR\033[0m]  Configuration almost done at >> ${birth}"
   menuMAIN
 else
-  bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/global-config-file.sh) "$configFILE"
+  bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/global-config-file.sh) "/root/pve-global-config.sh"
 fi
