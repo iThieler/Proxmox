@@ -1,10 +1,11 @@
 #!/bin/bash
 
-source "/root/Proxmox/misc/functions-basic.sh"
-source "/root/Proxmox/misc/functions-whiptail.sh"
 if [ -n "${1}" ]; then
   configFILE="$1"
 fi
+
+source <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/_functions.sh)
+
 
 bakFILE backup "/etc/aliases"
 bakFILE backup "/etc/postfix/canonical"
