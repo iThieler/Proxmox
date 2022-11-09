@@ -116,7 +116,6 @@ function create_Global_Config() {
 
 echoLOG b "Starte globale Konfiguration :-)"
 create_Global_Config
-updateHost
 
 if [ -n "$nasIP" ]; then
   bash <(https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/config-nas.sh) "$configFile"
@@ -127,3 +126,7 @@ if [ -n "$mailSERVER" ]; then
 fi
 
 bash <(https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/config-pve.sh) "$configFile"
+
+sleep 2
+
+reboot
