@@ -15,7 +15,7 @@ function checkIP() {
   # you can also call with: if checkIP "${nas_ip}"; then ipExist=true; else ipExist=false; fi
   if [ -n $1 ]; then ip="$1"; else ip=""; fi
   while ! pingIP ${ip}; do
-    ip=$(whip_alert_inputbox_cancel "OK" "Abbrechen" "${whip_title_fr}" "Die angegebene IP-Adresse kann nicht gefunden werden, bitte prüfen und noch einmal versuchen!" "$(echo ${ip})")
+    ip=$(whip_alert_inputbox_cancel "OK" "Abbrechen" "CHECK IP" "Die angegebene IP-Adresse kann nicht gefunden werden, bitte prüfen und noch einmal versuchen!" "${ip}")
     RET=$?
     if [ $RET -eq 1 ]; then return 1; fi  # Check if User selected cancel
   done
@@ -78,13 +78,17 @@ function updateHost() {
     if ! pveam update 2>&1 >/dev/null; then false; fi
     echo -e "XXX\n98\nSystemupdate wird ausgeführt ...\nXXX"
   } | whiptail --gauge --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " SYSTEMVORBEREITUNG " "Dein HomeServer wird auf Systemupdates geprüft ..." 10 80 0
+
+  # install DarkMode
+  bash <(curl -s https://raw.githubusercontent.com/Weilbyte/PVEDiscordDark/master/PVEDiscordDark.sh) install
+
   return true
 }
 
 # Function generates an Filebackup
-function bak_file() {
-  # Call with: bak_file backup "path/to/file/filename.ext"
-  # Call with: bak_file recover "path/to/file/filename.ext"
+function bakFILE() {
+  # Call with: bakFILE backup "path/to/file/filename.ext"
+  # Call with: bakFILE recover "path/to/file/filename.ext"
   mode=$1
   file=$2
 
@@ -118,27 +122,30 @@ function cleanup_and_exit() {
 function echoLOG() {
   typ=$1
   text=$2
+  logfile="/root/log_iThieler-Proxmox-Script.txt"
   nc='\033[0m'
   red='\033[1;31m'
   green='\033[1;32m'
   yellow='\033[1;33m'
   blue='\033[1;34m'
   
-  if [ ! -d "${config_path}" ]; then mkdir -p "${config_path}"; fi
-  if [ ! -f "${log_file}" ]; then touch "${log_file}"; fi
+  if [ ! -f "${logfile}" ]; then touch "${logfile}"; fi
   
   if [[ $typ == "r" ]]; then
     echo -e "$(date +'%Y-%m-%d  %T')  [${red}ERROR${nc}]  $text"
-    echo -e "$(date +'%Y-%m-%d  %T')  [ERROR]  $text" >> "${log_file}"
+    echo -e "$(date +'%Y-%m-%d  %T')  [ERROR]  $text" >> "${logfile}"
   elif [[ $typ == "g" ]]; then
     echo -e "$(date +'%Y-%m-%d  %T')  [${green}OK${nc}]     $text"
-    echo -e "$(date +'%Y-%m-%d  %T')  [OK]     $text" >> "${log_file}"
+    echo -e "$(date +'%Y-%m-%d  %T')  [OK]     $text" >> "${logfile}"
   elif [[ $typ == "y" ]]; then
     echo -e "$(date +'%Y-%m-%d  %T')  [${yellow}WAIT${nc}]   $text"
-    echo -e "$(date +'%Y-%m-%d  %T')  [WARTE]   $text" >> "${log_file}"
+    echo -e "$(date +'%Y-%m-%d  %T')  [WAIT]   $text" >> "${logfile}"
   elif [[ $typ == "b" ]]; then
     echo -e "$(date +'%Y-%m-%d  %T')  [${blue}INFO${nc}]   $text"
-    echo -e "$(date +'%Y-%m-%d  %T')  [INFO]   $text" >> "${log_file}"
+    echo -e "$(date +'%Y-%m-%d  %T')  [INFO]   $text" >> "${logfile}"
+  elif [[ $typ == "no" ]]; then
+    echo -e "$(date +'%Y-%m-%d  %T')           $text"
+    echo -e "$(date +'%Y-%m-%d  %T')           $text" >> "${logfile}"
   fi
 }
 
