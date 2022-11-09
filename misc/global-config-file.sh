@@ -4,8 +4,7 @@ if [ -n "$1" ]; then
   configFile="$1"
 fi
 
-source "$(dirname "${BASH_SOURCE[0]}")/functions-basic.sh"
-#source "$(dirname "${BASH_SOURCE[0]}")/functions-whiptail.sh"
+source <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/_functions.sh)
 
 pwd
 
