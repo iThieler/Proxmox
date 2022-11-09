@@ -59,19 +59,6 @@ deb http://download.proxmox.com/debian/pve bullseye pve-no-subscription
 EOF
 echo "DPkg::Post-Invoke { \"dpkg -V proxmox-widget-toolkit | grep -q '/proxmoxlib\.js$'; if [ \$? -eq 1 ]; then { echo 'Removing subscription nag from UI...'; sed -i '/data.status/{s/\!//;s/Active/NoMoreNagging/}' /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js; }; fi\"; };" > /etc/apt/apt.conf.d/no-nag-script
 apt --reinstall install proxmox-widget-toolkit &>/dev/null
-updPVE
-if [ ./config-postfix.sh ]; then
-  cp /root/pve-global-config.sh /tmp/proxmox-configuration.txt
-  sed -i 's|robotPASS=".*"|robotPASS=""|g' /tmp/proxmox-configuration.txt
-  sed -i 's|mailPASS=".*"|mailPASS=""|g' /tmp/proxmox-configuration.txt
-  sed -i 's|nasPASS=".*"|nasPASS=""|g' /tmp/proxmox-configuration.txt
-  echo -e "Im Anhang befindet sich die Datei >>proxmox-configuration.txt<<. Diese sollte unbedingt gesichert werden. Mit dieser Datei kann kann eine erneute Konfiguration schneller erfolgen, da schon alle fragen beantwortet sind. Falls eine NAS angegeben wurde, wird diese Datei ebenfalls im Backupordner gesichert" | mail.mailutils -a "From: \"HomeServer\" <${mailFROM}>" -s "[HomeServer] Testnachricht" "$mailTO" -A "/tmp/proxmox-configuration.txt"
-fi
-if [ -z $nasIP ]; then
-  if [ ./config-nas.sh ]; then
-    cp /root/pve-global-config.sh /mnt/pve/backups/proxmox-configuration.txt > /dev/null 2>&1
-  fi
-fi
 
 updateHost
 
