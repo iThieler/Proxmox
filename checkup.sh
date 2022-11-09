@@ -1,27 +1,5 @@
 #!/bin/bash
 
-# Function checked if an Package is installed, returned true or false
-function check_pkg() {
-  if [ $(dpkg-query -s "${1}" &> /dev/null | grep -cw "Status: install ok installed") -eq 1 ]; then
-    true
-  else
-    false
-  fi
-}
-
-function cloneGIT() {
-  local repo=$1
-  if [ -z "$2" ]; then
-    local user="iThieler"
-  else
-    local user=$2
-  fi
-  git clone "https://github.com/${user}/${repo}.git" &>/dev/null
-  #for file in `find "/root/Proxmox" -name '*.sh' -o -regex './s?bin/[^/]+' -o -regex './usr/sbin/[^/]+' -o -regex './usr/lib/[^/]+'`; do
-  #  chmod +x  $file
-  #done 
-}
-
 function menuMAIN() {
   sel=("1" "... update my HomeServer" \
        "2" "... update my HomeServer and all containers" \
@@ -32,7 +10,7 @@ function menuMAIN() {
        "7" "... delete one or more containers" \
        "8" "... delete one or more virtual machine(s)" \
        "" "" \
-       "Q" "... exit and clean up"
+       "Q" "... exit and clean up")
   menuSelection=$(whiptail --menu --nocancel --backtitle "© 2021 - SmartHome-IoT.net" --title " CONFIGURING PROXMOX " "\nWhat do you want to do?" 20 80 10 "${sel[@]}" 3>&1 1>&2 2>&3)
 
   if [[ $menuSelection == "1" ]]; then
@@ -72,7 +50,6 @@ function menuMAIN() {
     menuMAIN
   fi
 }
-}
 
 # Check Proxmox
 if ! command -v pveversion >/dev/null 2>&1; then
@@ -100,7 +77,7 @@ if [ "$pve_majorversion" -lt 7 ]; then
 fi
 
 # Checks if git package is installed
-if ! check_pkg "git"; then
+if ! checkPKG "git"; then
   apt update &>/dev/null
   apt install -y git &>/dev/null
 fi
