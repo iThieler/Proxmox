@@ -10,9 +10,9 @@ function pingIP() {
 }
 
 # Function give the entered IP to FUNCTION pingIP. Returns true if IP is pingable if not, you cancheck and change the IP
-function check_ip() {
-  # Call with: check_ip "192.168.0.1"
-  # you can also call with: if check_ip "${nas_ip}"; then ipExist=true; else ipExist=false; fi
+function checkIP() {
+  # Call with: checkIP "192.168.0.1"
+  # you can also call with: if checkIP "${nas_ip}"; then ipExist=true; else ipExist=false; fi
   if [ -n $1 ]; then ip="$1"; else ip=""; fi
   while ! pingIP ${ip}; do
     ip=$(whip_alert_inputbox_cancel "OK" "Abbrechen" "${whip_title_fr}" "Die angegebene IP-Adresse kann nicht gefunden werden, bitte prüfen und noch einmal versuchen!" "$(echo ${ip})")
@@ -22,7 +22,7 @@ function check_ip() {
 }
 
 # Function checked if an Package is installed, returned true or false
-function check_pkg() {
+function checkPKG() {
   if [ $(dpkg-query -s "${1}" &> /dev/null | grep -cw "Status: install ok installed") -eq 1 ]; then
     true
   else
