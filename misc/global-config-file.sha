@@ -6,8 +6,7 @@ fi
 fileName=$(basename "${BASH_SOURCE:-$0}")
 filePATH=$(realpath "$0" | sed 's|\(.*\)/.*|\1|')
 
-source "$filePATH/functions-basic.sh"
-source "$filePATH/functions-whiptail.sh"
+source <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/_functions.sh)
 
 <<com
 function create_Global_Config() {
