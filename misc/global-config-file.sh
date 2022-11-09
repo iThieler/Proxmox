@@ -1,28 +1,24 @@
 #!/bin/bash
 
-fileName=$(basename "${BASH_SOURCE:-$0}")
-filePATH=$(realpath "$0" | sed 's|\(.*\)/.*|\1|')
-
 source <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/_functions.sh)
 
 function create_Global_Config() {
   # get Variables from Server
-  hostNETWORKID=$(hostname -I | cut -d. -f1,2,3)
-  echoLOG y "hostNETWORKID= ${hostNETWORKID}"
   hostDOMAIN=$(pveum user list | grep "root@pam" | awk '{print $5}' | cut -d\@ -f2)
-  hostGATEWAY=$(ip r | grep default | cut -d' ' -f3)
-  hostROOTMAIL=$(pveum user list | grep "root@pam" | awk '{print $5}')
   
   # config Netrobot
-  robotNAME=$(whip_inputbox "OK" "NETZWERKROBOTER" "Wie lautet der Name, deines Netzwerkroboter?" "netrobot")
-  robotPASS=$(whip_inputbox_password_autogenerate "OK" "NETZWERKROBOTER" "Wie lautet das Passwort von >>${robotNAME}<<?\nLeer = Passwort automatisch erstellen")
-  whip_message "NETZWERKROBOTER" "Stell sicher, das sich auf deinen Geräten (Router, NAS, Switch, AccessPoint) der folgende Benutzer mit Adminrechten befindet.\n\nBenutzername: ${robotNAME}\nPasswort: ${robotPASS}"
+  if whip_yesno "JA" "NEIN" "NETZWERKROBOTER" "Nutzt Du einen Netzwerkroborter in deinem Netzwerk (algemeiner Benutzer der auf allen Geräten Adminrechte hat)?"; then
+    robot=true
+    robotNAME=$(whip_inputbox "OK" "NETZWERKROBOTER" "Wie lautet der Name, deines Netzwerkroboter?" "netrobot")
+    robotPASS=$(whip_inputbox_password_autogenerate "OK" "NETZWERKROBOTER" "Wie lautet das Passwort von >>${robotNAME}<<?\nLeer = Passwort automatisch erstellen")
+    whip_message "NETZWERKROBOTER" "Stell sicher, das sich auf deinen Geräten (Router, NAS, Switch, AccessPoint) der folgende Benutzer mit Adminrechten befindet.\n\nBenutzername: ${robotNAME}\nPasswort: ${robotPASS}"
+  fi
 
   # config SMTP server for email notification
   if whip_yesno "JA" "NEIN" "MAILSERVER" "Soll ein eigener Mailserver für den Versand von Benachrichtigungen verwendet werden?"; then
     mailUSER=$(whip_inputbox "OK" "MAILSERVER" "Welcher Benutzername wird für den Login am Mailserver verwendet?" "notify@${hostDOMAIN}")
     mailPASS=$(whip_inputbox "OK" "MAILSERVER" "Wie lautet das Passwort, welches für den Login am Mailserver verwendet wird?")
-    mailTO=$(whip_inputbox "OK" "MAILSERVER" "An welche E-Mailadresse sollen Benachrichtigungen von deinem Server gesendet werden?" "${hostROOTMAIL}")
+    mailTO=$(whip_inputbox "OK" "MAILSERVER" "An welche E-Mailadresse sollen Benachrichtigungen von deinem Server gesendet werden?" "$(pveum user list | grep "root@pam" | awk '{print $5}')")
     mailFROM=$(whip_inputbox "OK" "MAILSERVER" "Die Absendeadresse lautet?" "notify@${hostDOMAIN}")
     mailSERVER=$(whip_inputbox "OK" "MAILSERVER" "Wie lautet die Adresse deines Postausgangsserver?" "smtp.${hostDOMAIN}")
     mailPORT=$(whip_inputbox "OK" "MAILSERVER" "Welchen Port benutzt dein Postausgangsserver?" "587")
@@ -35,12 +31,14 @@ function create_Global_Config() {
 
   # config NAS
   if whip_yesno "JA" "NEIN" "NAS" "Befindet sich ein Network Attached Storage (NAS) in deinem Netzwerk?"; then
-    nasIP=$(whip_inputbox "OK" "NAS" "Wie lautet die IP-Adresse der NAS?" "${hostNETWORKID}.")
+    nasIP=$(whip_inputbox "OK" "NAS" "Wie lautet die IP-Adresse der NAS?" "$(hostname -I | cut -d. -f1,2).")
     nasBAKPATH=$(whip_inputbox "OK" "NAS" "Wie heisst der Ordner in dem Backups gespeichert werden sollen?\nProxmox erstellt automatisch einen Unterordner namens >>dump<<." "backups")
-    if whip_yesno "SAMBA" "NFS" "NAS" "Kann dieses Verzeichnis per NFS (Linux Standard) angebunden werden, oder soll das Samba Protokoll (Windows Standard) genutzt werden?"; then
-      nasPROTOCOL=cifs
+    if ! robot; then
       nasUSER=$(whip_inputbox "OK" "NAS" "Wie lautet der Benutzername eines Adminnutzer?" "${robotNAME}.")
       nasPASS=$(whip_inputbox "OK" "NAS" "Wie lautet das Passwort von >>${nasUSER}<<?\nLeer = Passwort von >>${robotNAME}<<")
+    fi
+    if whip_yesno "SAMBA" "NFS" "NAS" "Kann dieses Verzeichnis per NFS (Linux Standard) angebunden werden, oder soll das Samba Protokoll (Windows Standard) genutzt werden?"; then
+      nasPROTOCOL=cifs
     else
       nasPROTOCOL=nfs
     fi
@@ -53,11 +51,11 @@ function create_Global_Config() {
 
   # config VLAN
   if whip_yesno "JA" "NEIN" "VLAN" "Werden in diesem Netzwerk VLANs genutzt?"; then
-    local network=$(${hostNETWORKID} | cut -d. -f1,2)
+    network=$(hostname -I | cut -d. -f1,2)
     if whip_yesno "JA" "NEIN" "VLAN" "Wird ein VLAN für Server genutzt?"; then
-      local vlanid=$(${hostNETWORKID} | cut -d. -f3)
+      local vlanid=$(hostname -I | cut -d. -f3)
       vlanSERVERID=$(whip_inputbox "OK" "VLAN" "Wie lautet die VLAN-ID?" "${vlanid}")
-      vlanSERVERGW=$(whip_inputbox "OK" "VLAN" "Wie lautet die IP-Adresse des Gateways?" "${hostGATEWAY}")
+      vlanSERVERGW=$(whip_inputbox "OK" "VLAN" "Wie lautet die IP-Adresse des Gateways?" "$(ip r | grep default | cut -d' ' -f3)")
     fi
     if whip_yesno "JA" "NEIN" "VLAN" "Wird ein VLAN für SmartHome Geräte genutzt?"; then
       vlanSMARTHOMEID=$(whip_inputbox "OK" "VLAN" "Wie lautet die VLAN-ID?")
@@ -73,18 +71,19 @@ function create_Global_Config() {
     fi
   else
     vlanSERVERID=0
-    vlanSERVERGW="${hostNETWORKID}.${hostGATEWAY}"
+    vlanSERVERGW=$(ip r | grep default | cut -d' ' -f3)
   fi
 
   # create config File
   echo > "/root/.iThieler"
-  echo -e "\0043\0041/bin/bash
-  \0043 This file stores variables that are specified during the first execution of the post-processing script by the >
-  \0043 This makes re-execution of the script easier, and follows a standard. The advantage is that the user does not >
-  \0043 to answer all the questions again and again.\n
-  \0043 NOTICE: Backup Proxmox Configuration Script from https://ithieler.github.io/Proxmox/
-  \0043 Created on $(date)
+  echo -e "\0043\0041/bin/bash \
+  \n\0043 This file stores variables that are specified during the first execution of the post-processing script by the > \
+  \n\0043 This makes re-execution of the script easier, and follows a standard. The advantage is that the user does not > \
+  \n\0043 to answer all the questions again and again.\n \
+  \n\0043 NOTICE: Backup Proxmox Configuration Script from https://ithieler.github.io/Proxmox/ \
+  \n\0043 Created on $(date)
   \n\0043 Variables - Netrobot
+  robot=${robot}
   robotNAME=${robotNAME}
   robotPASS=${robotPASS}
   \n\0043 Variables - Mailserver (SMTP)
@@ -113,19 +112,32 @@ function create_Global_Config() {
   vlanGUESTGW=${vlanGUESTGW}" > "/root/pve-global-config.sh"
 }
 
-echoLOG b "Starte globale Konfiguration :-)"
-create_Global_Config
+if [ ! -f "/root/pve-global-config.sh" ]; then
+  echoLOG "no" "creating configuration file"
+  create_Global_Config
+fi
 
 if [ -n "$nasIP" ]; then
-  bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/config-nas.sh)
+  if bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/config-nas.sh); then
+    echoLOG g "mounting NAS as backup drive"
+  else
+    echoLOG r "mounting NAS as backup drive"
+  fi
 fi
 
 if [ -n "$mailSERVER" ]; then
-  bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/config-postfix.sh)
+  if bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/config-postfix.sh); then
+    echoLOG g "configure mail server for notifications"
+  else
+    echoLOG r "configure mail server for notifications"
+  fi
 fi
 
-bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/config-pve.sh)
+if bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/config-pve.sh); then
+  echoLOG g "configure Proxmox main system"
+else
+  echoLOG r "configure Proxmox main system"
+fi
 
 sleep 2
-
 reboot
