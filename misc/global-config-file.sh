@@ -1,8 +1,5 @@
 #!/bin/bash
 
-if [ -n "$1" ]; then
-  configFile="$1"
-fi
 fileName=$(basename "${BASH_SOURCE:-$0}")
 filePATH=$(realpath "$0" | sed 's|\(.*\)/.*|\1|')
 
@@ -56,21 +53,23 @@ function create_Global_Config() {
 
   # config VLAN
   if whip_yesno "JA" "NEIN" "VLAN" "Werden in diesem Netzwerk VLANs genutzt?"; then
+    local network=$(${hostNETWORKID} | cut -d. -f1,2)
     if whip_yesno "JA" "NEIN" "VLAN" "Wird ein VLAN für Server genutzt?"; then
-      vlanSERVERID=$(whip_inputbox "OK" "VLAN" "Wie lautet die VLAN-ID?" "$(${hostNETWORKID} | cut -d. -f3)")
+      local vlanid=$(${hostNETWORKID} | cut -d. -f3)
+      vlanSERVERID=$(whip_inputbox "OK" "VLAN" "Wie lautet die VLAN-ID?" "${vlanid}")
       vlanSERVERGW=$(whip_inputbox "OK" "VLAN" "Wie lautet die IP-Adresse des Gateways?" "${hostGATEWAY}")
     fi
     if whip_yesno "JA" "NEIN" "VLAN" "Wird ein VLAN für SmartHome Geräte genutzt?"; then
       vlanSMARTHOMEID=$(whip_inputbox "OK" "VLAN" "Wie lautet die VLAN-ID?")
-      vlanSMARTHOMEGW=$(whip_inputbox "OK" "VLAN" "Wie lautet die IP-Adresse des Gateways?" "$(${hostNETWORKID} | cut -d. -f1,2).${vlanSMARTHOMEID}.254")
+      vlanSMARTHOMEGW=$(whip_inputbox "OK" "VLAN" "Wie lautet die IP-Adresse des Gateways?" "${network}.${vlanSMARTHOMEID}.254")
     fi
-    if whip_yesno "JA" "NEIN" "VLAN" "Wird ein VLAN für DHCP (Handys, Laptops, Fernseher usw.) genutzt?"; then
+    if whip_yesno "JA" "NEIN" "VLAN" "Wird ein VLAN für DHCP/Produktiv (Handys, Laptops, Fernseher usw.) genutzt?"; then
       vlanDHCPID=$(whip_inputbox "OK" "VLAN" "Wie lautet die VLAN-ID?")
-      vlanDHCPGW=$(whip_inputbox "OK" "VLAN" "Wie lautet die IP-Adresse des Gateways?" "$(${hostNETWORKID} | cut -d. -f1,2).${vlanDHCPID}.254")
+      vlanDHCPGW=$(whip_inputbox "OK" "VLAN" "Wie lautet die IP-Adresse des Gateways?" "${network}.${vlanDHCPID}.254")
     fi
     if whip_yesno "JA" "NEIN" "VLAN" "Wird ein VLAN für Gäste WLAN genutzt?"; then
       vlanGUESTID=$(whip_inputbox "OK" "VLAN" "Wie lautet die VLAN-ID?")
-      vlanGUESTGW=$(whip_inputbox "OK" "VLAN" "Wie lautet die IP-Adresse des Gateways?" "$(${hostNETWORKID} | cut -d. -f1,2).${vlanDHCPID}.1")
+      vlanGUESTGW=$(whip_inputbox "OK" "VLAN" "Wie lautet die IP-Adresse des Gateways?" "${network}.${vlanGUESTID}.1")
     fi
   else
     vlanSERVERID=0
@@ -111,22 +110,22 @@ function create_Global_Config() {
   vlanDHCPID=${vlanDHCPID}
   vlanDHCPGW=${vlanDHCPGW}
   vlanGUESTID=${vlanGUESTID}
-  vlanGUESTGW=${vlanGUESTGW}" > $configFILE
+  vlanGUESTGW=${vlanGUESTGW}" > "/root/pve-global-config.sh"
 }
 
 echoLOG b "Starte globale Konfiguration :-)"
 create_Global_Config
 
 if [ -n "$nasIP" ]; then
-  bash <(https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/config-nas.sh) "$configFile"
+  bash <(https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/config-nas.sh)
 fi
 
 if [ -n "$mailSERVER" ]; then
-  bash <(https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/config-postfix.sh) "$configFile"
+  bash <(https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/config-postfix.sh)
 fi
 
-bash <(https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/config-pve.sh) "$configFile"
+bash <(https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/config-pve.sh)
 
 sleep 2
 
-reboot
+echo "reboot"
