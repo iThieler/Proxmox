@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/_functions.sh)
+
 function menuMAIN() {
   sel=("1" "... update my HomeServer" \
        "2" "... update my HomeServer and all containers" \
