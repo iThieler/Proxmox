@@ -9,16 +9,12 @@ filePATH=$(realpath "$0" | sed 's|\(.*\)/.*|\1|')
 source <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/_functions.sh)
 
 function create_Global_Config() {
-  echoLOG g "in Funktion"
   # get Variables from Server
   hostNETWORKID=$(hostname -I | cut -d. -f1,2,3)
   echoLOG y "hostNETWORKID= ${hostNETWORKID}"
   hostDOMAIN=$(pveum user list | grep "root@pam" | awk '{print $5}' | cut -d\@ -f2)
-  echoLOG r "hostDOMAIN= ${hostDOMAIN}"
   hostGATEWAY=$(ip r | grep default | cut -d' ' -f3)
-  echoLOG b "hostGATEWAY= ${hostGATEWAY}"
   hostROOTMAIL=$(pveum user list | grep "root@pam" | awk '{print $5}')
-  echoLOG g "hostROOTMAIL= ${hostROOTMAIL}"
   
   # config Netrobot
   robotNAME=$(whip_inputbox "OK" "NETZWERKROBOTER" "Wie lautet der Name, deines Netzwerkroboter?" "netrobot")
@@ -60,22 +56,21 @@ function create_Global_Config() {
 
   # config VLAN
   if whip_yesno "JA" "NEIN" "VLAN" "Werden in diesem Netzwerk VLANs genutzt?"; then
-    networkID=$(${hostNETWORKID} | cut -d. -f1,2)
     if whip_yesno "JA" "NEIN" "VLAN" "Wird ein VLAN für Server genutzt?"; then
-      vlanSERVERID=$(whip_inputbox "OK" "VLAN" "Wie lautet die VLAN-ID?")
+      vlanSERVERID=$(whip_inputbox "OK" "VLAN" "Wie lautet die VLAN-ID?" "$(${hostNETWORKID} | cut -d. -f3)")
       vlanSERVERGW=$(whip_inputbox "OK" "VLAN" "Wie lautet die IP-Adresse des Gateways?" "${hostGATEWAY}")
     fi
     if whip_yesno "JA" "NEIN" "VLAN" "Wird ein VLAN für SmartHome Geräte genutzt?"; then
       vlanSMARTHOMEID=$(whip_inputbox "OK" "VLAN" "Wie lautet die VLAN-ID?")
-      vlanSMARTHOMEGW=$(whip_inputbox "OK" "VLAN" "Wie lautet die IP-Adresse des Gateways?" "${networkID}.${vlanSMARTHOMEID}.254")
+      vlanSMARTHOMEGW=$(whip_inputbox "OK" "VLAN" "Wie lautet die IP-Adresse des Gateways?" "$(${hostNETWORKID} | cut -d. -f1,2).${vlanSMARTHOMEID}.254")
     fi
     if whip_yesno "JA" "NEIN" "VLAN" "Wird ein VLAN für DHCP (Handys, Laptops, Fernseher usw.) genutzt?"; then
       vlanDHCPID=$(whip_inputbox "OK" "VLAN" "Wie lautet die VLAN-ID?")
-      vlanDHCPGW=$(whip_inputbox "OK" "VLAN" "Wie lautet die IP-Adresse des Gateways?" "${networkID}.${vlanDHCPID}.254")
+      vlanDHCPGW=$(whip_inputbox "OK" "VLAN" "Wie lautet die IP-Adresse des Gateways?" "$(${hostNETWORKID} | cut -d. -f1,2).${vlanDHCPID}.254")
     fi
     if whip_yesno "JA" "NEIN" "VLAN" "Wird ein VLAN für Gäste WLAN genutzt?"; then
       vlanGUESTID=$(whip_inputbox "OK" "VLAN" "Wie lautet die VLAN-ID?")
-      vlanGUESTGW=$(whip_inputbox "OK" "VLAN" "Wie lautet die IP-Adresse des Gateways?" "${networkID}.${vlanDHCPID}.1")
+      vlanGUESTGW=$(whip_inputbox "OK" "VLAN" "Wie lautet die IP-Adresse des Gateways?" "$(${hostNETWORKID} | cut -d. -f1,2).${vlanDHCPID}.1")
     fi
   else
     vlanSERVERID=0
@@ -124,11 +119,11 @@ create_Global_Config
 updateHost
 
 if [ -n "$nasIP" ]; then
-  bash "https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/config-nas.sh" "$configFile"
+  bash <(https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/config-nas.sh) "$configFile"
 fi
 
 if [ -n "$mailSERVER" ]; then
-  bash "https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/config-postfix.sh" "$configFile"
+  bash <(https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/config-postfix.sh) "$configFile"
 fi
 
-bash "misc/config-pve.sh" "$configFile"
+bash <(https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/config-pve.sh) "$configFile"
