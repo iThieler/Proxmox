@@ -75,7 +75,6 @@ function create_Global_Config() {
   fi
 
   # create config File
-  echo > "/root/.iThieler"
   echo -e "\0043\0041/bin/bash \
   \n\0043 This file stores variables that are specified during the first execution of the post-processing script by the > \
   \n\0043 This makes re-execution of the script easier, and follows a standard. The advantage is that the user does not > \
@@ -138,6 +137,8 @@ if bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/c
 else
   echoLOG r "configure Proxmox main system"
 fi
+
+echo > "/root/.iThieler"
 
 sleep 2
 reboot
