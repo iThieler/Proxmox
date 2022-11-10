@@ -4,7 +4,6 @@ source "/root/pve-global-config.sh"
 source <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/_functions.sh)
 
 bakFILE backup "/etc/aliases"
-bakFILE backup "/etc/postfix/canonical"
 bakFILE backup "/etc/postfix/main.cf"
 bakFILE backup "/etc/ssl/certs/ca-certificates.crt"
 
