@@ -2,6 +2,37 @@
 
 source <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/_functions.sh)
 
+function firstRUN() {
+  whip_message "SYSTEM PREPARATION" "This Script runs for the first Time. Proxmox is checked for system updates, possibly required software will be installed. This will take a while."
+  echoLOG y "starting system preparation"
+  sed -i "s/^deb/#deb/g" /etc/apt/sources.list.d/pve-enterprise.list
+  cat <<EOF > /etc/apt/sources.list
+    deb http://ftp.debian.org/debian bullseye main contrib
+    deb http://ftp.debian.org/debian bullseye-updates main contrib
+    deb http://security.debian.org/debian-security bullseye-security main contrib
+EOF
+  cat <<EOF >> /etc/apt/sources.list.d/pve-no-subscription.list
+    deb http://download.proxmox.com/debian/pve bullseye pve-no-subscription
+EOF
+  echo "DPkg::Post-Invoke { \"dpkg -V proxmox-widget-toolkit | grep -q '/proxmoxlib\.js$'; if [ \$? -eq 1 ]; then { echo 'Removing subscription nag from UI...'; sed -i '/data.status/{s/\!//;s/Active/NoMoreNagging/}' /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js; }; fi\"; };" > /etc/apt/apt.conf.d/no-nag-script
+  apt --reinstall install proxmox-widget-toolkit &>/dev/null
+
+  apt-get update 2>&1 >/dev/null
+  if apt-get install -y parted smartmontools libsasl2-modules mailutils lxc-pve 2>&1 >/dev/null; then
+    echoLOG g "install needed Software"
+  else
+    echoLOG r "install needed Software"
+  fi
+
+  if updateHost; then
+    echoLOG g "initial Systemupdate"
+  else
+    echoLOG r "initial Systemupdate"
+  fi
+
+  echoLOG g "system preparation finished"
+}
+
 function menuMAIN() {
   sel=("1" "... update my HomeServer" \
        "2" "... update my HomeServer and all containers" \
@@ -86,21 +117,10 @@ if [ "$pve_majorversion" -lt 7 ]; then
   exit 1
 fi
 
-<<comment
-# Checks if git package is installed
-if ! checkPKG "git"; then
-  apt update &>/dev/null
-  apt install -y git &>/dev/null
-fi
+# if no-subscription is not enabled, the first run is performed
+if [ ! -f "/etc/apt/sources.list.d/pve-no-subscription.list" ]; then firstRUN; fi
 
-# Start the script
-gitREPONAME="Proxmox"
-
-if [ -d "/root/${gitREPONAME}" ]; then
-  rm -r "/root/${gitREPONAME}"
-fi
-comment
-
+# check if this script has already configured this system
 if [ -f "/root/.iThieler" ]; then
   birth=$(stat .iThieler | grep "Birth" | cut -d' ' -f3,4,5)
   echoLOG b "Global configuration almost done at >> ${birth}"
