@@ -53,7 +53,7 @@ function create_Global_Config() {
   if whip_yesno "JA" "NEIN" "VLAN" "Werden in diesem Netzwerk VLANs genutzt?"; then
     network=$(hostname -I | cut -d. -f1,2)
     if whip_yesno "JA" "NEIN" "VLAN" "Wird ein VLAN für Server genutzt?"; then
-      local vlanid=$(hostname -I | cut -d. -f3)
+      vlanid=$(hostname -I | cut -d. -f3)
       vlanSERVERID=$(whip_inputbox "OK" "VLAN" "Wie lautet die VLAN-ID?" "${vlanid}")
       vlanSERVERGW=$(whip_inputbox "OK" "VLAN" "Wie lautet die IP-Adresse des Gateways?" "$(ip r | grep default | cut -d' ' -f3)")
     fi
