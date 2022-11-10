@@ -112,7 +112,7 @@ function create_Global_Config() {
 }
 
 if [ ! -f "/root/pve-global-config.sh" ]; then
-  echoLOG b "creating configuration file"
+  echoLOG b "start creating configuration file"
   create_Global_Config
 fi
 
@@ -146,7 +146,7 @@ fi
 echo > "/root/.iThieler"
 
 # mail configuration file to root
-if [ -z "${mailUSER}" ]; then
+if [ -n "$mailUSER" ]; then
   local mailto=$(whip_inputbox "OK" "CONFIGURATION FILE" "An welche Adresse soll eine Kopie der Konfiguartionsdatei gesendet werden?" "${mailTO}")
   cp /root/pve-global-config.sh /tmp/proxmox-configuration.txt
   sed -i 's|robotPASS=".*"|robotPASS=""|g' /tmp/proxmox-configuration.txt
@@ -157,7 +157,7 @@ if [ -z "${mailUSER}" ]; then
 fi
 
 # copy configuration to NAS
-if [ -z "$nasIP" ]; then
+if [ -n "$nasIP" ]; then
   cp /root/pve-global-config.sh /mnt/pve/backups/proxmox-configuration.txt > /dev/null 2>&1
   echoLOG b "Kopie der Konfiurationsdatei auf NAS gespeichert."
 fi
