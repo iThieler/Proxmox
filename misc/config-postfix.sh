@@ -7,6 +7,11 @@ bakFILE backup "/etc/aliases"
 bakFILE backup "/etc/postfix/main.cf"
 bakFILE backup "/etc/ssl/certs/ca-certificates.crt"
 
+# install mailutils
+apt update &>/dev/null
+apt install -y mailutils &>/dev/null
+
+# change configfiles to send E-Mails
 if grep "root:" /etc/aliases; then
   sed -i "s/^root:.*$/root: $mailTO/" /etc/aliases
 else
