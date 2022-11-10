@@ -80,7 +80,9 @@ function updateHost() {
   } | whiptail --gauge --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " SYSTEMVORBEREITUNG " "Dein HomeServer wird auf Systemupdates geprüft ..." 10 80 0
 
   # install DarkMode
-  bash <(curl -s https://raw.githubusercontent.com/Weilbyte/PVEDiscordDark/master/PVEDiscordDark.sh) install 2>&1 >/dev/null
+  if ! bash <(curl -s https://raw.githubusercontent.com/Weilbyte/PVEDiscordDark/master/PVEDiscordDark.sh) install 2>&1 >/dev/null; then false; fi
+  
+  return 0
 }
 
 # Function generates an Filebackup
