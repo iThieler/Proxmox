@@ -186,14 +186,14 @@ function lxc_SQLSecure() {
 # give an whiptail message box
 function whip_message() {
   #call whip_message "title" "message"
-  whiptail --msgbox --ok-button " OK " --backtitle "© 2021 - SmartHome-IoT.net" --title " ${1} " "${2}" 0 80
+  whiptail --msgbox --ok-button " OK " --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " ${1} " "${2}" 0 80
   echoLOG b "${message}"
 }
 
 # give a whiptail question box
 function whip_yesno() {
   #call whip_yesno "btn1" "btn2" "title" "message"  >> btn1 = true  btn2 = false
-  whiptail --yesno --yes-button " ${1} " --no-button " ${2} " --backtitle "© 2021 - SmartHome-IoT.net" --title " ${3} " "${4}" 0 80
+  whiptail --yesno --yes-button " ${1} " --no-button " ${2} " --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " ${3} " "${4}" 0 80
   yesno=$?
   if [ ${yesno} -eq 0 ]; then true; else false; fi
 }
@@ -201,7 +201,7 @@ function whip_yesno() {
 # give a whiptail box with input field
 function whip_inputbox() {
   #call whip_inputbox "btn" "title" "message" "default value"
-  input=$(whiptail --inputbox --ok-button " ${1} " --nocancel --backtitle "© 2021 - SmartHome-IoT.net" --title " ${2} " "\n${3}" 0 80 "${4}" 3>&1 1>&2 2>&3)
+  input=$(whiptail --inputbox --ok-button " ${1} " --nocancel --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " ${2} " "\n${3}" 0 80 "${4}" 3>&1 1>&2 2>&3)
   if [[ $input == "" ]]; then
     whip_inputbox "$1" "$2" "$3" "$4\n\n!!! Es muss eine Eingabe erfolgen !!!" ""
   else
@@ -212,7 +212,7 @@ function whip_inputbox() {
 # give a whiptail box with input field and cancel button
 function whip_inputbox_cancel() {
   #call whip_inputbox_cancel "btn1" "btn2" "title" "message" "default value"
-  input=$(whiptail --inputbox --ok-button " ${1} " --cancel-button " ${2} " --backtitle "© 2021 - SmartHome-IoT.net" --title " ${3} " "\n${4}" 0 80 "${5}" 3>&1 1>&2 2>&3)
+  input=$(whiptail --inputbox --ok-button " ${1} " --cancel-button " ${2} " --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " ${3} " "\n${4}" 0 80 "${5}" 3>&1 1>&2 2>&3)
   if [ $? -eq 1 ]; then
     echo cancel
   else
@@ -227,7 +227,7 @@ function whip_inputbox_cancel() {
 # give a whiptail box with input field for passwords
 function whip_inputbox_password() {
   #call whip_inputbox "btn" "title" "message"
-  input=$(whiptail --passwordbox --ok-button " ${1} " --nocancel --backtitle "© 2021 - SmartHome-IoT.net" --title " ${2} " "\n${3}" 10 80 3>&1 1>&2 2>&3)
+  input=$(whiptail --passwordbox --ok-button " ${1} " --nocancel --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " ${2} " "\n${3}" 10 80 3>&1 1>&2 2>&3)
   if [[ $input == "" ]]; then
     whip_inputbox "$1" "$2" "$3" "$4\n\n!!! Es muss eine Eingabe erfolgen !!!" ""
   else
@@ -238,7 +238,7 @@ function whip_inputbox_password() {
 # give a whiptail box with input field for passwords
 function whip_inputbox_password_autogenerate() {
   #call whip_inputbox "btn" "title" "message"
-  input=$(whiptail --passwordbox --ok-button " ${1} " --nocancel --backtitle "© 2021 - SmartHome-IoT.net" --title " ${2} " "\n${3}" 10 80 3>&1 1>&2 2>&3)
+  input=$(whiptail --passwordbox --ok-button " ${1} " --nocancel --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " ${2} " "\n${3}" 10 80 3>&1 1>&2 2>&3)
   if [[ $input == "" ]]; then
     echo $(generatePassword 26)
   else
@@ -268,9 +268,9 @@ function whip_filebrowser() {
 
   curdir=$(pwd)
   if [ "$curdir" == "/" ] ; then  # Check if current dir is root folder
-    selection=$(whiptail --menu --ok-button " Select " --cancel-button " Cancel " --backtitle "© 2021 - SmartHome-IoT.net" --title " Dateiauswahl " "Aktueller Pfad\n$curdir" 0 80 0 $dir_list 3>&1 1>&2 2>&3)
+    selection=$(whiptail --menu --ok-button " Select " --cancel-button " Cancel " --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " Dateiauswahl " "Aktueller Pfad\n$curdir" 0 80 0 $dir_list 3>&1 1>&2 2>&3)
   else   # Not root dir so show ../ selection in Menu
-    selection=$(whiptail --menu --ok-button " Select " --cancel-button " Cancel " --backtitle "© 2021 - SmartHome-IoT.net" --title " Dateiauswahl " "Aktueller Pfad\n$curdir" 0 80 0 ../ " " $dir_list 3>&1 1>&2 2>&3)
+    selection=$(whiptail --menu --ok-button " Select " --cancel-button " Cancel " --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " Dateiauswahl " "Aktueller Pfad\n$curdir" 0 80 0 ../ " " $dir_list 3>&1 1>&2 2>&3)
   fi
 
   RET=$?
@@ -311,7 +311,7 @@ function whip_alert() {
       textbox=white,red
       button=black,yellow
     ' \
-    whiptail --msgbox --ok-button " OK " --backtitle "© 2021 - SmartHome-IoT.net" --title " ${1} " "${2}" 0 80
+    whiptail --msgbox --ok-button " OK " --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " ${1} " "${2}" 0 80
     echoLOG r "${message}"
 }
 
@@ -324,7 +324,7 @@ function whip_alert_yesno() {
       textbox=white,red
       button=black,yellow
     ' \
-    whiptail --yesno --yes-button " ${1} " --no-button " ${2} " --backtitle "© 2021 - SmartHome-IoT.net" --title " ${3} " "${4}" 0 80
+    whiptail --yesno --yes-button " ${1} " --no-button " ${2} " --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " ${3} " "${4}" 0 80
     yesno=$?
     if [ ${yesno} -eq 0 ]; then echoLOG r "${4} ${blue}${1}${nc}"; else echoLOG r "${4} ${blue}${2}${nc}"; fi
     if [ ${yesno} -eq 0 ]; then true; else false; fi
@@ -339,7 +339,7 @@ function whip_alert_inputbox() {
       textbox=white,red
       button=black,yellow
     ' \
-  input=$(whiptail --inputbox --ok-button " ${1} " --nocancel --backtitle "© 2021 - SmartHome-IoT.net" --title " ${2} " "\n${3}" 0 80 "${4}" 3>&1 1>&2 2>&3)
+  input=$(whiptail --inputbox --ok-button " ${1} " --nocancel --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " ${2} " "\n${3}" 0 80 "${4}" 3>&1 1>&2 2>&3)
   if [[ $input == "" ]]; then
     whip_inputbox "$1" "$2" "$3" "$4\n\n!!! Es muss eine Eingabe erfolgen !!!" ""
   else
@@ -356,7 +356,7 @@ function whip_alert_inputbox_cancel() {
       textbox=white,red
       button=black,yellow
     ' \
-  input=$(whiptail --inputbox --ok-button " ${1} " --cancel-button " ${2} " --backtitle "© 2021 - SmartHome-IoT.net" --title " ${3} " "\n${4}" 0 80 "${5}" 3>&1 1>&2 2>&3)
+  input=$(whiptail --inputbox --ok-button " ${1} " --cancel-button " ${2} " --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " ${3} " "\n${4}" 0 80 "${5}" 3>&1 1>&2 2>&3)
   if [ $? -eq 1 ]; then
     echo cancel
   else
