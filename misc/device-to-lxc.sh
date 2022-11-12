@@ -2,16 +2,7 @@
 
 source <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/_functions.sh)
 
-function menuMAIN() {
-  sel=("1" "... bind Zigbee Stick" \
-       "2" "... bind DVB-Device" \
-       "3" "... bind grafic Card" \
-       "4" "... bind Storage" \
-       "" "" \
-       "Q" "... back")
-  menuSelection=$(whiptail --menu --nocancel --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " BIND DEVICE TO LXC " "\nWhat do you want to do?" 20 80 10 "${sel[@]}" 3>&1 1>&2 2>&3)
-
-  if [[ $menuSelection == "1" ]]; then
+function zigbee() {
     #get container ID and stop
     ctID=
     pct stop $ctID
@@ -77,6 +68,20 @@ function menuMAIN() {
 
     #start container
     pct start $ctID
+}
+
+function menuMAIN() {
+  sel=("1" "... bind Zigbee Stick" \
+       "2" "... bind DVB-Device" \
+       "3" "... bind grafic Card" \
+       "4" "... bind Storage" \
+       "" "" \
+       "Q" "... back")
+  menuSelection=$(whiptail --menu --nocancel --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " BIND DEVICE TO LXC " "\nWhat do you want to do?" 20 80 10 "${sel[@]}" 3>&1 1>&2 2>&3)
+
+  if [[ $menuSelection == "1" ]]; then
+    #bind zigbee
+    zigbee
   elif [[ $menuSelection == "2" ]]; then
     #bind DVB-Device
     menuMAIN
@@ -88,8 +93,10 @@ function menuMAIN() {
     menuMAIN
   elif [[ $menuSelection == "Q" ]]; then
     #going back
-    bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/checkup.sh)
+    exit
   else
     menuMAIN
   fi
 }
+
+menuMAIN
