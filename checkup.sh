@@ -54,45 +54,22 @@ function menuMAIN() {
   menuSelection=$(whiptail --menu --nocancel --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " CONFIGURING PROXMOX " "\nWhat do you want to do?" 20 80 10 "${sel[@]}" 3>&1 1>&2 2>&3)
 
   if [[ $menuSelection == "1" ]]; then
-    if whip_yesno "ONLY HOST" "ALL" "CONFIGURING PROXMOX" "Do you want to update only your Proxmox Hostsystem or your Proxmox Hostsystem and all containers and virtual machines?"; then
-      #Update only Host
-      echoLOG y "Start full update Host Server"
-      updateHost
-      echoLOG g "Full Hostupdate done"
-    else
-      #update Host and all VMs
-    fi
+    bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/helper/do-update.sh)
     menuMAIN
   elif [[ $menuSelection == "2" ]]; then
-    if whip_yesno "CONTAINER" "VIRTUAL MACHINE" "CONFIGURING PROXMOX" "Do you want to backup one or more Conatiners or one or more virtual machines?"; then
-      #backup containers
-    else
-      #backup virtual machines
-    fi
+    bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/helper/do-backup.sh)
     menuMAIN
   elif [[ $menuSelection == "3" ]]; then
-    if whip_yesno "CONTAINER" "VIRTUAL MACHINE" "CONFIGURING PROXMOX" "Do you want to restore one or more Conatiners or one or more virtual machines?"; then
-      #restore containers
-    else
-      #restore virtual machines
-    fi
+    bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/helper/do-restore.sh)
     menuMAIN
   elif [[ $menuSelection == "4" ]]; then
-    if whip_yesno "CONTAINER" "VIRTUAL MACHINE" "CONFIGURING PROXMOX" "Do you want to create a Conatiner or a virtual machines?"; then
-      #create containers
-    else
-      #create virtual machines
-    fi
+    bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/helper/do-create.sh)
     menuMAIN
   elif [[ $menuSelection == "5" ]]; then
-    if whip_yesno "CONTAINER" "VIRTUAL MACHINE" "CONFIGURING PROXMOX" "Do you want to delete one or more Conatiners or one or more virtual machines?"; then
-      #delete containers
-    else
-      #delete virtual machines
-    fi
+    bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/helper/do-delete.sh)
     menuMAIN
   elif [[ $menuSelection == "6" ]]; then
-    bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/device-to-lxc.sh)
+    bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/helper/do-passthrough.sh)
     menuMAIN
   elif [[ $menuSelection == "Q" ]]; then
     echoLOG y "one moment please, while finishing script"
