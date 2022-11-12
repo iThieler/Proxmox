@@ -7,7 +7,7 @@ function create_Global_Config() {
   hostDOMAIN=$(pveum user list | grep "root@pam" | awk '{print $5}' | cut -d\@ -f2)
   
   # config Netrobot
-  if whip_yesno "JA" "NEIN" "NETZWERKROBOTER" "Nutzt Du einen Netzwerkroborter in deinem Netzwerk (algemeiner Benutzer der auf allen Geräten Adminrechte hat)?"; then
+  if whip_yesno "JA" "NEIN" "NETZWERKROBOTER" "Nutzt Du einen Netzwerkroborter in deinem Netzwerk (allgemeiner Benutzer der auf allen Geräten Adminrechte hat)?"; then
     robot=true
     robotNAME=$(whip_inputbox "OK" "NETZWERKROBOTER" "Wie lautet der Name, deines Netzwerkroboter?" "netrobot")
     robotPASS=$(whip_inputbox_password_autogenerate "OK" "NETZWERKROBOTER" "Wie lautet das Passwort von >>${robotNAME}<<?\nLeer = Passwort automatisch erstellen")
