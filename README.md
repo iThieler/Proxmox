@@ -30,7 +30,7 @@ Run the following in the Proxmox Shell. ⚠️ **PVE7 ONLY**
 bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/checkup.sh)
 ```
 
-<br><br><h1 align="center" id="heading"> Good to know & more </h1>
+<br><h1 align="center" id="heading"> Good to know & more </h1>
 
 <details>
 <summary markdown="span"> Resize Container Disk (LXC) </summary>
