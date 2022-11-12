@@ -198,7 +198,7 @@ function whip_yesno() {
   if [ ${yesno} -eq 0 ]; then true; else false; fi
 }
 
-# give a whiptail box with inpput field
+# give a whiptail box with input field
 function whip_inputbox() {
   #call whip_inputbox "btn" "title" "message" "default value"
   input=$(whiptail --inputbox --ok-button " ${1} " --nocancel --backtitle "© 2021 - SmartHome-IoT.net" --title " ${2} " "\n${3}" 0 80 "${4}" 3>&1 1>&2 2>&3)
@@ -209,7 +209,7 @@ function whip_inputbox() {
   fi
 }
 
-# give a whiptail box with inpput field and cancel button
+# give a whiptail box with input field and cancel button
 function whip_inputbox_cancel() {
   #call whip_inputbox_cancel "btn1" "btn2" "title" "message" "default value"
   input=$(whiptail --inputbox --ok-button " ${1} " --cancel-button " ${2} " --backtitle "© 2021 - SmartHome-IoT.net" --title " ${3} " "\n${4}" 0 80 "${5}" 3>&1 1>&2 2>&3)
@@ -224,7 +224,7 @@ function whip_inputbox_cancel() {
   fi
 }
 
-# give a whiptail box with inpput field for passwords
+# give a whiptail box with input field for passwords
 function whip_inputbox_password() {
   #call whip_inputbox "btn" "title" "message"
   input=$(whiptail --passwordbox --ok-button " ${1} " --nocancel --backtitle "© 2021 - SmartHome-IoT.net" --title " ${2} " "\n${3}" 10 80 3>&1 1>&2 2>&3)
@@ -235,7 +235,7 @@ function whip_inputbox_password() {
   fi
 }
 
-# give a whiptail box with inpput field for passwords
+# give a whiptail box with input field for passwords
 function whip_inputbox_password_autogenerate() {
   #call whip_inputbox "btn" "title" "message"
   input=$(whiptail --passwordbox --ok-button " ${1} " --nocancel --backtitle "© 2021 - SmartHome-IoT.net" --title " ${2} " "\n${3}" 10 80 3>&1 1>&2 2>&3)
@@ -244,6 +244,16 @@ function whip_inputbox_password_autogenerate() {
   else
     echo "${input}"
   fi
+}
+
+function whip_get_usbdevice() {
+  read usbdev < <(
+      declare -a array=()
+      while read foo{,,,,} id dsc;do
+          array+=("$dsc" "")
+        done < <(lsusb)
+      whiptail --menu 'Select USB device' 0 80 0 "${array[@]}" 2>&1 >/dev/tty
+  )
 }
 
 function whip_filebrowser() {
@@ -265,7 +275,7 @@ function whip_filebrowser() {
 
   RET=$?
   if [ $RET -eq 1 ]; then return 1; fi  # Check if User selected cancel
-  
+
   if [[ -d "$selection" ]]; then  # Check if Directory selected
     whip_filebrowser "$selection"
   elif [[ -f "$selection" ]]; then  # Check if File selected
@@ -320,7 +330,7 @@ function whip_alert_yesno() {
     if [ ${yesno} -eq 0 ]; then true; else false; fi
 }
 
-# give a whiptail box with inpput field in alert mode
+# give a whiptail box with input field in alert mode
 function whip_alert_inputbox() {
   #call whip_inputbox "btn" "title" "message" "default value"
   NEWT_COLORS='
@@ -337,7 +347,7 @@ function whip_alert_inputbox() {
   fi
 }
 
-# give a whiptail box with inpput field and cancel button in alert mode
+# give a whiptail box with input field and cancel button in alert mode
 function whip_alert_inputbox_cancel() {
   #call whip_inputbox_cancel "btn1" "btn2" "title" "message" "default value"
   NEWT_COLORS='
