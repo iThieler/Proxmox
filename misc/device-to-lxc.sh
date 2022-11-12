@@ -2,8 +2,6 @@
 
 source <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/_functions.sh)
 
-
-
 function menuMAIN() {
   sel=("1" "... bind Zigbee Stick" \
        "2" "... bind DVB-Device" \
@@ -71,6 +69,7 @@ function menuMAIN() {
       #insert text to lxc conigfile
       echo -e "$line1\n$line2\n$line3\n$line4" >> "/etc/pve/lxc/$ctID.conf"
     fi
+    chmod o+rw "/dev/$usbPATH"
 
     #create udev rule
     echo -e "SUBSYSTEMS=="usb", ATTRS{idVendor}=="${usbVENDORID}", ATTRS{idProduct}=="${usbPRODUCTID}", GROUP="users", MODE="0666"" > "/etc/udev/rules.d/50-myusb.rules"
