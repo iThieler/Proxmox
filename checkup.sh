@@ -34,54 +34,56 @@ EOF
 }
 
 function menuMAIN() {
-  sel=("1" "... update my HomeServer" \
-       "2" "... update my HomeServer and all containers" \
-       "3" "... install and configure containers" \
-       "4" "... install and configure virtual machine(s)" \
-       "5" "... create a backup of one or more guest systems" \
-       "6" "... restore one or more guest systems from backup" \
-       "7" "... delete one or more containers" \
-       "8" "... delete one or more virtual machine(s)" \
+  sel=("1" "I want to update ..." \
+       "2" "I want to backup ..." \
+       "3" "I want to restore ..." \
+       "4" "I want to create ..." \
+       "5" "I want to delete ..." \
+       "6" "I want to passthrough ..." \
        "" "" \
        "Q" "... exit and clean up")
   menuSelection=$(whiptail --menu --nocancel --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " CONFIGURING PROXMOX " "\nWhat do you want to do?" 20 80 10 "${sel[@]}" 3>&1 1>&2 2>&3)
 
   if [[ $menuSelection == "1" ]]; then
-    echoLOG y "Start full update Host Server"
-    updateHost
-    echoLOG g "Full Hostupdate done"
+    if whip_yesno "ONLY HOST" "ALL" "CONFIGURING PROXMOX" "Do you want to update only your Proxmox Hostsystem or your Proxmox Hostsystem and all containers and virtual machines?"; then
+      #Update only Host
+      echoLOG y "Start full update Host Server"
+      updateHost
+      echoLOG g "Full Hostupdate done"
+    else
+      #update Host and all VMs
+    fi
     menuMAIN
   elif [[ $menuSelection == "2" ]]; then
-    echoLOG y "Start full update Host Server"
-    updateHost
-    echoLOG g "Full Hostupdate done"
-    echoLOG y "Start updating Container"
-    #update "all"
-    echoLOG g "All Containerupdates done"
+    if whip_yesno "CONTAINER" "VIRTUAL MACHINE" "CONFIGURING PROXMOX" "Do you want to backup one or more Conatiners or one or more virtual machines?"; then
+      #backup containers
+    else
+      #backup virtual machines
+    fi
     menuMAIN
   elif [[ $menuSelection == "3" ]]; then
-    #install "LXC"
+    if whip_yesno "CONTAINER" "VIRTUAL MACHINE" "CONFIGURING PROXMOX" "Do you want to restore one or more Conatiners or one or more virtual machines?"; then
+      #restore containers
+    else
+      #restore virtual machines
+    fi
     menuMAIN
   elif [[ $menuSelection == "4" ]]; then
-    #install "VM"
+    if whip_yesno "CONTAINER" "VIRTUAL MACHINE" "CONFIGURING PROXMOX" "Do you want to create a Conatiner or a virtual machines?"; then
+      #create containers
+    else
+      #create virtual machines
+    fi
     menuMAIN
   elif [[ $menuSelection == "5" ]]; then
-    if whip_yesno "ALL" "SELECT" "BACKUP GUEST SYSTEMS" "Do you want to back up all containers and virtual machines, or select individual ones?"; then
-      #backuprestore "backup" "all"
-      menuMAIN
+    if whip_yesno "CONTAINER" "VIRTUAL MACHINE" "CONFIGURING PROXMOX" "Do you want to delete one or more Conatiners or one or more virtual machines?"; then
+      #delete containers
     else
-      #backuprestore "backup" "select"
-      menuMAIN
+      #delete virtual machines
     fi
     menuMAIN
   elif [[ $menuSelection == "6" ]]; then
-    #backuprestore "restore" "all"
-    menuMAIN
-  elif [[ $menuSelection == "7" ]]; then
-    #delete "LXC"
-    menu
-  elif [[ $menuSelection == "8" ]]; then
-    #delete "VM"
+    bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/device-to-lxc.sh)
     menuMAIN
   elif [[ $menuSelection == "Q" ]]; then
     echoLOG y "one moment please, while finishing script"
