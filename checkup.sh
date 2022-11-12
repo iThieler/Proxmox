@@ -44,7 +44,7 @@ function menuMAIN() {
        "8" "... delete one or more virtual machine(s)" \
        "" "" \
        "Q" "... exit and clean up")
-  menuSelection=$(whiptail --menu --nocancel --backtitle "© 2021 - SmartHome-IoT.net" --title " CONFIGURING PROXMOX " "\nWhat do you want to do?" 20 80 10 "${sel[@]}" 3>&1 1>&2 2>&3)
+  menuSelection=$(whiptail --menu --nocancel --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " CONFIGURING PROXMOX " "\nWhat do you want to do?" 20 80 10 "${sel[@]}" 3>&1 1>&2 2>&3)
 
   if [[ $menuSelection == "1" ]]; then
     echoLOG y "Start full update Host Server"
@@ -100,7 +100,7 @@ if ! command -v pveversion >/dev/null 2>&1; then
       textbox=white,red
       button=black,yellow
     ' \
-    whiptail --textbox --backtitle "© 2021 - SmartHome-IoT.net" --title " CHECKUP " "\nNo Proxmox detected, Wrong Script!" 10 80
+    whiptail --textbox --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " CHECKUP " "\nNo Proxmox detected, Wrong Script!" 10 80
   exit 1
 fi
 
@@ -113,7 +113,7 @@ if [ "$pve_majorversion" -lt 7 ]; then
       textbox=white,red
       button=black,yellow
     ' \
-    whiptail --textbox --backtitle "© 2021 - SmartHome-IoT.net" --title " CHECKUP " "\nThis script works only on servers with Proxmox version 7.X\nYour Prxmox version: ${pve_majorversion}" 10 80
+    whiptail --textbox --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " CHECKUP " "\nThis script works only on servers with Proxmox version 7.X\nYour Prxmox version: ${pve_majorversion}" 10 80
   exit 1
 fi
 
