@@ -78,23 +78,17 @@ function menuMAIN() {
     #start container
     pct start $ctID
   elif [[ $menuSelection == "2" ]]; then
-    echoLOG y "Start full update Host Server"
-    updateHost
-    echoLOG g "Full Hostupdate done"
-    echoLOG y "Start updating Container"
-    #update "all"
-    echoLOG g "All Containerupdates done"
+    #bind DVB-Device
     menuMAIN
   elif [[ $menuSelection == "3" ]]; then
-    #install "LXC"
+    #bind grafic Card
     menuMAIN
   elif [[ $menuSelection == "4" ]]; then
-    #install "VM"
+    #bind Storage
     menuMAIN
   elif [[ $menuSelection == "Q" ]]; then
-    echoLOG y "one moment please, while finishing script"
-    #finish
-    exit 0
+    #going back
+    bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/checkup.sh)
   else
     menuMAIN
   fi
