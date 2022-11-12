@@ -9,7 +9,7 @@ function menuMAIN() {
        "4" "... bind Storage" \
        "" "" \
        "Q" "... back")
-  menuSelection=$(whiptail --menu --nocancel --backtitle "© 2021 - SmartHome-IoT.net" --title " BIND DEVICE TO LXC " "\nWhat do you want to do?" 20 80 10 "${sel[@]}" 3>&1 1>&2 2>&3)
+  menuSelection=$(whiptail --menu --nocancel --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " BIND DEVICE TO LXC " "\nWhat do you want to do?" 20 80 10 "${sel[@]}" 3>&1 1>&2 2>&3)
 
   if [[ $menuSelection == "1" ]]; then
     #get container ID and stop
