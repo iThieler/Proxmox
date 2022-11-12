@@ -2,6 +2,15 @@
 
 source <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/_functions.sh)
 
+function headerLOGO() {
+  echo -e "
+    _ _____ _    _     _         _      ___                                       _      _            _ _        _   _ 
+   (_|_   _| |_ (_)___| |___ _ _( )___ | _ \_ _ _____ ___ __  _____ __  _____ _ _(_)_ __| |_   __ ___| | |___ __| |_(_)___ _ _
+   | | | | | ' \| / -_| / -_| '_|/(_-< |  _| '_/ _ \ \ | '  \/ _ \ \ / (_-/ _| '_| | '_ |  _| / _/ _ | | / -_/ _|  _| / _ | ' \
+   |_| |_| |_||_|_\___|_\___|_|   /__/ |_| |_| \___/_\_|_|_|_\___/_\_\ /__\__|_| |_| .__/\__| \__\___|_|_\___\__|\__|_\___|_||_|
+                                                                                   |_|"
+}
+
 function firstRUN() {
   whip_message "SYSTEM PREPARATION" "This Script runs for the first Time. Proxmox is checked for system updates, possibly required software will be installed. This will take a while."
   echoLOG y "starting system preparation"
@@ -93,6 +102,8 @@ function menuMAIN() {
     menuMAIN
   fi
 }
+clear
+headerLOGO
 
 # Check Proxmox
 if ! command -v pveversion >/dev/null 2>&1; then
