@@ -311,8 +311,8 @@ function whip_alert() {
       border=gray,green
       textbox=gray,green
       button=black,lightgray
-      roottext=lightgray,
-      title=lightgray,
+      roottext=lightgray,gray
+      title=,lightgray
     ' \
     whiptail --msgbox --ok-button " OK " --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " ${1} " "${2}" 0 80
     echoLOG r "${2}"
