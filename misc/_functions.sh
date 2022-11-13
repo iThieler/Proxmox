@@ -121,7 +121,7 @@ function cleanup_and_exit() {
 # Function write event to logfile and echo colorized in shell
 function echoLOG() {
   typ=$1
-  text=$2
+  text=$(echo -e $2 | sed ':a;N;$!ba;s/\n/ /g')
   logfile="/root/log_iThieler-Proxmox-Script.txt"
   nc='\033[0m'
   red='\033[1;31m'
@@ -132,20 +132,20 @@ function echoLOG() {
   if [ ! -f "${logfile}" ]; then touch "${logfile}"; fi
 
     if [[ $typ == "r" ]]; then
-    echo -e "$(date +'%Y-%m-%d  %T')  [${red}ERROR${nc}]  $text | sed ':a;N;$!ba;s/\n/ /g'"
-    echo -e "$(date +'%Y-%m-%d  %T')  [ERROR]  $text | sed ':a;N;$!ba;s/\n/ /g'" >> "${logfile}"
+    echo -e "$(date +'%Y-%m-%d  %T')  [${red}ERROR${nc}]  $text"
+    echo -e "$(date +'%Y-%m-%d  %T')  [ERROR]  $text" >> "${logfile}"
   elif [[ $typ == "g" ]]; then
-    echo -e "$(date +'%Y-%m-%d  %T')  [${green}OK${nc}]     $text | sed ':a;N;$!ba;s/\n/ /g'"
-    echo -e "$(date +'%Y-%m-%d  %T')  [OK]     $text | sed ':a;N;$!ba;s/\n/ /g'" >> "${logfile}"
+    echo -e "$(date +'%Y-%m-%d  %T')  [${green}OK${nc}]     $text"
+    echo -e "$(date +'%Y-%m-%d  %T')  [OK]     $text" >> "${logfile}"
   elif [[ $typ == "y" ]]; then
-    echo -e "$(date +'%Y-%m-%d  %T')  [${yellow}WAIT${nc}]   $text | sed ':a;N;$!ba;s/\n/ /g'"
-    echo -e "$(date +'%Y-%m-%d  %T')  [WAIT]   $text | sed ':a;N;$!ba;s/\n/ /g'" >> "${logfile}"
+    echo -e "$(date +'%Y-%m-%d  %T')  [${yellow}WAIT${nc}]   $text"
+    echo -e "$(date +'%Y-%m-%d  %T')  [WAIT]   $text" >> "${logfile}"
   elif [[ $typ == "b" ]]; then
-    echo -e "$(date +'%Y-%m-%d  %T')  [${blue}INFO${nc}]   $text | sed ':a;N;$!ba;s/\n/ /g'"
-    echo -e "$(date +'%Y-%m-%d  %T')  [INFO]   $text | sed ':a;N;$!ba;s/\n/ /g'" >> "${logfile}"
+    echo -e "$(date +'%Y-%m-%d  %T')  [${blue}INFO${nc}]   $text"
+    echo -e "$(date +'%Y-%m-%d  %T')  [INFO]   $text" >> "${logfile}"
   elif [[ $typ == "no" ]]; then
-    echo -e "$(date +'%Y-%m-%d  %T')           $text | sed ':a;N;$!ba;s/\n/ /g'"
-    echo -e "$(date +'%Y-%m-%d  %T')           $text | sed ':a;N;$!ba;s/\n/ /g'" >> "${logfile}"
+    echo -e "$(date +'%Y-%m-%d  %T')           $text"
+    echo -e "$(date +'%Y-%m-%d  %T')           $text" >> "${logfile}"
   fi
 }
 
