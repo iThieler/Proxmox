@@ -121,7 +121,7 @@ function cleanup_and_exit() {
 # Function write event to logfile and echo colorized in shell
 function echoLOG() {
   typ=$1
-  text=$(echo -e $2 | sed ':a;N;$!ba;s/\n/ /g')
+  text=$(echo -e $2 | sed ':a;N;$!ba;s/\n/ - /g')
   logfile="/root/log_iThieler-Proxmox-Script.txt"
   nc='\033[0m'
   red='\033[1;31m'
