@@ -25,7 +25,7 @@ if [ -n "$nasIP" ]; then
         sleep 2
       done
       name=$(pct list | sed '1d' | awk '{print $3}')
-      if vzdump $ctID --dumpdir $bakdir --mode stop --compress zstd --notes-template "{{vmid}} - {{guestname}}" --exclude-path /mnt/ --exclude-path /media/ --quiet 1; then
+      if vzdump {$ctID} --dumpdir $bakdir --mode stop --compress zstd --notes-template "{{vmid}} - {{guestname}}" --exclude-path /mnt/ --exclude-path /media/ --quiet 1; then
         echoLOG g "Backup >> $ctID - $name"
       else
         echoLOG r "Backup >> $ctID - $name"
@@ -34,7 +34,7 @@ if [ -n "$nasIP" ]; then
     done
     for kvmID in $(qm list | sed '1d' | awk '{print $1}'); do
       qm stop $kvmID
-      if vzdump $kvmID --dumpdir $bakdir --mode stop --compress zstd --notes-template "{{vmid}} - {{guestname}}" --exclude-path /mnt/ --exclude-path /media/ --quiet 1; then
+      if vzdump {$kvmID} --dumpdir $bakdir --mode stop --compress zstd --notes-template "{{vmid}} - {{guestname}}" --exclude-path /mnt/ --exclude-path /media/ --quiet 1; then
         echoLOG g "Backup >> $kvmID - $name"
       else
         echoLOG r "Backup >> $kvmID - $name"
