@@ -79,6 +79,15 @@ function menuMAIN() {
     menuMAIN
   fi
 }
+
+# loads whiptail color sheme
+if [ -f "~/.iThielers_NEWT_COLORS" ]; then
+  export NEWT_COLORS_FILE=~/.iThielers_NEWT_COLORS
+else
+  wget https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/newt_colors_file.txt -O ~/.iThielers_NEWT_COLORS
+  export NEWT_COLORS_FILE=~/.iThielers_NEWT_COLORS
+fi
+
 clear
 headerLOGO
 
