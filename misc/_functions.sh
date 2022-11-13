@@ -306,10 +306,13 @@ function whip_filebrowser() {
 function whip_alert() {
   #call whip_alert "title" "message"
   NEWT_COLORS='
-      window=black,green
-      border=black,green
+      root=white,gray
+      window=gray,green
+      border=gray,green
       textbox=gray,green
-      button=black,white
+      button=black,lightgray
+      roottext=lightgray,
+      title=lightgray,
     ' \
     whiptail --msgbox --ok-button " OK " --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " ${1} " "${2}" 0 80
     echoLOG r "${2}"
