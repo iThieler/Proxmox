@@ -309,7 +309,7 @@ function whip_alert() {
       root=white,gray
       roottext=lightgray,gray
       window=gray,green
-      title=,green
+      title=lightgray,green
       border=gray,green
       textbox=lightgray,green
       button=black,lightgray
