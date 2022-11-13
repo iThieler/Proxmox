@@ -187,7 +187,7 @@ function lxc_SQLSecure() {
 function whip_message() {
   #call whip_message "title" "message"
   whiptail --msgbox --ok-button " OK " --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " ${1} " "${2}" 0 80
-  echoLOG b "${message}"
+  echoLOG b "${2}"
 }
 
 # give a whiptail question box
@@ -307,9 +307,9 @@ function whip_alert() {
   #call whip_alert "title" "message"
   NEWT_COLORS='
       window=black,green
-      border=white,red
-      textbox=white,red
-      button=black,yellow
+      border=black,green
+      textbox=white,green
+      button=black,gray
     ' \
     whiptail --msgbox --ok-button " OK " --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " ${1} " "${2}" 0 80
     echoLOG r "${2}"
