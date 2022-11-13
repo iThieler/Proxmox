@@ -302,12 +302,7 @@ function whip_filebrowser() {
 # give an whiptail message box in alert mode
 function whip_alert() {
   #call whip_alert "title" "message"
-  NEWT_COLORS='
-      window=gray,red
-      border=gray,red
-      title=lightgray,red
-      textbox=lightgray,red
-    ' \
+  NEWT_COLORS_FILE=~/.iThielers_NEWT_COLORS \
     whiptail --msgbox --ok-button " OK " --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " ${1} " "${2}" 0 80
     echoLOG r "${2}"
 }
@@ -315,12 +310,7 @@ function whip_alert() {
 # give an whiptail question box in alert mode
 function whip_alert_yesno() {
   #call whip_alert_yesno "btn1" "btn2" "title" "message"  >> btn1 = true  btn2 = false
-  NEWT_COLORS='
-      window=gray,red
-      border=gray,red
-      title=lightgray,red
-      textbox=lightgray,red
-    ' \
+  NEWT_COLORS_FILE=~/.iThielers_NEWT_COLORS \
     whiptail --yesno --yes-button " ${1} " --no-button " ${2} " --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " ${3} " "${4}" 0 80
     yesno=$?
     if [ ${yesno} -eq 0 ]; then echoLOG r "${4} ${blue}${1}${nc}"; else echoLOG r "${4} ${blue}${2}${nc}"; fi
@@ -330,12 +320,7 @@ function whip_alert_yesno() {
 # give a whiptail box with input field in alert mode
 function whip_alert_inputbox() {
   #call whip_inputbox "btn" "title" "message" "default value"
-  NEWT_COLORS='
-      window=gray,red
-      border=gray,red
-      title=lightgray,red
-      textbox=lightgray,red
-    ' \
+  NEWT_COLORS_FILE=~/.iThielers_NEWT_COLORS \
   input=$(whiptail --inputbox --ok-button " ${1} " --nocancel --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " ${2} " "\n${3}" 0 80 "${4}" 3>&1 1>&2 2>&3)
   if [[ $input == "" ]]; then
     whip_inputbox "$1" "$2" "$3" "$4\n\n!!! Es muss eine Eingabe erfolgen !!!" ""
@@ -347,12 +332,7 @@ function whip_alert_inputbox() {
 # give a whiptail box with input field and cancel button in alert mode
 function whip_alert_inputbox_cancel() {
   #call whip_inputbox_cancel "btn1" "btn2" "title" "message" "default value"
-  NEWT_COLORS='
-      window=gray,red
-      border=gray,red
-      title=lightgray,red
-      textbox=lightgray,red
-    ' \
+  NEWT_COLORS_FILE=~/.iThielers_NEWT_COLORS \
   input=$(whiptail --inputbox --ok-button " ${1} " --cancel-button " ${2} " --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " ${3} " "\n${4}" 0 80 "${5}" 3>&1 1>&2 2>&3)
   if [ $? -eq 1 ]; then
     echo cancel
