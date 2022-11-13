@@ -130,22 +130,22 @@ function echoLOG() {
   blue='\033[1;34m'
   
   if [ ! -f "${logfile}" ]; then touch "${logfile}"; fi
-  
-  if [[ $typ == "r" ]]; then
-    echo -e "$(date +'%Y-%m-%d  %T')  [${red}ERROR${nc}]  $text"
-    echo -e "$(date +'%Y-%m-%d  %T')  [ERROR]  $text" >> "${logfile}"
+
+    if [[ $typ == "r" ]]; then
+    echo -e "$(date +'%Y-%m-%d  %T')  [${red}ERROR${nc}]  $text | sed ':a;N;$!ba;s/\n/ /g'"
+    echo -e "$(date +'%Y-%m-%d  %T')  [ERROR]  $text | sed ':a;N;$!ba;s/\n/ /g'" >> "${logfile}"
   elif [[ $typ == "g" ]]; then
-    echo -e "$(date +'%Y-%m-%d  %T')  [${green}OK${nc}]     $text"
-    echo -e "$(date +'%Y-%m-%d  %T')  [OK]     $text" >> "${logfile}"
+    echo -e "$(date +'%Y-%m-%d  %T')  [${green}OK${nc}]     $text | sed ':a;N;$!ba;s/\n/ /g'"
+    echo -e "$(date +'%Y-%m-%d  %T')  [OK]     $text | sed ':a;N;$!ba;s/\n/ /g'" >> "${logfile}"
   elif [[ $typ == "y" ]]; then
-    echo -e "$(date +'%Y-%m-%d  %T')  [${yellow}WAIT${nc}]   $text"
-    echo -e "$(date +'%Y-%m-%d  %T')  [WAIT]   $text" >> "${logfile}"
+    echo -e "$(date +'%Y-%m-%d  %T')  [${yellow}WAIT${nc}]   $text | sed ':a;N;$!ba;s/\n/ /g'"
+    echo -e "$(date +'%Y-%m-%d  %T')  [WAIT]   $text | sed ':a;N;$!ba;s/\n/ /g'" >> "${logfile}"
   elif [[ $typ == "b" ]]; then
-    echo -e "$(date +'%Y-%m-%d  %T')  [${blue}INFO${nc}]   $text"
-    echo -e "$(date +'%Y-%m-%d  %T')  [INFO]   $text" >> "${logfile}"
+    echo -e "$(date +'%Y-%m-%d  %T')  [${blue}INFO${nc}]   $text | sed ':a;N;$!ba;s/\n/ /g'"
+    echo -e "$(date +'%Y-%m-%d  %T')  [INFO]   $text | sed ':a;N;$!ba;s/\n/ /g'" >> "${logfile}"
   elif [[ $typ == "no" ]]; then
-    echo -e "$(date +'%Y-%m-%d  %T')           $text"
-    echo -e "$(date +'%Y-%m-%d  %T')           $text" >> "${logfile}"
+    echo -e "$(date +'%Y-%m-%d  %T')           $text | sed ':a;N;$!ba;s/\n/ /g'"
+    echo -e "$(date +'%Y-%m-%d  %T')           $text | sed ':a;N;$!ba;s/\n/ /g'" >> "${logfile}"
   fi
 }
 
