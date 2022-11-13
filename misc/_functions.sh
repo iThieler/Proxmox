@@ -177,8 +177,6 @@ function lxc_SQLSecure() {
   pct exec $ctID -- bash -ci "apt-get purge -y expect > /dev/null 2>&1"
 }
 
-
-
 ################################
 ##   normal Whiptail Boxes    ##
 ################################
@@ -297,7 +295,6 @@ function whip_filebrowser() {
   fi
 }
 
-
 #######################################
 ##   Whiptail Boxes in alert mode    ##
 #######################################
@@ -306,13 +303,10 @@ function whip_filebrowser() {
 function whip_alert() {
   #call whip_alert "title" "message"
   NEWT_COLORS='
-      root=white,gray
-      roottext=lightgray,gray
-      window=gray,green
-      title=lightgray,green
-      border=gray,green
-      textbox=lightgray,green
-      button=black,lightgray
+      window=gray,red
+      border=gray,red
+      title=lightgray,red
+      textbox=lightgray,red
     ' \
     whiptail --msgbox --ok-button " OK " --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " ${1} " "${2}" 0 80
     echoLOG r "${2}"
@@ -322,10 +316,10 @@ function whip_alert() {
 function whip_alert_yesno() {
   #call whip_alert_yesno "btn1" "btn2" "title" "message"  >> btn1 = true  btn2 = false
   NEWT_COLORS='
-      window=black,red
-      border=white,red
-      textbox=white,red
-      button=black,yellow
+      window=gray,red
+      border=gray,red
+      title=lightgray,red
+      textbox=lightgray,red
     ' \
     whiptail --yesno --yes-button " ${1} " --no-button " ${2} " --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " ${3} " "${4}" 0 80
     yesno=$?
@@ -337,10 +331,10 @@ function whip_alert_yesno() {
 function whip_alert_inputbox() {
   #call whip_inputbox "btn" "title" "message" "default value"
   NEWT_COLORS='
-      window=black,red
-      border=white,red
-      textbox=white,red
-      button=black,yellow
+      window=gray,red
+      border=gray,red
+      title=lightgray,red
+      textbox=lightgray,red
     ' \
   input=$(whiptail --inputbox --ok-button " ${1} " --nocancel --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " ${2} " "\n${3}" 0 80 "${4}" 3>&1 1>&2 2>&3)
   if [[ $input == "" ]]; then
@@ -354,10 +348,10 @@ function whip_alert_inputbox() {
 function whip_alert_inputbox_cancel() {
   #call whip_inputbox_cancel "btn1" "btn2" "title" "message" "default value"
   NEWT_COLORS='
-      window=black,red
-      border=white,red
-      textbox=white,red
-      button=black,yellow
+      window=gray,red
+      border=gray,red
+      title=lightgray,red
+      textbox=lightgray,red
     ' \
   input=$(whiptail --inputbox --ok-button " ${1} " --cancel-button " ${2} " --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " ${3} " "\n${4}" 0 80 "${5}" 3>&1 1>&2 2>&3)
   if [ $? -eq 1 ]; then
