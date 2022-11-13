@@ -81,11 +81,12 @@ function menuMAIN() {
 }
 
 # loads whiptail color sheme
-if [ -f "~/.iThielers_NEWT_COLORS" ]; then
+if [ -f ~/.iThielers_NEWT_COLORS ]; then
   export NEWT_COLORS_FILE=~/.iThielers_NEWT_COLORS
 else
-  wget https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/newt_colors_file.txt -O ~/.iThielers_NEWT_COLORS
-  export NEWT_COLORS_FILE=~/.iThielers_NEWT_COLORS
+  if wget https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/newt_colors_file.txt -O ~/.iThielers_NEWT_COLORS 2>&1 >/dev/null; then
+    export NEWT_COLORS_FILE=~/.iThielers_NEWT_COLORS
+  fi
 fi
 
 clear
@@ -99,7 +100,7 @@ fi
 
 # Checks the PVE MajorRelease
 pve_majorversion=$(pveversion | cut -d/ -f2 | cut -d. -f1)
-if [ "$pve_majorversion" -lt 8 ]; then
+if [ "$pve_majorversion" -lt 7 ]; then
   whip_alert "CHECKUP" "This script works only on servers with Proxmox version 7.X\nYour Prxmox version: ${pve_majorversion}"
   exit 1
 fi
