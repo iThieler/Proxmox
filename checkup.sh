@@ -50,28 +50,35 @@ function menuMAIN() {
        "5" "I want to delete ..." \
        "6" "I want to passthrough ..." \
        "" "" \
-       "Q" "... exit and clean up")
+       "Q" "I want to exit and clean up!")
   menuSelection=$(whiptail --menu --nocancel --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " CONFIGURING PROXMOX " "\nWhat do you want to do?" 20 80 10 "${sel[@]}" 3>&1 1>&2 2>&3)
 
   if [[ $menuSelection == "1" ]]; then
+    echoLOG b "Select >> I want to update ..."
     bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/helper/do-update.sh)
     menuMAIN
   elif [[ $menuSelection == "2" ]]; then
+    echoLOG b "Select >> I want to backup ..."
     bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/helper/do-backup.sh)
     menuMAIN
   elif [[ $menuSelection == "3" ]]; then
+    echoLOG b "Select >> I want to restore ..."
     bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/helper/do-restore.sh)
     menuMAIN
   elif [[ $menuSelection == "4" ]]; then
+    echoLOG b "Select >> I want to create ..."
     bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/helper/do-create.sh)
     menuMAIN
   elif [[ $menuSelection == "5" ]]; then
+    echoLOG b "Select >> I want to delete ..."
     bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/helper/do-delete.sh)
     menuMAIN
   elif [[ $menuSelection == "6" ]]; then
+    echoLOG b "Select >> I want to passthrough ..."
     bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/helper/do-passthrough.sh)
     menuMAIN
   elif [[ $menuSelection == "Q" ]]; then
+    echoLOG b "Select >> I want to exit and clean up!"
     echoLOG y "one moment please, while finishing script"
     #finish
     exit 0
