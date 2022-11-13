@@ -20,7 +20,7 @@ if [ -n "$nasIP" ]; then
     #Backup all
     whip_message "DO BACKUP" "To ensure the highest possible backup quality, the respective guest system is shut down."
     for ctID in $(pct list | sed '1d' | awk '{print $1}'); do
-      pct stop $ctID
+      pct stop $ctID 2>&1 >/dev/null
       while [ $(pct status $ctID | cut -d' ' -f2 | grep -cw running) -eq 1 ]; do
         sleep 2
       done
@@ -30,16 +30,16 @@ if [ -n "$nasIP" ]; then
       else
         echoLOG r "Backup >> $ctID - $name"
       fi
-      pct start $ctID
+      pct start $ctID 2>&1 >/dev/null
     done
     for kvmID in $(qm list | sed '1d' | awk '{print $1}'); do
-      qm stop $kvmID
+      qm stop $kvmID 2>&1 >/dev/null
       if vzdump ${kvmID} --dumpdir ${bakdir} --mode stop --compress zstd --notes-template '{{guestname}}' --exclude-path /mnt/ --exclude-path /media/ --quiet 1; then
         echoLOG g "Backup >> $kvmID - $name"
       else
         echoLOG r "Backup >> $kvmID - $name"
       fi
-      qm start $kvmID
+      qm start $kvmID 2>&1 >/dev/null
     done
     exit 0
   else
