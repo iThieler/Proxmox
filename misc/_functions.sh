@@ -306,7 +306,7 @@ function whip_filebrowser() {
 function whip_alert() {
   #call whip_alert "title" "message"
   NEWT_COLORS='
-      window=black,red
+      window=black,green
       border=white,red
       textbox=white,red
       button=black,yellow
