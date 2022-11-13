@@ -84,26 +84,14 @@ headerLOGO
 
 # Check Proxmox
 if ! command -v pveversion >/dev/null 2>&1; then
-  NEWT_COLORS='
-      window=black,red
-      border=white,red
-      textbox=white,red
-      button=black,yellow
-    ' \
-    whiptail --textbox --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " CHECKUP " "\nNo Proxmox detected, Wrong Script!" 10 80
+  whip_alert "CHECKUP" "No Proxmox detected, Wrong Script!"
   exit 1
 fi
 
 # Checks the PVE MajorRelease
 pve_majorversion=$(pveversion | cut -d/ -f2 | cut -d. -f1)
 if [ "$pve_majorversion" -lt 8 ]; then
-  NEWT_COLORS='
-      window=black,red
-      border=white,red
-      textbox=white,red
-      button=black,yellow
-    ' \
-    whiptail --textbox --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " CHECKUP " "\nThis script works only on servers with Proxmox version 7.X\nYour Prxmox version: ${pve_majorversion}" 10 80
+  whip_alert "CHECKUP" "This script works only on servers with Proxmox version 7.X\nYour Prxmox version: ${pve_majorversion}"
   exit 1
 fi
 
