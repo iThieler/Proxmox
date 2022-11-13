@@ -307,12 +307,12 @@ function whip_alert() {
   #call whip_alert "title" "message"
   NEWT_COLORS='
       root=white,gray
-      window=gray,green
-      border=gray,green
-      textbox=gray,green
-      button=black,lightgray
       roottext=lightgray,gray
-      title=,lightgray
+      window=gray,green
+      title=,green
+      border=gray,green
+      textbox=lightgray,green
+      button=black,lightgray
     ' \
     whiptail --msgbox --ok-button " OK " --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " ${1} " "${2}" 0 80
     echoLOG r "${2}"
