@@ -92,6 +92,7 @@ if [ -f ~/.iThielers_NEWT_COLORS ]; then
   export NEWT_COLORS_FILE=~/.iThielers_NEWT_COLORS
 else
   if wget https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/newt_colors_file.txt -O ~/.iThielers_NEWT_COLORS 2>&1 >/dev/null; then
+    wget https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/newt_colors_alert_file.txt -O ~/.iThielers_NEWT_COLORS_ALERT 2>&1 >/dev/null
     export NEWT_COLORS_FILE=~/.iThielers_NEWT_COLORS
   fi
 fi
