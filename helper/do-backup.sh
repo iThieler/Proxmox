@@ -41,8 +41,10 @@ if [ -n "$nasIP" ]; then
       fi
       qm start $kvmID
     done
+    exit 0
   else
     #backup selected
+    exit 0
   fi
 else
   whip_alert "DO BACKUP" "This function is only available if a NAS has been mounted as a backup drive with the main script."
