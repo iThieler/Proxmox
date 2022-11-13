@@ -312,7 +312,7 @@ function whip_alert() {
       button=black,yellow
     ' \
     whiptail --msgbox --ok-button " OK " --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " ${1} " "${2}" 0 80
-    echoLOG r "${message}"
+    echoLOG r "${2}"
 }
 
 # give an whiptail question box in alert mode
