@@ -96,7 +96,7 @@ fi
 
 # Checks the PVE MajorRelease
 pve_majorversion=$(pveversion | cut -d/ -f2 | cut -d. -f1)
-if [ "$pve_majorversion" -lt 7 ]; then
+if [ "$pve_majorversion" -lt 8 ]; then
   NEWT_COLORS='
       window=black,red
       border=white,red
