@@ -96,7 +96,7 @@ if [ $(pct list | grep -c 1.*) -eq 0 ] && [ $(qm list | grep -c 2.*) -eq 0 ] ; t
 fi
 
 if [ -d "/mnt/pve/backups/dump/manual/" ]; then
-  whip_alert "DO BACKUP" "Manual backups were found, click OK to delete them and create new ones. If you want to keep the existing ones, you have to backup them manually before clicking OK.\nBackups that were created automatically will of course be kept."
+  whip_alert "DO BACKUP" "Manual backups were found. If you continue, these will be deleted and new ones created.\nThe daily automatically created backups will be kept."
   rm -r "/mnt/pve/backups/dump/manual/"
 fi
 
