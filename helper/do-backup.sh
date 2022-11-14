@@ -4,14 +4,14 @@ source <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/_f
 source "/root/pve-global-config.sh"
 
 function menu() {
-  sel=("1" "I want to select ..." \
+  sel='("1" "I want to select ..." \
        "2" "I want only running ..." \
        "3" "I want only stopped ..." \
        "4" "I want all LXC ..." \
        "5" "I want all KVM ..." \
        "6" "I want all ..." \
        "" "" \
-       "Q" "I want to exit/going back!")
+       "Q" "I want to exit/going back!")'
        echoLOG g $sel
   menuSelection=$(whip_menu "DO BACKUP" "What do you want to do?" $sel)
 
@@ -97,8 +97,6 @@ if [ -d "/mnt/pve/backups/dump/manual/" ]; then
   whip_alert "DO BACKUP" "Manual backups were found. If you continue, these will be deleted and new ones created.\nThe daily automatically created backups will be kept."
   rm -r "/mnt/pve/backups/dump/manual/"
 fi
-
-echo backup.sh
 
 if [ -n "$nasIP" ]; then
   mkdir -p "/mnt/pve/backups/dump/manual"
