@@ -98,6 +98,8 @@ if [ -d "/mnt/pve/backups/dump/manual/" ]; then
   rm -r "/mnt/pve/backups/dump/manual/"
 fi
 
+echo backup.sh
+
 if [ -n "$nasIP" ]; then
   mkdir -p "/mnt/pve/backups/dump/manual"
   menu
