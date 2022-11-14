@@ -12,7 +12,7 @@ function menu() {
        "6" "I want all ..." \
        "" "" \
        "Q" "I want to exit/going back!")'
-       echoLOG g $sel
+       echoLOG g ${sel}
   menuSelection=$(whip_menu "DO BACKUP" "What do you want to do?" $sel)
 
   if [[ $menuSelection == "1" ]]; then
