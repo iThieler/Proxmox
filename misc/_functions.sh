@@ -247,14 +247,17 @@ function whip_inputbox_password_autogenerate() {
 # give a whiptail menu
 function whip_menu() {
   #call whip_menu "title" "message" "selectionlist"
-  input=$(whiptail --menu --nocancel --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " ${1} " "\n${2}" 0 80 0 "${3[@]}" 3>&1 1>&2 2>&3)
+  list="$3"
+  echo "$list"
+  input=$(whiptail --menu --nocancel --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " ${1} " "\n${2}" 0 80 0 "${list[@]}" 3>&1 1>&2 2>&3)
   echo "${input}"
 }
 
 # give a whiptail menu
 function whip_menu_cancel() {
   #call whip_menu_cancel "title" "message" "selectionlist"
-  input=$(whiptail --menu --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " ${1} " "\n${2}" 0 80 0 "${3[@]}" 3>&1 1>&2 2>&3)
+  list=$3
+  input=$(whiptail --menu --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " ${1} " "\n${2}" 0 80 0 "${list[@]}" 3>&1 1>&2 2>&3)
   echo "${input}"
 }
 
