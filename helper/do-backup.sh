@@ -31,12 +31,14 @@ function menu() {
 
     for choosed_guest in $var_guestchoice; do
       if [ $(pct list | grep -c $choosed_guest) -eq 1 ]; then
-        pct shutdown ${choosed_guest} --forceStop 1 --timeout 10 > /dev/null 2>&1
+        name=$(pct list | grep $ctID | awk '{print $3}')
+        pct shutdown ${choosed_guest} --forceStop 1 --timeout 10 >/dev/null 2>&1
         while [ $(pct status $ctID | cut -d' ' -f2 | grep -c running) -eq 1 ]; do
           sleep 2
         done
       elif [ $(qm list | grep -c $choosed_guest) -eq 1 ]; then
-        qm shutdown ${choosed_guest} --forceStop 1 --timeout 30 > /dev/null 2>&1
+        name=$(qm list | grep 200 | awk '{print $2}')
+        qm shutdown ${choosed_guest} --forceStop 1 --timeout 30 >/dev/null 2>&1
         while [ $(qm status $ctID | cut -d' ' -f2 | grep -c running) -eq 1 ]; do
           sleep 2
         done
@@ -50,9 +52,9 @@ function menu() {
           echo "${txt_1108}  SmartHome-IoT.net" > ${filename}_manual.vma.zst.notes
         fi
         mv ${filename}.log ${filename}_manual.log
-        echoLOG g "${txt_1106}"
+        echoLOG g "Backup >> $ctID - $name"
       else
-        echoLOG r "${txt_1107}"
+        echoLOG r "Backup >> $ctID - $name"
       fi
       if [ $(pct list | grep -c $choosed_guest) -eq 1 ]; then
         pct start ${choosed_guest} > /dev/null 2>&1
@@ -64,23 +66,18 @@ function menu() {
     menu
   elif [[ $menuSelection == "2" ]]; then
     echoLOG b "Select >> I want only running ..."
-    bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/helper/do-backup.sh)
     menu
   elif [[ $menuSelection == "3" ]]; then
     echoLOG b "Select >> I want only stopped ..."
-    bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/helper/do-restore.sh)
     menu
   elif [[ $menuSelection == "4" ]]; then
     echoLOG b "Select >> I want all LXC ..."
-    bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/helper/do-create.sh)
     menu
   elif [[ $menuSelection == "5" ]]; then
     echoLOG b "Select >> I want all KVM ..."
-    bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/helper/do-delete.sh)
     menu
   elif [[ $menuSelection == "6" ]]; then
     echoLOG b "Select >> I want all ..."
-    bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/helper/do-passthrough.sh)
     menu
   elif [[ $menuSelection == "Q" ]]; then
     echoLOG b "Select >> I want to exit / going back!"
