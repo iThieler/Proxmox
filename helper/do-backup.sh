@@ -100,6 +100,8 @@ if [ -d "/mnt/pve/backups/dump/manual/" ]; then
   rm -r "/mnt/pve/backups/dump/manual/"
 fi
 
+echo "NASIP: $nasIP"
+
 if [ -n "$nasIP" ]; then
   echo "halli Hallo Hallöle"
   mkdir -p "/mnt/pve/backups/dump/manual"
@@ -112,7 +114,7 @@ fi
 
 
 
-
+<<com
 if [ -n "$nasIP" ]; then
   if whip_yesno "ALL" "SELECT" "DO BACKUP" "Do you want to backup all containers and virtual machines, or select individual ones?"; then
     #Backup all
@@ -148,3 +150,4 @@ else
   whip_alert "DO BACKUP" "This function is only available if a NAS has been mounted as a backup drive with the main script."
   exit 1
 fi
+com
