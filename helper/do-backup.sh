@@ -4,14 +4,14 @@ source <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/_f
 source "/root/pve-global-config.sh"
 
 function menu() {
-  sel1=("1" "I want to select ..." \
+  sel=("1" "I want to select ..." \
        "2" "I want only running ..." \
        "3" "I want only stopped ..." \
        "4" "I want all LXC ..." \
        "5" "I want all KVM ..." \
        "6" "I want all ..." \
        "" "" \
-       "Q" "I want to exit / going back!")
+       "Q" "I want to exit/going back!")
   menuSelection=$(whiptail --menu --nocancel --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " DO BACKUP " "\nWhat do you want to do?" 20 80 10 "${sel[@]}" 3>&1 1>&2 2>&3)
 
   if [[ $menuSelection == "1" ]]; then
@@ -100,10 +100,7 @@ if [ -d "/mnt/pve/backups/dump/manual/" ]; then
   rm -r "/mnt/pve/backups/dump/manual/"
 fi
 
-echo "NASIP: $nasIP"
-
 if [ -n "$nasIP" ]; then
-  echo "halli Hallo Hallöle"
   mkdir -p "/mnt/pve/backups/dump/manual"
   menu
 else
