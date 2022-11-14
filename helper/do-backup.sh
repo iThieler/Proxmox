@@ -32,30 +32,30 @@ function menu() {
 
     for choosed_guest in $var_guestchoice; do
       if [ $(pct list | grep -c $choosed_guest) -eq 1 ]; then
-        name=$(pct list | grep $ctID | awk '{print $3}')
-        pct shutdown ${choosed_guest} --forceStop 1 --timeout 10 >/dev/null 2>&1
-        while [ $(pct status $ctID | cut -d' ' -f2 | grep -c running) -eq 1 ]; do
+        name=$(pct list | grep $choosed_guest | awk '{print $3}')
+        pct shutdown $choosed_guest --forceStop 1 --timeout 10 >/dev/null 2>&1
+        while [ $(pct status $choosed_guest | cut -d' ' -f2 | grep -c running) -eq 1 ]; do
           sleep 2
         done
       elif [ $(qm list | grep -c $choosed_guest) -eq 1 ]; then
         name=$(qm list | grep 200 | awk '{print $2}')
         qm shutdown ${choosed_guest} --forceStop 1 --timeout 30 >/dev/null 2>&1
-        while [ $(qm status $ctID | cut -d' ' -f2 | grep -c running) -eq 1 ]; do
+        while [ $(qm status $choosed_guest | cut -d' ' -f2 | grep -c running) -eq 1 ]; do
           sleep 2
         done
       fi
       if vzdump ${choosed_guest} --dumpdir /mnt/pve/backups/dump/manual --mode stop --compress zstd --exclude-path /mnt/ --exclude-path /media/ --quiet 1; then
         filename=$(ls -ldst /mnt/pve/backups/dump/manual/*-${choosed_guest}-*.*.zst | awk '{print $10}' | cut -d. -f1 | head -n1)
-        if [ -f "${filename}.tar.zst" ]; then
-          echo "" > ${filename}.tar.zst.notes
-        else
-          mv ${filename}.vma.zst ${filename}_manual.vma.zst
-          echo "${txt_1108}  SmartHome-IoT.net" > ${filename}_manual.vma.zst.notes
-        fi
-        mv ${filename}.log ${filename}_manual.log
-        echoLOG g "Backup >> $ctID - $name"
+        #if [ -f "${filename}.tar.zst" ]; then
+        #  echo "" > ${filename}.tar.zst.notes
+        #else
+        #  mv ${filename}.vma.zst ${filename}_manual.vma.zst
+        #  echo "${txt_1108}  SmartHome-IoT.net" > ${filename}_manual.vma.zst.notes
+        #fi
+        #mv ${filename}.log ${filename}_manual.log
+        echoLOG g "Backup >> $choosed_guest - $name"
       else
-        echoLOG r "Backup >> $ctID - $name"
+        echoLOG r "Backup >> $choosed_guest - $name"
       fi
       if [ $(pct list | grep -c $choosed_guest) -eq 1 ]; then
         pct start ${choosed_guest} > /dev/null 2>&1
