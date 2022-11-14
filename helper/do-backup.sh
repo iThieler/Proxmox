@@ -12,7 +12,7 @@ function menu() {
        "6" "I want all ..." \
        "" "" \
        "Q" "I want to exit/going back!")
-  menuSelection=$(whiptail --menu --nocancel --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " DO BACKUP " "\nWhat do you want to do?" 20 80 10 "${sel[@]}" 3>&1 1>&2 2>&3)
+  menuSelection=$(whip_menu "DO BACKUP" "What do you want to do?" "${sel}")
 
   if [[ $menuSelection == "1" ]]; then
     echoLOG b "Select >> I want to select ..."
