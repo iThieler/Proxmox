@@ -15,6 +15,7 @@ function menu() {
        echoLOG g "${sel}"
        echo "nochmal"
   menuSelection=$(whip_menu "DO BACKUP" "What do you want to do?" $sel)
+  #menuSelection=$(whiptail --menu --nocancel --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " DO BACKUP " "\nWhat do you want to do?" 0 80 0 "${sel[@]}" 3>&1 1>&2 2>&3)
 
   if [[ $menuSelection == "1" ]]; then
     echoLOG b "Select >> I want to select ..."
