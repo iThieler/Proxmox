@@ -101,8 +101,8 @@ if [ -d "/mnt/pve/backups/dump/manual/" ]; then
 fi
 
 if [ -n "$nasIP" ]; then
-  bakdir="/mnt/pve/backups/dump/manual"
-  mkdir -p $bakdir
+  echo "halli Hallo Hallöle"
+  mkdir -p "/mnt/pve/backups/dump/manual"
   menu
 else
   whip_alert "DO BACKUP" "This function is only available if a NAS has been mounted as a backup drive with the main script."
