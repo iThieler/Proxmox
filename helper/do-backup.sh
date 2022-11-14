@@ -13,7 +13,7 @@ function menu() {
        "" "" \
        "Q" "I want to exit/going back!")'
        echoLOG g "${sel}"
-       echo "neu"
+       echo "nochmal"
   menuSelection=$(whip_menu "DO BACKUP" "What do you want to do?" $sel)
 
   if [[ $menuSelection == "1" ]]; then
