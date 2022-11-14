@@ -225,7 +225,7 @@ function whip_inputbox_cancel() {
 # give a whiptail box with input field for passwords
 function whip_inputbox_password() {
   #call whip_inputbox "btn" "title" "message"
-  input=$(whiptail --passwordbox --ok-button " ${1} " --nocancel --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " ${2} " "\n${3}" 10 80 3>&1 1>&2 2>&3)
+  input=$(whiptail --passwordbox --ok-button " ${1} " --nocancel --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " ${2} " "\n${3}" 0 80 3>&1 1>&2 2>&3)
   if [[ $input == "" ]]; then
     whip_inputbox "$1" "$2" "$3" "$4\n\n!!! Es muss eine Eingabe erfolgen !!!" ""
   else
@@ -236,12 +236,26 @@ function whip_inputbox_password() {
 # give a whiptail box with input field for passwords
 function whip_inputbox_password_autogenerate() {
   #call whip_inputbox "btn" "title" "message"
-  input=$(whiptail --passwordbox --ok-button " ${1} " --nocancel --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " ${2} " "\n${3}" 10 80 3>&1 1>&2 2>&3)
+  input=$(whiptail --passwordbox --ok-button " ${1} " --nocancel --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " ${2} " "\n${3}" 0 80 3>&1 1>&2 2>&3)
   if [[ $input == "" ]]; then
     echo $(generatePassword 26)
   else
     echo "${input}"
   fi
+}
+
+# give a whiptail menu
+function whip_menu() {
+  #call whip_menu "title" "message" "selectionlist"
+  input=$(whiptail --menu --nocancel --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " ${1} " "\n${2}" 0 80 0 "${3[@]}" 3>&1 1>&2 2>&3)
+  echo "${input}"
+}
+
+# give a whiptail menu
+function whip_menu_cancel() {
+  #call whip_menu_cancel "title" "message" "selectionlist"
+  input=$(whiptail --menu --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " ${1} " "\n${2}" 0 80 0 "${3[@]}" 3>&1 1>&2 2>&3)
+  echo "${input}"
 }
 
 function whip_get_usbdevice() {
