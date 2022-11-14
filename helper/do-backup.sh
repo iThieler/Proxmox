@@ -30,16 +30,16 @@ function menu() {
     var_guestchoice=$(whiptail --checklist --nocancel --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " DO BACKUP " "\nSelect the machines from which you want to create a backup?" 20 80 10 "${list[@]}" 3>&1 1>&2 2>&3 | sed 's#"##g')
 
     for choosed_guest in $var_guestchoice; do
-      if [ $(pct list | grep -c $choosed_guest) -eq 1 ]; then
-        name=$(pct list | grep $choosed_guest | awk '{print $3}')
-        pct shutdown $choosed_guest --forceStop 1 --timeout 10 >/dev/null 2>&1
-        while [ $(pct status $choosed_guest | cut -d' ' -f2 | grep -c running) -eq 1 ]; do
+      if [ $(pct list | grep -c ${choosed_guest}) -eq 1 ]; then
+        name=$(pct list | grep ${choosed_guest} | awk '{print $3}')
+        pct shutdown ${choosed_guest} --forceStop 1 --timeout 10 >/dev/null 2>&1
+        while [ $(pct status ${choosed_guest} | cut -d' ' -f2 | grep -c running) -eq 1 ]; do
           sleep 2
         done
-      elif [ $(qm list | grep -c $choosed_guest) -eq 1 ]; then
+      elif [ $(qm list | grep -c ${choosed_guest}) -eq 1 ]; then
         name=$(qm list | grep 200 | awk '{print $2}')
         qm shutdown ${choosed_guest} --forceStop 1 --timeout 30 >/dev/null 2>&1
-        while [ $(qm status $choosed_guest | cut -d' ' -f2 | grep -c running) -eq 1 ]; do
+        while [ $(qm status ${choosed_guest} | cut -d' ' -f2 | grep -c running) -eq 1 ]; do
           sleep 2
         done
       fi
