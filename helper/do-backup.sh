@@ -4,15 +4,16 @@ source <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/_f
 source "/root/pve-global-config.sh"
 
 function menu() {
-  sel='("1" "I want to select ..." \
+  sel=("1" "I want to select ..." \
        "2" "I want only running ..." \
        "3" "I want only stopped ..." \
        "4" "I want all LXC ..." \
        "5" "I want all KVM ..." \
        "6" "I want all ..." \
        "" "" \
-       "Q" "I want to exit/going back!")'
-  menuSelection=$(whiptail --menu --nocancel --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " DO BACKUP " "\nWhat do you want to do?" 0 80 0 "${sel[@]}" 3>&1 1>&2 2>&3)
+       "Q" "I want to exit/going back!")
+  menuSelection=$(whiptail --menu --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " DO BACKUP " "\nWhat do you want to do?" 0 80 0 "${sel[@]}" 3>&1 1>&2 2>&3)
+  if [ $? -eq 1 ]; then echoLOG r "Aborting by user"; exit 1; fi
 
   if [[ $menuSelection == "1" ]]; then
     echoLOG b "Select >> I want to select ..."
