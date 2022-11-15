@@ -15,6 +15,8 @@ function menu() {
   menuSelection=$(whiptail --menu --nocancel --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " DO BACKUP " "\nWhat do you want to Backup?" 0 80 0 "${sel[@]}" 3>&1 1>&2 2>&3)
   if [ $? -eq 1 ]; then echoLOG r "Aborting by user"; exit 1; fi
 
+  echoLOG y "Starting Backup Process"
+
   if [[ $menuSelection == "1" ]]; then
     echoLOG b "Select >> I want to select ..."
     if [ -f /tmp/list.sh ]; then rm /tmp/list.sh; fi
