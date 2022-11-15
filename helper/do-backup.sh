@@ -70,7 +70,7 @@ function menu() {
     rm /tmp/list.sh
     menu
   elif [[ $menuSelection == "2" ]]; then
-    echoLOG b "Select >> I want only running ..."
+    echoLOG b "Select >> I want only running ... 2"
     for choosed_guest in $(pct list | grep running | awk '{print $1}'); do
       if [ $(pct list | grep -c ${choosed_guest}) -eq 1 ]; then
         name=$(pct list | grep ${choosed_guest} | awk '{print $3}')
