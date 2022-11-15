@@ -92,9 +92,17 @@ function menuMAIN() {
 if [ -f ~/.iThielers_NEWT_COLORS ]; then
   export NEWT_COLORS_FILE=~/.iThielers_NEWT_COLORS
 else
-  if wget https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/newt_colors_file.txt -O ~/.iThielers_NEWT_COLORS 2>&1 >/dev/null; then
-    wget https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/newt_colors_alert_file.txt -O ~/.iThielers_NEWT_COLORS_ALERT 2>&1 >/dev/null
+  echoLOG b "no CI-Files found"
+  if wget -q https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/newt_colors_file.txt -O ~/.iThielers_NEWT_COLORS; then
+    echoLOG g "download normal mode CI-File"
     export NEWT_COLORS_FILE=~/.iThielers_NEWT_COLORS
+  else
+    echoLOG r "download normal mode CI-File"
+  fi
+  if wget -q https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/newt_colors_alert_file.txt -O ~/.iThielers_NEWT_COLORS_ALERT; then
+    echoLOG g "download alert mode CI-File"
+  else
+    echoLOG r "download alert mode CI-File"
   fi
 fi
 
