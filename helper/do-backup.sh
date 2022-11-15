@@ -81,7 +81,7 @@ function menu() {
           done
         fi
       fi
-      if vzdump ${choosed_guest} --dumpdir /mnt/pve/backups/dump/manual --mode stop --compress zstd --exclude-path /mnt/ --exclude-path /media/ --quiet 1; then
+      if vzdump ${choosed_guest} --dumpdir /mnt/pve/backups/dump/manual --mode stop --compress zstd --exclude-path /mnt/ --exclude-path /media/; then
         filename=$(ls -ldst /mnt/pve/backups/dump/manual/*-${choosed_guest}-*.*.zst | awk '{print $10}' | cut -d. -f1 | head -n1)
         mv "${filename}.tar.zst" "/mnt/pve/backups/dump/manual/${choosed_guest}-${name}.tar.zst"
         rm "${filename}.log"
@@ -101,7 +101,7 @@ function menu() {
           done
         fi
       fi
-      if vzdump ${choosed_guest} --dumpdir /mnt/pve/backups/dump/manual --mode stop --compress zstd --exclude-path /mnt/ --exclude-path /media/ --quiet 1; then
+      if vzdump ${choosed_guest} --dumpdir /mnt/pve/backups/dump/manual --mode stop --compress zstd --exclude-path /mnt/ --exclude-path /media/; then
         filename=$(ls -ldst /mnt/pve/backups/dump/manual/*-${choosed_guest}-*.*.zst | awk '{print $10}' | cut -d. -f1 | head -n1)
         mv "${filename}.vma.zst" "/mnt/pve/backups/dump/manual/${choosed_guest}-${name}.vma.zst"
         rm "${filename}.log"
