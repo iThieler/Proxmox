@@ -38,7 +38,7 @@ function menu() {
           sleep 2
         done
       elif [ $(qm list | grep -c ${choosed_guest}) -eq 1 ]; then
-        name=$(qm list | grep 200 | awk '{print $2}')
+        name=$(qm list | grep ${choosed_guest} | awk '{print $2}')
         qm shutdown ${choosed_guest} --forceStop 1 --timeout 30 >/dev/null 2>&1
         while [ $(qm status ${choosed_guest} | cut -d' ' -f2 | grep -c running) -eq 1 ]; do
           sleep 2
@@ -47,15 +47,11 @@ function menu() {
       if vzdump ${choosed_guest} --dumpdir /mnt/pve/backups/dump/manual --mode stop --compress zstd --exclude-path /mnt/ --exclude-path /media/ --quiet 1; then
         filename=$(ls -ldst /mnt/pve/backups/dump/manual/*-${choosed_guest}-*.*.zst | awk '{print $10}' | cut -d. -f1 | head -n1)
         if [ -f "${filename}.tar.zst" ]; then
-          name=$(pct list | grep ${choosed_guest} | awk '{print $3}')
-          echo "ID: ${choosed_guest}"
-          echo "Name: ${name}"
-          echo "Datei ist: ${filename}"
+          mv "${filename}.tar.zst" "/mnt/pve/backups/dump/manual/${choosed_guest}-${name}.tar.zst"
+          rm "${filename}.log"
         elif [ -f "${filename}.vma.zst" ]; then
-          name=$(qm list | grep ${choosed_guest} | awk '{print $2}')
-          echo "ID: ${choosed_guest}"
-          echo "Name: ${name}"
-          echo "Datei ist: ${filename}"
+          mv "${filename}.vma.zst" "/mnt/pve/backups/dump/manual/${choosed_guest}-${name}.tar.zst"
+          rm "${filename}.log"
         fi
         echoLOG g "Backup >> $choosed_guest - $name"
       else
@@ -68,7 +64,6 @@ function menu() {
       fi
     done
     rm /tmp/list.sh
-    #rm /mnt/pve/backups/dump/manual/*.log
     menu
   elif [[ $menuSelection == "2" ]]; then
     echoLOG b "Select >> I want only running ..."
