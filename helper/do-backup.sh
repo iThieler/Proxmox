@@ -12,7 +12,7 @@ function menu() {
        "6" "I want all ..." \
        "" "" \
        "Q" "I want to exit/going back!")
-  menuSelection=$(whiptail --menu --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " DO BACKUP " "\nWhat do you want to do?" 0 80 0 "${sel[@]}" 3>&1 1>&2 2>&3)
+  menuSelection=$(whiptail --menu --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " DO BACKUP " "\nWhat do you want to Backup?" 0 80 0 "${sel[@]}" 3>&1 1>&2 2>&3)
   if [ $? -eq 1 ]; then echoLOG r "Aborting by user"; exit 1; fi
 
   if [[ $menuSelection == "1" ]]; then
@@ -50,7 +50,7 @@ function menu() {
           mv "${filename}.tar.zst" "/mnt/pve/backups/dump/manual/${choosed_guest}-${name}.tar.zst"
           rm "${filename}.log"
         elif [ -f "${filename}.vma.zst" ]; then
-          mv "${filename}.vma.zst" "/mnt/pve/backups/dump/manual/${choosed_guest}-${name}.tar.zst"
+          mv "${filename}.vma.zst" "/mnt/pve/backups/dump/manual/${choosed_guest}-${name}.vma.zst"
           rm "${filename}.log"
         fi
         echoLOG g "Backup >> $choosed_guest - $name"
@@ -67,23 +67,165 @@ function menu() {
     menu
   elif [[ $menuSelection == "2" ]]; then
     echoLOG b "Select >> I want only running ..."
+    for choosed_guest in $(pct list | grep running | awk '{print $1}'); do
+      if [ $(pct list | grep -c ${choosed_guest}) -eq 1 ]; then
+        name=$(pct list | grep ${choosed_guest} | awk '{print $3}')
+        pct shutdown ${choosed_guest} --forceStop 1 --timeout 10 >/dev/null 2>&1
+        while [ $(pct status ${choosed_guest} | cut -d' ' -f2 | grep -c running) -eq 1 ]; do
+          sleep 2
+        done
+      fi
+      if vzdump ${choosed_guest} --dumpdir /mnt/pve/backups/dump/manual --mode stop --compress zstd --exclude-path /mnt/ --exclude-path /media/ --quiet 1; then
+        filename=$(ls -ldst /mnt/pve/backups/dump/manual/*-${choosed_guest}-*.*.zst | awk '{print $10}' | cut -d. -f1 | head -n1)
+        mv "${filename}.tar.zst" "/mnt/pve/backups/dump/manual/${choosed_guest}-${name}.tar.zst"
+        rm "${filename}.log"
+        echoLOG g "Backup >> $choosed_guest - $name"
+      else
+        echoLOG r "Backup >> $choosed_guest - $name"
+      fi
+      pct start ${choosed_guest} > /dev/null 2>&1
+    done
+    for choosed_guest in $(qm list | grep running | awk '{print $1}'); do
+      if [ $(qm list | grep -c ${choosed_guest}) -eq 1 ]; then
+        name=$(qm list | grep ${choosed_guest} | awk '{print $2}')
+        qm shutdown ${choosed_guest} --forceStop 1 --timeout 30 >/dev/null 2>&1
+        while [ $(qm status ${choosed_guest} | cut -d' ' -f2 | grep -c running) -eq 1 ]; do
+          sleep 2
+        done
+      fi
+      if vzdump ${choosed_guest} --dumpdir /mnt/pve/backups/dump/manual --mode stop --compress zstd --exclude-path /mnt/ --exclude-path /media/ --quiet 1; then
+        filename=$(ls -ldst /mnt/pve/backups/dump/manual/*-${choosed_guest}-*.*.zst | awk '{print $10}' | cut -d. -f1 | head -n1)
+        mv "${filename}.vma.zst" "/mnt/pve/backups/dump/manual/${choosed_guest}-${name}.vma.zst"
+        rm "${filename}.log"
+        echoLOG g "Backup >> $choosed_guest - $name"
+      else
+        echoLOG r "Backup >> $choosed_guest - $name"
+      fi
+      qm start ${choosed_guest} > /dev/null 2>&1
+    done
     menu
   elif [[ $menuSelection == "3" ]]; then
     echoLOG b "Select >> I want only stopped ..."
+    for choosed_guest in $(pct list | grep stopped | awk '{print $1}'); do
+      if [ $(pct list | grep -c ${choosed_guest}) -eq 1 ]; then
+        name=$(pct list | grep ${choosed_guest} | awk '{print $3}')
+        pct shutdown ${choosed_guest} --forceStop 1 --timeout 10 >/dev/null 2>&1
+        while [ $(pct status ${choosed_guest} | cut -d' ' -f2 | grep -c stopped) -eq 1 ]; do
+          sleep 2
+        done
+      fi
+      if vzdump ${choosed_guest} --dumpdir /mnt/pve/backups/dump/manual --mode stop --compress zstd --exclude-path /mnt/ --exclude-path /media/ --quiet 1; then
+        filename=$(ls -ldst /mnt/pve/backups/dump/manual/*-${choosed_guest}-*.*.zst | awk '{print $10}' | cut -d. -f1 | head -n1)
+        mv "${filename}.tar.zst" "/mnt/pve/backups/dump/manual/${choosed_guest}-${name}.tar.zst"
+        rm "${filename}.log"
+        echoLOG g "Backup >> $choosed_guest - $name"
+      else
+        echoLOG r "Backup >> $choosed_guest - $name"
+      fi
+      pct start ${choosed_guest} > /dev/null 2>&1
+    done
+    for choosed_guest in $(qm list | grep stopped | awk '{print $1}'); do
+      if [ $(qm list | grep -c ${choosed_guest}) -eq 1 ]; then
+        name=$(qm list | grep ${choosed_guest} | awk '{print $2}')
+        qm shutdown ${choosed_guest} --forceStop 1 --timeout 30 >/dev/null 2>&1
+        while [ $(qm status ${choosed_guest} | cut -d' ' -f2 | grep -c stopped) -eq 1 ]; do
+          sleep 2
+        done
+      fi
+      if vzdump ${choosed_guest} --dumpdir /mnt/pve/backups/dump/manual --mode stop --compress zstd --exclude-path /mnt/ --exclude-path /media/ --quiet 1; then
+        filename=$(ls -ldst /mnt/pve/backups/dump/manual/*-${choosed_guest}-*.*.zst | awk '{print $10}' | cut -d. -f1 | head -n1)
+        mv "${filename}.vma.zst" "/mnt/pve/backups/dump/manual/${choosed_guest}-${name}.vma.zst"
+        rm "${filename}.log"
+        echoLOG g "Backup >> $choosed_guest - $name"
+      else
+        echoLOG r "Backup >> $choosed_guest - $name"
+      fi
+      qm start ${choosed_guest} > /dev/null 2>&1
+    done
     menu
   elif [[ $menuSelection == "4" ]]; then
     echoLOG b "Select >> I want all LXC ..."
+    for choosed_guest in $(pct list | grep 'running\|stopped' | awk '{print $1}'); do
+      if [ $(pct list | grep -c ${choosed_guest}) -eq 1 ]; then
+        name=$(pct list | grep ${choosed_guest} | awk '{print $3}')
+        pct shutdown ${choosed_guest} --forceStop 1 --timeout 10 >/dev/null 2>&1
+        while [ $(pct status ${choosed_guest} | cut -d' ' -f2 | grep -c stopped) -eq 1 ]; do
+          sleep 2
+        done
+      fi
+      if vzdump ${choosed_guest} --dumpdir /mnt/pve/backups/dump/manual --mode stop --compress zstd --exclude-path /mnt/ --exclude-path /media/ --quiet 1; then
+        filename=$(ls -ldst /mnt/pve/backups/dump/manual/*-${choosed_guest}-*.*.zst | awk '{print $10}' | cut -d. -f1 | head -n1)
+        mv "${filename}.tar.zst" "/mnt/pve/backups/dump/manual/${choosed_guest}-${name}.tar.zst"
+        rm "${filename}.log"
+        echoLOG g "Backup >> $choosed_guest - $name"
+      else
+        echoLOG r "Backup >> $choosed_guest - $name"
+      fi
+      pct start ${choosed_guest} > /dev/null 2>&1
+    done
     menu
   elif [[ $menuSelection == "5" ]]; then
     echoLOG b "Select >> I want all KVM ..."
+    for choosed_guest in $(qm list | grep 'running\|stopped' | awk '{print $1}'); do
+      if [ $(qm list | grep -c ${choosed_guest}) -eq 1 ]; then
+        name=$(qm list | grep ${choosed_guest} | awk '{print $2}')
+        qm shutdown ${choosed_guest} --forceStop 1 --timeout 30 >/dev/null 2>&1
+        while [ $(qm status ${choosed_guest} | cut -d' ' -f2 | grep -c stopped) -eq 1 ]; do
+          sleep 2
+        done
+      fi
+      if vzdump ${choosed_guest} --dumpdir /mnt/pve/backups/dump/manual --mode stop --compress zstd --exclude-path /mnt/ --exclude-path /media/ --quiet 1; then
+        filename=$(ls -ldst /mnt/pve/backups/dump/manual/*-${choosed_guest}-*.*.zst | awk '{print $10}' | cut -d. -f1 | head -n1)
+        mv "${filename}.vma.zst" "/mnt/pve/backups/dump/manual/${choosed_guest}-${name}.vma.zst"
+        rm "${filename}.log"
+        echoLOG g "Backup >> $choosed_guest - $name"
+      else
+        echoLOG r "Backup >> $choosed_guest - $name"
+      fi
+      qm start ${choosed_guest} > /dev/null 2>&1
+    done
     menu
   elif [[ $menuSelection == "6" ]]; then
     echoLOG b "Select >> I want all ..."
+    for choosed_guest in $(pct list | grep 'running\|stopped' | awk '{print $1}'); do
+      if [ $(pct list | grep -c ${choosed_guest}) -eq 1 ]; then
+        name=$(pct list | grep ${choosed_guest} | awk '{print $3}')
+        pct shutdown ${choosed_guest} --forceStop 1 --timeout 10 >/dev/null 2>&1
+        while [ $(pct status ${choosed_guest} | cut -d' ' -f2 | grep -c running) -eq 1 ]; do
+          sleep 2
+        done
+      fi
+      if vzdump ${choosed_guest} --dumpdir /mnt/pve/backups/dump/manual --mode stop --compress zstd --exclude-path /mnt/ --exclude-path /media/ --quiet 1; then
+        filename=$(ls -ldst /mnt/pve/backups/dump/manual/*-${choosed_guest}-*.*.zst | awk '{print $10}' | cut -d. -f1 | head -n1)
+        mv "${filename}.tar.zst" "/mnt/pve/backups/dump/manual/${choosed_guest}-${name}.tar.zst"
+        rm "${filename}.log"
+        echoLOG g "Backup >> $choosed_guest - $name"
+      else
+        echoLOG r "Backup >> $choosed_guest - $name"
+      fi
+      pct start ${choosed_guest} > /dev/null 2>&1
+    done
+    for choosed_guest in $(qm list | grep 'running\|stopped' | awk '{print $1}'); do
+      if [ $(qm list | grep -c ${choosed_guest}) -eq 1 ]; then
+        name=$(qm list | grep ${choosed_guest} | awk '{print $2}')
+        qm shutdown ${choosed_guest} --forceStop 1 --timeout 30 >/dev/null 2>&1
+        while [ $(qm status ${choosed_guest} | cut -d' ' -f2 | grep -c running) -eq 1 ]; do
+          sleep 2
+        done
+      fi
+      if vzdump ${choosed_guest} --dumpdir /mnt/pve/backups/dump/manual --mode stop --compress zstd --exclude-path /mnt/ --exclude-path /media/ --quiet 1; then
+        filename=$(ls -ldst /mnt/pve/backups/dump/manual/*-${choosed_guest}-*.*.zst | awk '{print $10}' | cut -d. -f1 | head -n1)
+        mv "${filename}.vma.zst" "/mnt/pve/backups/dump/manual/${choosed_guest}-${name}.vma.zst"
+        rm "${filename}.log"
+        echoLOG g "Backup >> $choosed_guest - $name"
+      else
+        echoLOG r "Backup >> $choosed_guest - $name"
+      fi
+      qm start ${choosed_guest} > /dev/null 2>&1
+    done
     menu
   elif [[ $menuSelection == "Q" ]]; then
-    echoLOG b "Select >> I want to exit / going back!"
-    echoLOG y "one moment please, while finishing script"
-    #finish
+    echoLOG b "Select >> I want to exit/going back!"
     exit 0
   fi
 }
@@ -93,56 +235,14 @@ if [ $(pct list | grep -c 1.*) -eq 0 ] && [ $(qm list | grep -c 2.*) -eq 0 ] ; t
   exit 1
 fi
 
-if [ -d "/mnt/pve/backups/dump/manual/" ]; then
-  whip_alert "DO BACKUP" "Manual backups were found. If you continue, these will be deleted and new ones created.\nThe daily automatically created backups will be kept."
-  rm -r "/mnt/pve/backups/dump/manual/"
-fi
-
 if [ -n "$nasIP" ]; then
+  if [ -d "/mnt/pve/backups/dump/manual/" ]; then
+    whip_alert "DO BACKUP" "Manual backups were found. If you continue, these will be deleted and new ones created.\nThe daily automatically created backups will be kept."
+    rm -r "/mnt/pve/backups/dump/manual/"
+  fi
   mkdir -p "/mnt/pve/backups/dump/manual"
   menu
 else
   whip_alert "DO BACKUP" "This function is only available if a NAS has been mounted as a backup drive with the main script."
   exit 1
 fi
-
-
-
-
-<<com
-if [ -n "$nasIP" ]; then
-  if whip_yesno "ALL" "SELECT" "DO BACKUP" "Do you want to backup all containers and virtual machines, or select individual ones?"; then
-    #Backup all
-    whip_message "DO BACKUP" "To ensure the highest possible backup quality, the respective guest system is shut down."
-    for ctID in $(pct list | sed '1d' | awk '{print $1}'); do
-      pct stop $ctID 2>&1 >/dev/null
-      while [ $(pct status $ctID | cut -d' ' -f2 | grep -cw running) -eq 1 ]; do
-        sleep 2
-      done
-      name=$(pct list | sed '1d' | awk '{print $3}')
-      if vzdump ${ctID} --dumpdir ${bakdir} --mode stop --compress zstd --notes-template '{{guestname}}' --exclude-path /mnt/ --exclude-path /media/ --quiet 1; then
-        echoLOG g "Backup >> $ctID - $name"
-      else
-        echoLOG r "Backup >> $ctID - $name"
-      fi
-      pct start $ctID 2>&1 >/dev/null
-    done
-    for kvmID in $(qm list | sed '1d' | awk '{print $1}'); do
-      qm stop $kvmID 2>&1 >/dev/null
-      if vzdump ${kvmID} --dumpdir ${bakdir} --mode stop --compress zstd --notes-template '{{guestname}}' --exclude-path /mnt/ --exclude-path /media/ --quiet 1; then
-        echoLOG g "Backup >> $kvmID - $name"
-      else
-        echoLOG r "Backup >> $kvmID - $name"
-      fi
-      qm start $kvmID 2>&1 >/dev/null
-    done
-    exit 0
-  else
-    #backup selected
-    exit 0
-  fi
-else
-  whip_alert "DO BACKUP" "This function is only available if a NAS has been mounted as a backup drive with the main script."
-  exit 1
-fi
-com
