@@ -319,7 +319,7 @@ function whip_alert_yesno() {
 
 # give a whiptail box with input field in alert mode
 function whip_alert_inputbox() {
-  #call whip_inputbox "btn" "title" "message" "default value"
+  #call whip_alert_inputbox "btn" "title" "message" "default value"
   NEWT_COLORS_FILE=~/.iThielers_NEWT_COLORS_ALERT \
   input=$(whiptail --inputbox --ok-button " ${1} " --nocancel --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " ${2} " "\n${3}" 0 80 "${4}" 3>&1 1>&2 2>&3)
   if [[ $input == "" ]]; then
