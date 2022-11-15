@@ -46,13 +46,17 @@ function menu() {
       fi
       if vzdump ${choosed_guest} --dumpdir /mnt/pve/backups/dump/manual --mode stop --compress zstd --exclude-path /mnt/ --exclude-path /media/ --quiet 1; then
         filename=$(ls -ldst /mnt/pve/backups/dump/manual/*-${choosed_guest}-*.*.zst | awk '{print $10}' | cut -d. -f1 | head -n1)
-        #if [ -f "${filename}.tar.zst" ]; then
-        #  echo "" > ${filename}.tar.zst.notes
-        #else
-        #  mv ${filename}.vma.zst ${filename}_manual.vma.zst
-        #  echo "${txt_1108}  SmartHome-IoT.net" > ${filename}_manual.vma.zst.notes
-        #fi
-        #mv ${filename}.log ${filename}_manual.log
+        if [ -f "${filename}.tar.zst" ]; then
+          name=$(pct list | grep ${choosed_guest} | awk '{print $3}')
+          echo "ID: ${choosed_guest}"
+          echo "Name: ${name}"
+          echo "Datei ist: ${filename}"
+        elif [ -f "${filename}.vma.zst" ]; then
+          name=$(qm list | grep ${choosed_guest} | awk '{print $2}')
+          echo "ID: ${choosed_guest}"
+          echo "Name: ${name}"
+          echo "Datei ist: ${filename}"
+        fi
         echoLOG g "Backup >> $choosed_guest - $name"
       else
         echoLOG r "Backup >> $choosed_guest - $name"
@@ -64,6 +68,7 @@ function menu() {
       fi
     done
     rm /tmp/list.sh
+    #rm /mnt/pve/backups/dump/manual/*.log
     menu
   elif [[ $menuSelection == "2" ]]; then
     echoLOG b "Select >> I want only running ..."
