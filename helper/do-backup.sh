@@ -33,16 +33,20 @@ function menu() {
     for choosed_guest in $var_guestchoice; do
       if [ $(pct list | grep -c ${choosed_guest}) -eq 1 ]; then
         name=$(pct list | grep ${choosed_guest} | awk '{print $3}')
-        pct shutdown ${choosed_guest} --forceStop 1 --timeout 10 >/dev/null 2>&1
-        while [ $(pct status ${choosed_guest} | cut -d' ' -f2 | grep -c running) -eq 1 ]; do
-          sleep 2
-        done
+        if [ $(pct list | grep ${choosed_guest} | grep -c running) -eq 1 ]; then
+          pct shutdown ${choosed_guest} --forceStop 1 --timeout 10 >/dev/null 2>&1
+          while [ $(pct status ${choosed_guest} | cut -d' ' -f2 | grep -c stopped) -eq 1 ]; do
+            sleep 2
+          done
+        fi
       elif [ $(qm list | grep -c ${choosed_guest}) -eq 1 ]; then
         name=$(qm list | grep ${choosed_guest} | awk '{print $2}')
-        qm shutdown ${choosed_guest} --forceStop 1 --timeout 30 >/dev/null 2>&1
-        while [ $(qm status ${choosed_guest} | cut -d' ' -f2 | grep -c running) -eq 1 ]; do
-          sleep 2
-        done
+        if [ $(qm list | grep ${choosed_guest} | grep -c running) -eq 1 ]; then
+          qm shutdown ${choosed_guest} --forceStop 1 --timeout 10 >/dev/null 2>&1
+          while [ $(qm status ${choosed_guest} | cut -d' ' -f2 | grep -c stopped) -eq 1 ]; do
+            sleep 2
+          done
+        fi
       fi
       if vzdump ${choosed_guest} --dumpdir /mnt/pve/backups/dump/manual --mode stop --compress zstd --exclude-path /mnt/ --exclude-path /media/ --quiet 1; then
         filename=$(ls -ldst /mnt/pve/backups/dump/manual/*-${choosed_guest}-*.*.zst | awk '{print $10}' | cut -d. -f1 | head -n1)
@@ -70,10 +74,12 @@ function menu() {
     for choosed_guest in $(pct list | grep running | awk '{print $1}'); do
       if [ $(pct list | grep -c ${choosed_guest}) -eq 1 ]; then
         name=$(pct list | grep ${choosed_guest} | awk '{print $3}')
-        pct shutdown ${choosed_guest} --forceStop 1 --timeout 10 >/dev/null 2>&1
-        while [ $(pct status ${choosed_guest} | cut -d' ' -f2 | grep -c running) -eq 1 ]; do
-          sleep 2
-        done
+        if [ $(pct list | grep ${choosed_guest} | grep -c running) -eq 1 ]; then
+          pct shutdown ${choosed_guest} --forceStop 1 --timeout 10 >/dev/null 2>&1
+          while [ $(pct status ${choosed_guest} | cut -d' ' -f2 | grep -c stopped) -eq 1 ]; do
+            sleep 2
+          done
+        fi
       fi
       if vzdump ${choosed_guest} --dumpdir /mnt/pve/backups/dump/manual --mode stop --compress zstd --exclude-path /mnt/ --exclude-path /media/ --quiet 1; then
         filename=$(ls -ldst /mnt/pve/backups/dump/manual/*-${choosed_guest}-*.*.zst | awk '{print $10}' | cut -d. -f1 | head -n1)
@@ -88,10 +94,12 @@ function menu() {
     for choosed_guest in $(qm list | grep running | awk '{print $1}'); do
       if [ $(qm list | grep -c ${choosed_guest}) -eq 1 ]; then
         name=$(qm list | grep ${choosed_guest} | awk '{print $2}')
-        qm shutdown ${choosed_guest} --forceStop 1 --timeout 30 >/dev/null 2>&1
-        while [ $(qm status ${choosed_guest} | cut -d' ' -f2 | grep -c running) -eq 1 ]; do
-          sleep 2
-        done
+        if [ $(qm list | grep ${choosed_guest} | grep -c running) -eq 1 ]; then
+          qm shutdown ${choosed_guest} --forceStop 1 --timeout 10 >/dev/null 2>&1
+          while [ $(qm status ${choosed_guest} | cut -d' ' -f2 | grep -c stopped) -eq 1 ]; do
+            sleep 2
+          done
+        fi
       fi
       if vzdump ${choosed_guest} --dumpdir /mnt/pve/backups/dump/manual --mode stop --compress zstd --exclude-path /mnt/ --exclude-path /media/ --quiet 1; then
         filename=$(ls -ldst /mnt/pve/backups/dump/manual/*-${choosed_guest}-*.*.zst | awk '{print $10}' | cut -d. -f1 | head -n1)
@@ -109,10 +117,6 @@ function menu() {
     for choosed_guest in $(pct list | grep stopped | awk '{print $1}'); do
       if [ $(pct list | grep -c ${choosed_guest}) -eq 1 ]; then
         name=$(pct list | grep ${choosed_guest} | awk '{print $3}')
-        pct shutdown ${choosed_guest} --forceStop 1 --timeout 10 >/dev/null 2>&1
-        while [ $(pct status ${choosed_guest} | cut -d' ' -f2 | grep -c stopped) -eq 1 ]; do
-          sleep 2
-        done
       fi
       if vzdump ${choosed_guest} --dumpdir /mnt/pve/backups/dump/manual --mode stop --compress zstd --exclude-path /mnt/ --exclude-path /media/ --quiet 1; then
         filename=$(ls -ldst /mnt/pve/backups/dump/manual/*-${choosed_guest}-*.*.zst | awk '{print $10}' | cut -d. -f1 | head -n1)
@@ -127,10 +131,6 @@ function menu() {
     for choosed_guest in $(qm list | grep stopped | awk '{print $1}'); do
       if [ $(qm list | grep -c ${choosed_guest}) -eq 1 ]; then
         name=$(qm list | grep ${choosed_guest} | awk '{print $2}')
-        qm shutdown ${choosed_guest} --forceStop 1 --timeout 30 >/dev/null 2>&1
-        while [ $(qm status ${choosed_guest} | cut -d' ' -f2 | grep -c stopped) -eq 1 ]; do
-          sleep 2
-        done
       fi
       if vzdump ${choosed_guest} --dumpdir /mnt/pve/backups/dump/manual --mode stop --compress zstd --exclude-path /mnt/ --exclude-path /media/ --quiet 1; then
         filename=$(ls -ldst /mnt/pve/backups/dump/manual/*-${choosed_guest}-*.*.zst | awk '{print $10}' | cut -d. -f1 | head -n1)
@@ -148,10 +148,12 @@ function menu() {
     for choosed_guest in $(pct list | grep 'running\|stopped' | awk '{print $1}'); do
       if [ $(pct list | grep -c ${choosed_guest}) -eq 1 ]; then
         name=$(pct list | grep ${choosed_guest} | awk '{print $3}')
-        pct shutdown ${choosed_guest} --forceStop 1 --timeout 10 >/dev/null 2>&1
-        while [ $(pct status ${choosed_guest} | cut -d' ' -f2 | grep -c stopped) -eq 1 ]; do
-          sleep 2
-        done
+        if [ $(pct list | grep ${choosed_guest} | grep -c running) -eq 1 ]; then
+          pct shutdown ${choosed_guest} --forceStop 1 --timeout 10 >/dev/null 2>&1
+          while [ $(pct status ${choosed_guest} | cut -d' ' -f2 | grep -c stopped) -eq 1 ]; do
+            sleep 2
+          done
+        fi
       fi
       if vzdump ${choosed_guest} --dumpdir /mnt/pve/backups/dump/manual --mode stop --compress zstd --exclude-path /mnt/ --exclude-path /media/ --quiet 1; then
         filename=$(ls -ldst /mnt/pve/backups/dump/manual/*-${choosed_guest}-*.*.zst | awk '{print $10}' | cut -d. -f1 | head -n1)
@@ -169,10 +171,12 @@ function menu() {
     for choosed_guest in $(qm list | grep 'running\|stopped' | awk '{print $1}'); do
       if [ $(qm list | grep -c ${choosed_guest}) -eq 1 ]; then
         name=$(qm list | grep ${choosed_guest} | awk '{print $2}')
-        qm shutdown ${choosed_guest} --forceStop 1 --timeout 30 >/dev/null 2>&1
-        while [ $(qm status ${choosed_guest} | cut -d' ' -f2 | grep -c stopped) -eq 1 ]; do
-          sleep 2
-        done
+        if [ $(qm list | grep ${choosed_guest} | grep -c running) -eq 1 ]; then
+          qm shutdown ${choosed_guest} --forceStop 1 --timeout 10 >/dev/null 2>&1
+          while [ $(qm status ${choosed_guest} | cut -d' ' -f2 | grep -c stopped) -eq 1 ]; do
+            sleep 2
+          done
+        fi
       fi
       if vzdump ${choosed_guest} --dumpdir /mnt/pve/backups/dump/manual --mode stop --compress zstd --exclude-path /mnt/ --exclude-path /media/ --quiet 1; then
         filename=$(ls -ldst /mnt/pve/backups/dump/manual/*-${choosed_guest}-*.*.zst | awk '{print $10}' | cut -d. -f1 | head -n1)
@@ -190,10 +194,12 @@ function menu() {
     for choosed_guest in $(pct list | grep 'running\|stopped' | awk '{print $1}'); do
       if [ $(pct list | grep -c ${choosed_guest}) -eq 1 ]; then
         name=$(pct list | grep ${choosed_guest} | awk '{print $3}')
-        pct shutdown ${choosed_guest} --forceStop 1 --timeout 10 >/dev/null 2>&1
-        while [ $(pct status ${choosed_guest} | cut -d' ' -f2 | grep -c running) -eq 1 ]; do
-          sleep 2
-        done
+        if [ $(pct list | grep ${choosed_guest} | grep -c running) -eq 1 ]; then
+          pct shutdown ${choosed_guest} --forceStop 1 --timeout 10 >/dev/null 2>&1
+          while [ $(pct status ${choosed_guest} | cut -d' ' -f2 | grep -c stopped) -eq 1 ]; do
+            sleep 2
+          done
+        fi
       fi
       if vzdump ${choosed_guest} --dumpdir /mnt/pve/backups/dump/manual --mode stop --compress zstd --exclude-path /mnt/ --exclude-path /media/ --quiet 1; then
         filename=$(ls -ldst /mnt/pve/backups/dump/manual/*-${choosed_guest}-*.*.zst | awk '{print $10}' | cut -d. -f1 | head -n1)
@@ -208,10 +214,12 @@ function menu() {
     for choosed_guest in $(qm list | grep 'running\|stopped' | awk '{print $1}'); do
       if [ $(qm list | grep -c ${choosed_guest}) -eq 1 ]; then
         name=$(qm list | grep ${choosed_guest} | awk '{print $2}')
-        qm shutdown ${choosed_guest} --forceStop 1 --timeout 30 >/dev/null 2>&1
-        while [ $(qm status ${choosed_guest} | cut -d' ' -f2 | grep -c running) -eq 1 ]; do
-          sleep 2
-        done
+        if [ $(qm list | grep ${choosed_guest} | grep -c running) -eq 1 ]; then
+          qm shutdown ${choosed_guest} --forceStop 1 --timeout 10 >/dev/null 2>&1
+          while [ $(qm status ${choosed_guest} | cut -d' ' -f2 | grep -c stopped) -eq 1 ]; do
+            sleep 2
+          done
+        fi
       fi
       if vzdump ${choosed_guest} --dumpdir /mnt/pve/backups/dump/manual --mode stop --compress zstd --exclude-path /mnt/ --exclude-path /media/ --quiet 1; then
         filename=$(ls -ldst /mnt/pve/backups/dump/manual/*-${choosed_guest}-*.*.zst | awk '{print $10}' | cut -d. -f1 | head -n1)
