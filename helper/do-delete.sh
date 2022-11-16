@@ -25,12 +25,12 @@ function menu() {
     echo -e ')' >> /tmp/list.sh
 
     source /tmp/list.sh
-    guestchoice=$(whiptail --checklist --nocancel --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " DO DELETE " "\nSelect the machines you want to delete?" 20 80 10 "${list[@]}" 3>&1 1>&2 2>&3 | sed 's#"##g')
+    guestchoice=$(whiptail --checklist --nocancel --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " DO DELETE " "\nSelect the machines you want to delete?" 0 80 0 "${list[@]}" 3>&1 1>&2 2>&3 | sed 's#"##g')
 
     for choosed_guest in $guestchoice; do
       if [ $(pct list | grep -c ${choosed_guest}) -eq 1 ]; then
         name=$(pct list | grep ${choosed_guest} | awk '{print $3}')
-        if $(whip_alert_yesno "YES" "NO" "DO DELETE" "Are you sure you want to delete the following container irrevocably?\nID: ${choosed_guest}\nName: ${name}"); then
+        if whip_alert_yesno "YES" "NO" "DO DELETE" "Are you sure you want to delete the following container irrevocably?\nID: ${choosed_guest}\nName: ${name}"; then
           if [ $(pct list | grep ${choosed_guest} | grep -c running) -eq 1 ]; then
             pct shutdown ${choosed_guest} --forceStop 1 --timeout 10 >/dev/null 2>&1
             while [ $(pct status ${choosed_guest} | cut -d' ' -f2 | grep -c running) -eq 1 ]; do
@@ -47,7 +47,7 @@ function menu() {
         fi
       elif [ $(qm list | grep -c ${choosed_guest}) -eq 1 ]; then
         name=$(qm list | grep ${choosed_guest} | awk '{print $2}')
-        if $(whip_alert_yesno "YES" "NO" "DO DELETE" "Are you sure you want to delete the following container irrevocably?\nID: ${choosed_guest}\nName: ${name}"); then
+        if whip_alert_yesno "YES" "NO" "DO DELETE" "Are you sure you want to delete the following container irrevocably?\nID: ${choosed_guest}\nName: ${name}"; then
           if [ $(qm list | grep ${choosed_guest} | grep -c running) -eq 1 ]; then
             qm shutdown ${choosed_guest} --forceStop 1 --timeout 10 >/dev/null 2>&1
             while [ $(qm status ${choosed_guest} | cut -d' ' -f2 | grep -c running) -eq 1 ]; do
@@ -69,7 +69,7 @@ function menu() {
     echoLOG b "Select >> I want all (Factory reset Proxmox) ..."
     for lxc in $(pct list | sed '1d' | awk '{print $1}'); do
       name=$(pct list | grep ${lxc} | awk '{print $3}')
-      if $(whip_alert_yesno "YES" "NO" "DO DELETE" "Are you sure you want to delete the following container irrevocably?\nID: ${lxc}\nName: ${name}"); then
+      if whip_alert_yesno "YES" "NO" "DO DELETE" "Are you sure you want to delete the following container irrevocably?\nID: ${lxc}\nName: ${name}"; then
         if [ $(pct list | grep ${lxc} | grep -c running) -eq 1 ]; then
           pct shutdown ${lxc} --forceStop 1 --timeout 10 >/dev/null 2>&1
           while [ $(pct status ${lxc} | cut -d' ' -f2 | grep -c running) -eq 1 ]; do
@@ -87,7 +87,7 @@ function menu() {
     done
     for vm in $(qm list | sed '1d' | awk '{print $1}'); do
       name=$(qm list | grep ${vm} | awk '{print $2}')
-      if $(whip_alert_yesno "YES" "NO" "DO DELETE" "Are you sure you want to delete the following container irrevocably?\nID: ${vm}\nName: ${name}"); then
+      if whip_alert_yesno "YES" "NO" "DO DELETE" "Are you sure you want to delete the following container irrevocably?\nID: ${vm}\nName: ${name}"; then
         if [ $(qm list | grep ${vm} | grep -c running) -eq 1 ]; then
           qm shutdown ${vm} --forceStop 1 --timeout 10 >/dev/null 2>&1
           while [ $(qm status ${vm} | cut -d' ' -f2 | grep -c running) -eq 1 ]; do
