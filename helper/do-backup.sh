@@ -31,7 +31,7 @@ function menu() {
     echo -e ')' >> /tmp/list.sh
 
     source /tmp/list.sh
-    var_guestchoice=$(whiptail --checklist --nocancel --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " DO BACKUP " "\nSelect the machines from which you want to create a backup?" 20 80 10 "${list[@]}" 3>&1 1>&2 2>&3 | sed 's#"##g')
+    var_guestchoice=$(whiptail --checklist --nocancel --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " DO BACKUP " "\nSelect the machines from which you want to create a backup?" 0 80 0 "${list[@]}" 3>&1 1>&2 2>&3 | sed 's#"##g')
 
     for choosed_guest in $var_guestchoice; do
       if [ $(pct list | grep -c ${choosed_guest}) -eq 1 ]; then
