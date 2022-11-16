@@ -134,13 +134,9 @@ fi
 
 if bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/config-pve.sh); then
   echoLOG g "configure Proxmox main system"
+  whip_message "PROXMOX" "The basic configuration of the server is now complete. The server must be restarted. After the restart, this script can be called again to install and configure containers and virtual machines."
 else
   echoLOG r "configure Proxmox main system"
-fi
-
-if ! checkPKG "mailutils"; then
-  apt update &>/dev/null
-  apt install -y mailutils &>/dev/null
 fi
 
 echo > "/root/.iThieler"
@@ -152,8 +148,8 @@ if [ -n "$mailUSER" ]; then
   sed -i 's|robotPASS=".*"|robotPASS=""|g' /tmp/proxmox-configuration.txt
   sed -i 's|mailPASS=".*"|mailPASS=""|g' /tmp/proxmox-configuration.txt
   sed -i 's|nasPASS=".*"|nasPASS=""|g' /tmp/proxmox-configuration.txt
-  echo -e "Im Anhang befindet sich die Datei >>proxmox-configuration.txt<<. Diese sollte unbedingt gesichert werden. Mit dieser Datei kann kann eine erneute Konfiguration schneller erfolgen, da schon alle fragen beantwortet sind. Falls eine NAS angegeben wurde, wird diese Datei ebenfalls im Backupordner gesichert" | mail.mailutils -a "From: \"HomeServer\" <${mailFROM}>" -s "[HomeServer] Testnachricht" "${mailto}" -A "/tmp/proxmox-configuration.txt"
-  echoLOG b "Kopie der Konfiurationsdatei an >> ${mailto} << gesendet."
+  echo -e "In the attachment you will find the file >>proxmox-configuration.txt<<. This should be absolutely saved. With this file a new configuration can be done faster, because all questions are already answered. If a NAS was specified, this file is also saved in the backup folder." | mail.mailutils -a "From: \"Proxmox Server\" <${mailFROM}>" -s "[PVE] Testnachricht" "${mailto}" -A "/tmp/proxmox-configuration.txt"
+  echoLOG b "Kopie der Konfiurationsdatei an >> ${mailTO} << gesendet."
 fi
 
 # copy configuration to NAS
@@ -162,5 +158,5 @@ if [ -n "$nasIP" ]; then
   echoLOG b "Kopie der Konfiurationsdatei auf NAS gespeichert."
 fi
 
-sleep 2
+cleanup
 reboot
