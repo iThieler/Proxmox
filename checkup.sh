@@ -129,7 +129,7 @@ if [ ! -f "/etc/apt/sources.list.d/pve-no-subscription.list" ]; then firstRUN; f
 if [ -f "/root/.iThieler" ]; then
   birth=$(stat .iThieler | grep "Birth" | cut -d' ' -f3,4,5)
   echoLOG b "Global configuration almost done at >> ${birth}"
-  menuMAIN
+  menu
 else
   bash <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/global-config-file.sh)
 fi
