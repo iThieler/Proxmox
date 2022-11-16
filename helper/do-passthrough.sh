@@ -70,7 +70,7 @@ function zigbee() {
     pct start $ctID
 }
 
-function menuMAIN() {
+function menu() {
   sel=("1" "... bind Zigbee Stick" \
        "2" "... bind DVB-Device" \
        "3" "... bind grafic Card" \
@@ -84,19 +84,20 @@ function menuMAIN() {
     zigbee
   elif [[ $menuSelection == "2" ]]; then
     #bind DVB-Device
-    menuMAIN
+    menu
   elif [[ $menuSelection == "3" ]]; then
     #bind grafic Card
-    menuMAIN
+    menu
   elif [[ $menuSelection == "4" ]]; then
     #bind Storage
-    menuMAIN
+    menu
   elif [[ $menuSelection == "Q" ]]; then
     #going back
-    exit
+    cleanup
+    exit 0
   else
-    menuMAIN
+    menu
   fi
 }
 
-menuMAIN
+menu
