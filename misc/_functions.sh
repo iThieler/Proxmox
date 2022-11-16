@@ -109,13 +109,9 @@ function bakFILE() {
 }
 
 # Function clean the Shell History and exit
-function cleanup_and_exit() {
-  unset gh_tag
-  unset main_language
-  unset script_path
+function cleanup() {
   cat /dev/null > ~/.bash_history && history -c && history -w
   sleep 5
-  exit
 }
 
 # Function write event to logfile and echo colorized in shell
