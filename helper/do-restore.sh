@@ -22,13 +22,13 @@ function menu() {
     echo -e ')' >> /tmp/list.sh
 
     source /tmp/list.sh
-    choice=$(whiptail --checklist --nocancel --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " DO BACKUP " "\nSelect the backups you want to restore" 20 80 10 "${list[@]}" 3>&1 1>&2 2>&3 | sed 's#"##g')
+    choice=$(whiptail --checklist --nocancel --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " DO BACKUP " "\nSelect the backups you want to restore" 0 80 0 "${list[@]}" 3>&1 1>&2 2>&3 | sed 's#"##g')
 
     for selection in $choice; do
       guestname=$(cat /tmp/list.sh | sed 's/\"//g' | grep ${selection} | awk '{print $2}')
       if [ -f "/mnt/pve/backups/dump/manual/${selection}-${guestname}.tar.zst" ]; then
         if [ $(pct list | grep -c ${selection}) -eq 1 ] || [ $(pct list | grep -c ${selection}) -eq 1 ]; then
-          if $(whip_yesno "OVERWRITE" "NEW ID" "DO RESTORE" "The machine you want to restore already exists, do you want to overwrite it or choose a new ID?"); then
+          if whip_yesno "OVERWRITE" "NEW ID" "DO RESTORE" "The machine you want to restore already exists, do you want to overwrite it or choose a new ID?"; then
             if pct restore ${selection} "/mnt/pve/backups/dump/manual/${selection}-${guestname}.tar.zst" --storage $(pvesm status --content images,rootdir | grep active | awk '{print $1}') --pool "BackupPool" --force 1 > /dev/null 2>&1; then
               echoLOG g "Restore >> $selection - $guestname"
             else
@@ -48,7 +48,7 @@ function menu() {
         fi
       elif [ -f "/mnt/pve/backups/dump/manual/${selection}-${guestname}.vma.zst" ]; then
         if [ $(qm list | grep -c ${selection}) -eq 1 ]; then
-          if $(whip_yesno "OVERWRITE" "CANCEL" "DO RESTORE" "The machine you want to restore already exists. Do you want to overwrite it?"); then
+          if whip_yesno "OVERWRITE" "CANCEL" "DO RESTORE" "The machine you want to restore already exists. Do you want to overwrite it?"; then
             if qmrestore ${selection} "/mnt/pve/backups/dump/manual/${selection}-${guestname}.vma.zst" --storage $(pvesm status --content images,rootdir | grep active | awk '{print $1}') --pool "BackupPool" --force 1 > /dev/null 2>&1; then
               echoLOG g "Restore >> $selection - $guestname"
             else
@@ -66,7 +66,7 @@ function menu() {
       guestID=$(echo $file | cut -d. -f1 | cut -d- -f1)
       guestname=$(echo $file | cut -d. -f1 | cut -d- -f2)
       if [ $(echo $file | grep -c tar) -eq 1 ]; then
-        if $(whip_yesno "OVERWRITE" "NEW ID" "DO RESTORE" "The machine you want to restore already exists, do you want to overwrite it or choose a new ID?"); then
+        if whip_yesno "OVERWRITE" "NEW ID" "DO RESTORE" "The machine you want to restore already exists, do you want to overwrite it or choose a new ID?"; then
           if pct restore ${guestID} "/mnt/pve/backups/dump/manual/${guestID}-${guestname}.tar.zst" --storage $(pvesm status --content images,rootdir | grep active | awk '{print $1}') --pool "BackupPool" --force 1 > /dev/null 2>&1; then
             echoLOG g "Restore >> $guestID - $guestname"
           else
@@ -85,7 +85,7 @@ function menu() {
         fi
       elif [ $(echo $file | grep -c vma) -eq 1 ]; then
         if [ $(qm list | grep -c ${guestID}) -eq 1 ]; then
-          if $(whip_yesno "OVERWRITE" "CANCEL" "DO RESTORE" "The machine you want to restore already exists. Do you want to overwrite it?"); then
+          if whip_yesno "OVERWRITE" "CANCEL" "DO RESTORE" "The machine you want to restore already exists. Do you want to overwrite it?"; then
             if qmrestore ${guestID} "/mnt/pve/backups/dump/manual/${guestID}-${guestname}.vma.zst" --storage $(pvesm status --content images,rootdir | grep active | awk '{print $1}') --pool "BackupPool" --force 1 > /dev/null 2>&1; then
               echoLOG g "Restore >> $guestID - $guestname"
             else
