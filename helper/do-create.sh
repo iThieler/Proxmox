@@ -17,7 +17,13 @@ function menu() {
   elif [[ $menuSelection == "2" ]]; then
     echoLOG b "Select >> I want create KVM ..."
     menu
+  elif [[ $menuSelection == "Q" ]]; then
+    echoLOG b "Select >> I want to exit/going back!"
+    cleanup
+    exit 0
+  else
+    menu
   fi
 }
-
+ 
 menu
