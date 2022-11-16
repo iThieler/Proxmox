@@ -2,6 +2,7 @@
 
 source <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/_functions.sh)
 source "/root/pve-global-config.sh"
+if [[ $1 == "checkup" ]]; then goback=true; fi
 
 function menu() {
   sel=("1" "I want to select ..." \
@@ -128,7 +129,7 @@ function menu() {
     reboot
   elif [[ $menuSelection == "Q" ]]; then
     echoLOG b "Select >> I want to exit/going back!"
-    cleanup
+    if [ "$goback" != true ]; then cleanup; fi
     exit 0
   else
     menu
