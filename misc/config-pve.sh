@@ -44,7 +44,4 @@ echo -e "[OPTIONS]\n \
         [RULES]\n \
         GROUP proxmox\n\n" > /etc/pve/nodes/$(hostname)/host.fw
 
-# create Backuppool
-pvesh create /pools --poolid BackupPool --comment "VMs in this pool are backed up daily"
-
-whip_message "PROXMOX" "Die Grundkonfiguration des Servers ist nun abgeschlossen. Der Server muss neu gestartet werden. Nach dem Neustart kann dieses Skript zur installation und konfiguration von Containern und virtuellen Maschinen erneut aufgerufen werden."
+exit 0
