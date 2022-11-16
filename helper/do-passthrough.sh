@@ -1,6 +1,8 @@
 #!/bin/bash
 
 source <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/_functions.sh)
+source "/root/pve-global-config.sh"
+if [[ $1 == "checkup" ]]; then goback=true; fi
 
 function zigbee() {
     #get container ID and stop
@@ -93,7 +95,7 @@ function menu() {
     menu
   elif [[ $menuSelection == "Q" ]]; then
     #going back
-    cleanup
+    if [ "$goback" != true ]; then cleanup; fi
     exit 0
   else
     menu
