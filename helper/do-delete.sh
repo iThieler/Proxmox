@@ -123,6 +123,7 @@ function menu() {
     else
       echoLOG r "remove needed Software"
     fi
+    bash <(curl -s https://raw.githubusercontent.com/Weilbyte/PVEDiscordDark/master/PVEDiscordDark.sh) uninstall 2>&1 >/dev/null
     whip_message "DO DELETE" "The package sources cannot be changed after they have been used. If you want to use the enterprise repository of Proxmox again, you have to reinstall Proxmox."
     cleanup
     whip_message "DO DELETE" "Your server must be restarted now."
