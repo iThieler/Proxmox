@@ -100,7 +100,10 @@ function menu() {
     menu
   elif [[ $menuSelection == "Q" ]]; then
     echoLOG b "Select >> I want to exit/going back!"
+    cleanup
     exit 0
+  else
+    menu
   fi
 }
 
