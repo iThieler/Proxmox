@@ -16,7 +16,10 @@ if checkIP "${nasIP}"; then
   # create Backupjob every Day at 3:00
   echo "0 3 * * *   root   vzdump --compress zstd --mailto ${mailTO} --mailnotification always --exclude-path /mnt/ --exclude-path /media/ --mode snapshot --quiet 1 --pool BackupPool --maxfiles 6 --storage backups" >> /etc/cron.d/vzdump
 
-  exit 0
+  # create Backuppool
+  pvesh create /pools --poolid BackupPool --comment "VMs in this pool are backed up daily"
 else
   exit 1
 fi
+
+exit 0
