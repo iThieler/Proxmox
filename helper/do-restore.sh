@@ -26,7 +26,7 @@ function menu() {
 
     for choosed_guest in $var_guestchoice; do
       guestname=$(cat /tmp/list.sh | sed 's/\"//g' | grep ${choosed_guest} | awk '{print $2}')
-      if [ -f "/mnt/pve/backups/dump/manual/${choosed_guest}-${guestname}.tar.zst" ]
+      if [ -f "/mnt/pve/backups/dump/manual/${choosed_guest}-${guestname}.tar.zst" ]; then
         if [ $(pct list | grep -c ${choosed_guest}) -eq 1 ] || [ $(pct list | grep -c ${choosed_guest}) -eq 1 ]; then
           if $(whip_yesno "OVERWRITE" "NEW ID" "DO RESTORE" "The machine you want to restore already exists, do you want to overwrite it or choose a new ID?"); then
             if pct restore ${choosed_guest} "/mnt/pve/backups/dump/manual/${choosed_guest}-${guestname}.tar.zst" --storage $(pvesm status --content images,rootdir | grep active | awk '{print $1}') --pool "BackupPool" --force 1 > /dev/null 2>&1; then
