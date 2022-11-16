@@ -42,6 +42,7 @@ function menu() {
         pct exec $selection -- bash -ci "apt-get dist-upgrade -y >/dev/null 2>&1"
         pct exec $selection -- bash -ci "apt-get autoremove -y >/dev/null 2>&1"
       fi
+    done
     menu
   elif [[ $menuSelection == "2" ]]; then
     echoLOG b "Select >> I want the Proxmox server ..."
