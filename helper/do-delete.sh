@@ -108,7 +108,7 @@ function menu() {
       pvesm remove backups
       grep -v "vzdump" /etc/cron.d/vzdump > tmpfile && mv tmpfile /etc/cron.d/vzdump #delete Backup cronjob
       grep -v "BackupPool" /etc/pve/user.cfg > tmpfile && mv tmpfile /etc/pve/user.cfg
-    if
+    fi
     if [ -n "$mailSERVER" ]; then
       bakFILE recover "/etc/aliases" #delete Postfix config
       rm "/etc/postfix/canonical"
