@@ -81,7 +81,7 @@ function menuMAIN() {
   elif [[ $menuSelection == "Q" ]]; then
     echoLOG b "Select >> I want to exit and clean up!"
     echoLOG y "one moment please, while finishing script"
-    #finish
+    cleanup
     exit 0
   else
     menuMAIN
