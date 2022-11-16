@@ -8,7 +8,7 @@ function menu() {
   sel=("1" "I want to select ..." \
        "2" "I want the Proxmox server ..." \
        "3" "I want all LXC ..." \
-       "3" "I want all ..." \
+       "4" "I want all ..." \
        "" "" \
        "Q" "I want to exit/going back!")
   menuSelection=$(whiptail --menu --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " DO UPDATE " "\nWhat do you want to update?" 0 80 0 "${sel[@]}" 3>&1 1>&2 2>&3)
@@ -59,10 +59,10 @@ function menu() {
       name=$(pct list | grep ${lxc} | awk '{print $3}')
       if [ $(pct list | grep ${lxc} | grep -c running) -eq 1 ]; then
         echoLOG b "Update operating system only >> $lxc - $name"
-        pct exec $selection -- bash -ci "apt-get update >/dev/null 2>&1"
-        pct exec $selection -- bash -ci "apt-get upgrade -y >/dev/null 2>&1"
-        pct exec $selection -- bash -ci "apt-get dist-upgrade -y >/dev/null 2>&1"
-        pct exec $selection -- bash -ci "apt-get autoremove -y >/dev/null 2>&1"
+        pct exec $lxc -- bash -ci "apt-get update >/dev/null 2>&1"
+        pct exec $lxc -- bash -ci "apt-get upgrade -y >/dev/null 2>&1"
+        pct exec $lxc -- bash -ci "apt-get dist-upgrade -y >/dev/null 2>&1"
+        pct exec $lxc -- bash -ci "apt-get autoremove -y >/dev/null 2>&1"
       fi
     done
     menu
@@ -78,10 +78,10 @@ function menu() {
       name=$(pct list | grep ${lxc} | awk '{print $3}')
       if [ $(pct list | grep ${lxc} | grep -c running) -eq 1 ]; then
         echoLOG b "Update operating system only >> $lxc - $name"
-        pct exec $selection -- bash -ci "apt-get update >/dev/null 2>&1"
-        pct exec $selection -- bash -ci "apt-get upgrade -y >/dev/null 2>&1"
-        pct exec $selection -- bash -ci "apt-get dist-upgrade -y >/dev/null 2>&1"
-        pct exec $selection -- bash -ci "apt-get autoremove -y >/dev/null 2>&1"
+        pct exec $lxc -- bash -ci "apt-get update >/dev/null 2>&1"
+        pct exec $lxc -- bash -ci "apt-get upgrade -y >/dev/null 2>&1"
+        pct exec $lxc -- bash -ci "apt-get dist-upgrade -y >/dev/null 2>&1"
+        pct exec $lxc -- bash -ci "apt-get autoremove -y >/dev/null 2>&1"
       fi
     done
     menu
