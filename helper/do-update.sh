@@ -25,7 +25,7 @@ function menu() {
     echo -e ')' >> /tmp/list.sh
 
     source /tmp/list.sh
-    choice=$(whiptail --checklist --nocancel --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " DO UPDATE " "\nSelect the machines you want to update?" 20 80 10 "${list[@]}" 3>&1 1>&2 2>&3 | sed 's#"##g')
+    choice=$(whiptail --checklist --nocancel --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " DO UPDATE " "\nSelect the machines you want to update?" 0 80 0 "${list[@]}" 3>&1 1>&2 2>&3 | sed 's#"##g')
 
     for selection in $choice; do
       name=$(pct list | grep ${choosed_guest} | awk '{print $3}')
