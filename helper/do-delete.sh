@@ -54,7 +54,7 @@ function menu() {
               sleep 2
             done
           fi
-          if qm destroy ${choosed_guest} --destroy-unreferenced-disks 1 --force 1 --skiplock 1 >/dev/null 2>&1; then
+          if qm destroy ${choosed_guest} --destroy-unreferenced-disks 1 --purge --skiplock 1 >/dev/null 2>&1; then
             echoLOG g "Delete >> $choosed_guest - $name"
           else
             echoLOG g "Delete >> $choosed_guest - $name"
@@ -94,7 +94,7 @@ function menu() {
             sleep 2
           done
         fi
-        if qm destroy ${vm} --destroy-unreferenced-disks 1 --force 1 --skiplock 1 >/dev/null 2>&1; then
+        if qm destroy ${vm} --destroy-unreferenced-disks 1 --purge --skiplock 1 >/dev/null 2>&1; then
           echoLOG g "Delete >> $vm - $name"
         else
           echoLOG g "Delete >> $vm - $name"
