@@ -148,7 +148,7 @@ if [ -n "$mailUSER" ]; then
   sed -i 's|robotPASS=".*"|robotPASS=""|g' /tmp/proxmox-configuration.txt
   sed -i 's|mailPASS=".*"|mailPASS=""|g' /tmp/proxmox-configuration.txt
   sed -i 's|nasPASS=".*"|nasPASS=""|g' /tmp/proxmox-configuration.txt
-  echo -e "In the attachment you will find the file >>proxmox-configuration.txt<<. This should be absolutely saved. With this file a new configuration can be done faster, because all questions are already answered. If a NAS was specified, this file is also saved in the backup folder." | mail.mailutils -a "From: \"Proxmox Server\" <${mailFROM}>" -s "[PVE] Testnachricht" "${confmailto}" -A "/tmp/proxmox-configuration.txt"
+  echo -e "In the attachment you will find the file >>proxmox-configuration.txt<<. This should be absolutely saved. With this file a new configuration can be done faster, because all questions are already answered. If a NAS was specified, this file is also saved in the backup folder." | mail.mailutils -a "From: \"Proxmox Server\" <${mailFROM}>" -s "[HomeServer] Configuration File" "${confmailto}" -A "/tmp/proxmox-configuration.txt"
   echoLOG b "Kopie der Konfiurationsdatei an >> ${confmailto} << gesendet."
 fi
 
