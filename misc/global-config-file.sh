@@ -7,22 +7,22 @@ function create_Global_Config() {
   hostDOMAIN=$(pveum user list | grep "root@pam" | awk '{print $5}' | cut -d\@ -f2)
   
   # config Netrobot
-  if whip_yesno "JA" "NEIN" "NETZWERKROBOTER" "Nutzt Du einen Netzwerkroborter in deinem Netzwerk (allgemeiner Benutzer der auf allen Geräten Adminrechte hat)?"; then
+  if whip_yesno "YES" "NO" "NETWORKROBOT" "Do you use a network robot in your network (general user that has admin/super user rights on all devices)?"; then
     robot=true
-    robotNAME=$(whip_inputbox "OK" "NETZWERKROBOTER" "Wie lautet der Name, deines Netzwerkroboter?" "netrobot")
-    robotPASS=$(whip_inputbox_password_autogenerate "OK" "NETZWERKROBOTER" "Wie lautet das Passwort von >>${robotNAME}<<?\nLeer = Passwort automatisch erstellen")
-    whip_message "NETZWERKROBOTER" "Stell sicher, das sich auf deinen Geräten (Router, NAS, Switch, AccessPoint) der folgende Benutzer mit Adminrechten befindet.\n\nBenutzername: ${robotNAME}\nPasswort: ${robotPASS}"
+    robotNAME=$(whip_inputbox "OK" "NETWORKROBOT" "What is the name of your network robot?" "netrobot")
+    robotPASS=$(whip_inputbox_password_autogenerate "OK" "NETWORKROBOT" "What is the password of >>${robotNAME}<<?\nBlank = create password automatically")
+    whip_message "NETWORKROBOT" "Make sure that on your devices (Router, NAS, Switches, AccessPoints) there is the following user with admin rights.\n\nUsername: ${robotNAME}\nPassword: ${robotPASS}"
   fi
 
   # config SMTP server for email notification
-  if whip_yesno "JA" "NEIN" "MAILSERVER" "Soll ein eigener Mailserver für den Versand von Benachrichtigungen verwendet werden?"; then
-    mailUSER=$(whip_inputbox "OK" "MAILSERVER" "Welcher Benutzername wird für den Login am Mailserver verwendet?" "notify@${hostDOMAIN}")
-    mailPASS=$(whip_inputbox "OK" "MAILSERVER" "Wie lautet das Passwort, welches für den Login am Mailserver verwendet wird?")
-    mailTO=$(whip_inputbox "OK" "MAILSERVER" "An welche E-Mailadresse sollen Benachrichtigungen von deinem Server gesendet werden?" "$(pveum user list | grep "root@pam" | awk '{print $5}')")
-    mailFROM=$(whip_inputbox "OK" "MAILSERVER" "Die Absendeadresse lautet?" "notify@${hostDOMAIN}")
-    mailSERVER=$(whip_inputbox "OK" "MAILSERVER" "Wie lautet die Adresse deines Postausgangsserver?" "smtp.${hostDOMAIN}")
-    mailPORT=$(whip_inputbox "OK" "MAILSERVER" "Welchen Port benutzt dein Postausgangsserver?" "587")
-    if whip_yesno "JA" "NEIN" "MAILSERVER" "Benötigt dein Mailserver für den Login SSL?"; then
+  if whip_yesno "Continue" "Exit" "MAILSERVER" "To be able to receive notifications you have to enter the data of your mail server. You can find them in the help section of your email provider.\n\nDo you want to continue?"; then
+    mailUSER=$(whip_inputbox "OK" "MAILSERVER" "Which username is used to login to the mail server?" "notify@${hostDOMAIN}")
+    mailPASS=$(whip_inputbox "OK" "MAILSERVER" "What is the password used to login to the mail server?")
+    mailTO=$(whip_inputbox "OK" "MAILSERVER" "To which e-mail address should notifications from your server be sent?" "$(pveum user list | grep "root@pam" | awk '{print $5}')")
+    mailFROM=$(whip_inputbox "OK" "MAILSERVER" "The sending address is?" "notify@${hostDOMAIN}")
+    mailSERVER=$(whip_inputbox "OK" "MAILSERVER" "What is the address of your outgoing mail server (SMTP server address)?" "smtp.${hostDOMAIN}")
+    mailPORT=$(whip_inputbox "OK" "MAILSERVER" "What port does your outgoing mail server use (SMTP server address)?" "587")
+    if whip_yesno "YES" "NO" "MAILSERVER" "Does your mail server require SSL/TLS/STARTTLS for login?"; then
       mailTLS=true
     else
       mailTLS=false
@@ -30,85 +30,100 @@ function create_Global_Config() {
   fi
 
   # config NAS
-  if whip_yesno "JA" "NEIN" "NAS" "Befindet sich ein Network Attached Storage (NAS) in deinem Netzwerk?"; then
-    nasIP=$(whip_inputbox "OK" "NAS" "Wie lautet die IP-Adresse der NAS?" "$(hostname -I | cut -d. -f1,2).")
-    nasBAKPATH=$(whip_inputbox "OK" "NAS" "Wie heisst der Ordner in dem Backups gespeichert werden sollen?\nProxmox erstellt automatisch einen Unterordner namens >>dump<<." "backups")
+  if whip_yesno "YES" "NO" "NETWORK ATTACHED STORAGE" "Is there a Network Attached Storage (NAS) on your network?"; then
+    nasIP=$(whip_inputbox "OK" "NETWORK ATTACHED STORAGE" "What is the IP address of your NAS?" "$(hostname -I | cut -d. -f1,2).")
+    nasBAKPATH=$(whip_inputbox "OK" "NETWORK ATTACHED STORAGE" "What is the name of the folder where backups should be stored?\nProxmox automatically creates a subfolder called >>dump<<." "backups")
     if ! $robot; then
-      nasUSER=$(whip_inputbox "OK" "NAS" "Wie lautet der Benutzername eines Adminnutzer?" "${robotNAME}.")
-      nasPASS=$(whip_inputbox "OK" "NAS" "Wie lautet das Passwort von >>${nasUSER}<<?\nLeer = Passwort von >>${robotNAME}<<")
+      nasUSER=$(whip_inputbox "OK" "NETWORK ATTACHED STORAGE" "What is the username of a user with full access rights to this folder?" "${robotNAME}.")
+      nasPASS=$(whip_inputbox "OK" "NETWORK ATTACHED STORAGE" "What is the password of >>${nasUSER}<<?")
     fi
-    if whip_yesno "SAMBA" "NFS" "NAS" "Kann dieses Verzeichnis per NFS (Linux Standard) angebunden werden, oder soll das Samba Protokoll (Windows Standard) genutzt werden?"; then
+    if whip_yesno "SAMBA" "NFS" "NETWORK ATTACHED STORAGE" "Can your NAS be mounted via NFS (Linux standard) or should the SAMBA protocol (Windows share) be used?"; then
       nasPROTOCOL=cifs
     else
       nasPROTOCOL=nfs
     fi
-    if [[ $(whip_inputbox "OK" "NAS" "Von welchem Hersteller ist die NAS?\n1 = Synology - 2 = QNAP - 3 = andere") == "1" ]]; then
+    sel=("1" "SYNOLOGY" \
+       "2" "QNAP" \
+       "3" "OTHER")
+    menuSelection=$(whiptail --menu --nocancel --backtitle "© 2021 - iThieler's Proxmox Script collection" --title " NETWORK ATTACHED STORAGE " "\nWhich manufacturer is the NAS from?" 20 80 10 "${sel[@]}" 3>&1 1>&2 2>&3)
+    if [[ $menuSelection == "1" ]]; then
       nasMAN=synology
-    elif [[ $(whip_inputbox "OK" "NAS" "Von welchem Hersteller ist die NAS?\n1 = Synology - 2 = QNAP - 3 = andere") == "2" ]]; then
+    elif [[ $menuSelection == "2" ]]; then
       nasMAN=qnap
+    else
+      nasMAN=other
     fi
   fi
 
   # config VLAN
-  if whip_yesno "JA" "NEIN" "VLAN" "Werden in diesem Netzwerk VLANs genutzt?"; then
+  if whip_yesno "YES" "NO" "VIRTUAL LACAL AREA NETWORK" "Do you use Virtual Local Area Networks (VLANs) in your network?"; then
     network=$(hostname -I | cut -d. -f1,2)
-    if whip_yesno "JA" "NEIN" "VLAN" "Wird ein VLAN für Server genutzt?"; then
+    if whip_yesno "Yes" "No" "VIRTUAL LACAL AREA NETWORK" "Is there a VLAN used for servers?"; then
       vlanid=$(hostname -I | cut -d. -f3)
-      vlanSERVERID=$(whip_inputbox "OK" "VLAN" "Wie lautet die VLAN-ID?" "${vlanid}")
-      vlanSERVERGW=$(whip_inputbox "OK" "VLAN" "Wie lautet die IP-Adresse des Gateways?" "$(ip r | grep default | cut -d' ' -f3)")
+      vlanSERVERID=$(whip_inputbox "OK" "VIRTUAL LACAL AREA NETWORK" "What is the VLAN ID?" "${vlanid}")
+      vlanSERVERGW=$(whip_inputbox "OK" "VIRTUAL LACAL AREA NETWORK" "What is the IP address of the gateway of this VLAN in CIDR notation (192.168.0.1/24)?" "$(ip r | grep default | cut -d' ' -f3)")
     fi
-    if whip_yesno "JA" "NEIN" "VLAN" "Wird ein VLAN für SmartHome Geräte genutzt?"; then
-      vlanSMARTHOMEID=$(whip_inputbox "OK" "VLAN" "Wie lautet die VLAN-ID?")
-      vlanSMARTHOMEGW=$(whip_inputbox "OK" "VLAN" "Wie lautet die IP-Adresse des Gateways?" "${network}.${vlanSMARTHOMEID}.254")
+    if whip_yesno "Yes" "No" "VIRTUAL LACAL AREA NETWORK" "Is there a VLAN used for SmartHome devices (IoT)?"; then
+      vlanSMARTHOMEID=$(whip_inputbox "OK" "VIRTUAL LACAL AREA NETWORK" "What is the VLAN ID?")
+      vlanSMARTHOMEGW=$(whip_inputbox "OK" "VIRTUAL LACAL AREA NETWORK" "What is the IP address of the gateway of this VLAN in CIDR notation (192.168.0.1/24)?" "${network}.${vlanSMARTHOMEID}.254")
     fi
-    if whip_yesno "JA" "NEIN" "VLAN" "Wird ein VLAN für DHCP/Produktiv (Handys, Laptops, Fernseher usw.) genutzt?"; then
-      vlanDHCPID=$(whip_inputbox "OK" "VLAN" "Wie lautet die VLAN-ID?")
-      vlanDHCPGW=$(whip_inputbox "OK" "VLAN" "Wie lautet die IP-Adresse des Gateways?" "${network}.${vlanDHCPID}.254")
+    if whip_yesno "Yes" "No" "VIRTUAL LACAL AREA NETWORK" "Is there a VLAN used for normal devices (DHCP and/or cell phones, laptops, TVs, etc.)?"; then
+      vlanDHCPID=$(whip_inputbox "OK" "VIRTUAL LACAL AREA NETWORK" "What is the VLAN ID?")
+      vlanDHCPGW=$(whip_inputbox "OK" "VIRTUAL LACAL AREA NETWORK" "What is the IP address of the gateway of this VLAN in CIDR notation (192.168.0.1/24)?" "${network}.${vlanDHCPID}.254")
     fi
-    if whip_yesno "JA" "NEIN" "VLAN" "Wird ein VLAN für Gäste WLAN genutzt?"; then
-      vlanGUESTID=$(whip_inputbox "OK" "VLAN" "Wie lautet die VLAN-ID?")
-      vlanGUESTGW=$(whip_inputbox "OK" "VLAN" "Wie lautet die IP-Adresse des Gateways?" "${network}.${vlanGUESTID}.1")
+    if whip_yesno "Yes" "No" "VIRTUAL LACAL AREA NETWORK" "Is there a VLAN used for guests?"; then
+      vlanGUESTID=$(whip_inputbox "OK" "VIRTUAL LACAL AREA NETWORK" "What is the VLAN ID?")
+      vlanGUESTGW=$(whip_inputbox "OK" "VIRTUAL LACAL AREA NETWORK" "What is the IP address of the gateway of this VLAN in CIDR notation (192.168.0.1/24)?" "${network}.${vlanGUESTID}.1")
     fi
   else
+    gwIP=$(ip r | grep default | cut -d' ' -f3)
+    gwCIDR=$(ip r | grep $(hostname -I) | cut -d' ' -f1 | cut -d/ -f2)
     vlanSERVERID=0
-    vlanSERVERGW=$(ip r | grep default | cut -d' ' -f3)
+    vlanSERVERGW="$gwIP/$gwCIDR"
   fi
 
   # create config File
-  echo -e "\0043\0041/bin/bash \
-  \n\0043 This file stores variables that are specified during the first execution of the post-processing script by the > \
-  \n\0043 This makes re-execution of the script easier, and follows a standard. The advantage is that the user does not > \
-  \n\0043 to answer all the questions again and again.\n \
-  \n\0043 NOTICE: Backup Proxmox Configuration Script from https://ithieler.github.io/Proxmox/ \
-  \n\0043 Created on $(date)
-  \n\0043 Variables - Netrobot
-  robot=${robot}
-  robotNAME=${robotNAME}
-  robotPASS=${robotPASS}
-  \n\0043 Variables - Mailserver (SMTP)
-  mailUSER=${mailUSER}
-  mailPASS=${mailPASS}
-  mailTO=${mailTO}
-  mailFROM=${mailFROM}
-  mailSERVER=${mailSERVER}
-  mailPORT=${mailPORT}
-  mailTLS=${mailTLS}
-  \n\0043 Variables - NAS
-  nasIP=${nasIP}
-  nasBAKPATH=${nasBAKPATH}
-  nasPROTOCOL=${nasPROTOCOL}
-  nasUSER=${nasUSER}
-  nasPASS=${nasPASS}
-  nasMAN=${nasMAN}
-  \n\0043 Variables - VLANs
-  vlanSERVERID=${vlanSERVERID}
-  vlanSERVERGW=${vlanSERVERGW}
-  vlanSMARTHOMEID=${vlanSMARTHOMEID}
-  vlanSMARTHOMEGW=${vlanSMARTHOMEGW}
-  vlanDHCPID=${vlanDHCPID}
-  vlanDHCPGW=${vlanDHCPGW}
-  vlanGUESTID=${vlanGUESTID}
-  vlanGUESTGW=${vlanGUESTGW}" > "/root/pve-global-config.sh"
+  cat << EOF >/root/pve-global-config.sh
+#!/bin/bash
+# This file stores variables that are specified during the first execution of the post-processing script by the
+# This makes re-execution of the script easier, and follows a standard. The advantage is that the user does not
+# to answer all the questions again and again.
+
+# NOTICE: Backup Proxmox Configuration Script from https://ithieler.github.io/Proxmox/
+# Created on $(date)
+
+# Variables - Netrobot
+robot=${robot}
+robotNAME=${robotNAME}
+robotPASS=${robotPASS}
+
+# Variables - Mailserver (SMTP)
+mailUSER=${mailUSER}
+mailPASS=${mailPASS}
+mailTO=${mailTO}
+mailFROM=${mailFROM}
+mailSERVER=${mailSERVER}
+mailPORT=${mailPORT}
+mailTLS=${mailTLS}
+
+# Variables - NAS
+nasIP=${nasIP}
+nasBAKPATH=${nasBAKPATH}
+nasPROTOCOL=${nasPROTOCOL}
+nasUSER=${nasUSER}
+nasPASS=${nasPASS}
+nasMAN=${nasMAN}
+
+# Variables - VLANs
+vlanSERVERID=${vlanSERVERID}
+vlanSERVERGW=${vlanSERVERGW}
+vlanSMARTHOMEID=${vlanSMARTHOMEID}
+vlanSMARTHOMEGW=${vlanSMARTHOMEGW}
+vlanDHCPID=${vlanDHCPID}
+vlanDHCPGW=${vlanDHCPGW}
+vlanGUESTID=${vlanGUESTID}
+vlanGUESTGW=${vlanGUESTGW}
+EOF
 }
 
 if [ ! -f "/root/pve-global-config.sh" ]; then
