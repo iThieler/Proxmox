@@ -107,7 +107,7 @@ else
 fi
 
 # Check if script starts from another
-if [[ "${1} == "secondstart" ]]; then
+if [[ "${1}" == "secondstart" ]]; then
   echo ""
   echo ""
 else
