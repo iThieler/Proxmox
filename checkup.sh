@@ -106,7 +106,14 @@ else
   fi
 fi
 
-clear
+# Check if script starts from another
+if [[ "${1} == "secondstart" ]]; then
+  echo ""
+  echo ""
+else
+  clear
+fi
+
 headerLOGO
 
 # Check Proxmox
