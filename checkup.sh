@@ -1,6 +1,7 @@
 #!/bin/bash
 
 source <(curl -s https://raw.githubusercontent.com/iThieler/Proxmox/main/misc/_functions.sh)
+codename=$(grep VERSION_CODENAME /etc/os-release | cut -d'=' -f2)
 
 function headerLOGO() {
   echo -e "
@@ -17,12 +18,12 @@ function firstRUN() {
   echoLOG y "starting system preparation"
   sed -i "s/^deb/#deb/g" /etc/apt/sources.list.d/pve-enterprise.list
   cat <<EOF > /etc/apt/sources.list
-    deb http://ftp.debian.org/debian bullseye main contrib
-    deb http://ftp.debian.org/debian bullseye-updates main contrib
-    deb http://security.debian.org/debian-security bullseye-security main contrib
+    deb http://ftp.debian.org/debian $codename main contrib
+    deb http://ftp.debian.org/debian $codename-updates main contrib
+    deb http://security.debian.org/debian-security $codename-security main contrib
 EOF
   cat <<EOF >> /etc/apt/sources.list.d/pve-no-subscription.list
-    deb http://download.proxmox.com/debian/pve bullseye pve-no-subscription
+    deb http://download.proxmox.com/debian/pve $codename pve-no-subscription
 EOF
   echo "DPkg::Post-Invoke { \"dpkg -V proxmox-widget-toolkit | grep -q '/proxmoxlib\.js$'; if [ \$? -eq 1 ]; then { echo 'Removing subscription nag from UI...'; sed -i '/data.status/{s/\!//;s/Active/NoMoreNagging/}' /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js; }; fi\"; };" > /etc/apt/apt.conf.d/no-nag-script
   apt --reinstall install proxmox-widget-toolkit &>/dev/null
