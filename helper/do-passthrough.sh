@@ -6,7 +6,7 @@ if [[ $1 == "checkup" ]]; then goback=true; fi
 
 function zigbee() {
     #get container ID and stop
-    ctID=
+    ctID=$(whip_inputbox "OK" "Container ID" "Wie lautet die Container-ID, an die der Zigbee-Stick gebunden werden soll?" "$(pct list | grep "ioBroker" | cut -d' ' -f 1)")
     pct stop $ctID
     while [ $(pct status $ctID | cut -d' ' -f2 | grep -cw running) -eq 1 ]; do
       sleep 2
